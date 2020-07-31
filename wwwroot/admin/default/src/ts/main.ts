@@ -1,6 +1,6 @@
 // Test sample code for SoftEther VPN Server JSON-RPC Stub
 // Runs on both web browsers and Node.js
-// 
+//
 // Licensed under the Apache License 2.0
 // Copyright (c) 2014-2018 SoftEther VPN Project
 
@@ -56,7 +56,7 @@ export async function ListVirtualHubs(id: string): Promise<void>
 
     hubList.HubList.forEach(hub =>
     {
-        ul.append("<li><strong><a href='./hub.html?" + hub.HubName_str + "'>" + hub.HubName_str + "</a></strong><br>" + ConcatKeysToHtml(hub) + "</li>");
+        ul.append("<a class=\"btn btn-primary m-1\" href='./hub.html?" + hub.HubName_str + "'>" + hub.HubName_str + "</a>");
     });
 }
 
@@ -71,12 +71,14 @@ export async function ShowVpnServerInfo(idInfo: string, idStatus: string): Promi
 
     Object.keys(serverInfo).forEach(key =>
     {
-        infoList.append("<li>" + key + ": \"" + (<any>serverInfo)[key] + "\"</li>");
+        //infoList.append("<li>" + key + ": \"" + (<any>serverInfo)[key] + "\"</li>");
+        infoList.append("<tr><th scope=\"row\">" + key + "</th><td>" + (<any>serverInfo)[key] + "</td></tr>");
     });
 
     Object.keys(serverStatus).forEach(key =>
     {
-        statusList.append("<li>" + key + ": \"" + (<any>serverStatus)[key] + "\"</li>");
+        //statusList.append("<li>" + key + ": \"" + (<any>serverStatus)[key] + "\"</li>");
+        statusList.append("<tr><th scope=\"row\">" + key + "</th><td>" + (<any>serverStatus)[key] + "</td></tr>");
     });
 }
 
@@ -96,9 +98,9 @@ export async function CreateNewHub(hubName: string, idList: string): Promise<voi
                 Online_bool: true,
                 HubType_u32: VPN.VpnRpcHubType.Standalone,
             });
-        
+
         await api.CreateHub(param);
-      
+
         ListVirtualHubs(idList);
 
         alert("The Virtual Hub '" + hubName + "' is created.");
@@ -115,7 +117,7 @@ function ConcatKeysToHtml(obj: any): string
 
     Object.keys(obj).forEach(key =>
     {
-        ret += key + ": \"" + (<any>obj)[key] + "\"<BR>";
+        ret += "<tr><th scope=\"row\">" + key + "</th> <td>" + (<any>obj)[key] + "</td></tr>";
     });
 
     return ret;
@@ -156,24 +158,29 @@ export async function HubAdminPage(queryString: string): Promise<void>
             {
                 HubName_str: hubNameInput,
             });
-        
+
         let hubInfo = await api.GetHub(getHubParam);
 
         $("#HUB_NAME").append("Virtual Hub \"" + hubInfo.HubName_str + "\"");
-
+        $("#HUB_BTN").append("<li class=\"nav-item\"><a class=\"nav-link btn btn-primary m-1\" onclick=\"\">Manage Virtual Hub</a></li>");
+        $("#HUB_BTN").append("<li class=\"nav-item\"><a class=\"nav-link btn btn-secondary m-1\" onclick=\"\">Online</a></li>");
+        $("#HUB_BTN").append("<li class=\"nav-item\"><a class=\"nav-link btn btn-secondary m-1\" onclick=\"\">Offline</a></li>");
+        $("#HUB_BTN").append("<li class=\"nav-item\"><a class=\"nav-link btn btn-info m-1\" href=\"hub_status.html?" + hubInfo.HubName_str + "\">View Status</a></li>");
+        $("#HUB_BTN").append("<li class=\"nav-item\"><a class=\"nav-link btn btn-warning m-1\" onclick=\"\">Properties</a></li>");
+        $("#HUB_BTN").append("<li class=\"nav-item\"><a class=\"nav-link btn btn-danger m-1\" onclick=\"JS.DeleteVirtualHub(location.search);\">Delete this Virtual Hub</a></li>");
         // User list
         let enumUserParam: VPN.VpnRpcEnumUser = new VPN.VpnRpcEnumUser(
             {
                 HubName_str: hubInfo.HubName_str,
             });
-        
+
         let enumUserRet = await api.EnumUser(enumUserParam);
 
         let userListHtmlItem = $("#USERS_LIST");
 
         enumUserRet.UserList.forEach(user =>
         {
-            userListHtmlItem.append("<li><strong>" + user.Name_str + "</strong><BR>" + ConcatKeysToHtml(user) + "</li>");
+            userListHtmlItem.append("<li><a class=\"btn btn-primary\" data-toggle=\"collapse\" href=\"#" + user.Name_str + "\" role=\"button\" aria-expanded=\"false\" aria-controls=\"collapseExample\"><strong>" + user.Name_str + "</strong></a><BR><div class=\"collapse\" id=\"" + user.Name_str + "\"><table class=\"table table-hover\"><thread><th scope=\"col\">Item</th><th scope=\"col\">Value</th></thread><tbody>" + ConcatKeysToHtml(user) + "</tbody></table></div></li>");
         });
 
         // Sessions list
@@ -188,7 +195,7 @@ export async function HubAdminPage(queryString: string): Promise<void>
 
         enumSessionsRet.SessionList.forEach(session =>
         {
-            sessionListHtmlItem.append("<li><strong>" + session.Name_str + "</strong><br>" + ConcatKeysToHtml(session) + "</li>");
+            sessionListHtmlItem.append("<li><a class=\"btn btn-primary\" data-toggle=\"collapse\" href=\"#" + session.Name_str + "\" role=\"button\" aria-expanded=\"false\" aria-controls=\"collapseExample\"><strong>" + session.Name_str + "</strong></a><BR><div class=\"collapse\" id=\"" + session.Name_str + "\"><table class=\"table table-hover\"><thread><th scope=\"col\">Item</th><th scope=\"col\">Value</th></thread><tbody>" + ConcatKeysToHtml(session) + "</tbody></table></div></li>");
         });
     }
     catch (ex)
@@ -197,5 +204,89 @@ export async function HubAdminPage(queryString: string): Promise<void>
     }
 }
 
+export async function VirtualHubStatus(idHub: string): Promise<void>
+{
+  let hubNameInput = idHub;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  try
+  {
+    let getHubParam: VPN.VpnRpcCreateHub = new VPN.VpnRpcCreateHub(
+        {
+            HubName_str: hubNameInput,
+        });
+    let getHubStatus: VPN.VpnRpcHubStatus = new VPN.VpnRpcHubStatus(
+        {
+            HubName_str: hubNameInput,
+        });
+
+    let hubInfo = await api.GetHub(getHubParam);
+    let hubStatus = await api.GetHubStatus(getHubStatus);
+    $("#HUB_NAME").append("Virtual Hub \"" + hubInfo.HubName_str + "\"");
+    $("#HUB").append("<table class=\"table table-hover\"><thread><th scope=\"col\">Item</th><th scope=\"col\">Value</th></thread><tbody>" + ConcatKeysToHtml(hubStatus) + "</tbody></table></li>");
 
 
+  }
+  catch (ex)
+  {
+      alert(ex);
+  }
+}
+
+export async function ListListeners(id: string): Promise<void>
+{
+    let li: JQuery<HTMLElement> = $(id);
+
+    li.children().remove();
+
+    let lisList = await api.EnumListener();
+
+    lisList.ListenerList.forEach(port =>
+    {
+        li.append("<tr><th scope=\"row\">TCP " + port.Ports_u32 + "</th> <td>" + port.Enables_bool + "</td><td>" + port.Errors_bool + "</td></tr>");
+    });
+}
+
+export async function CreateNewListener(lisPort: number): Promise<void>
+{
+    if (lisPort < 1 && lisPort > 65535 )
+    {
+        alert("Invalid port number.");
+        return;
+    }
+
+    try
+    {
+        let param: VPN.VpnRpcListener = new VPN.VpnRpcListener(
+            {
+                Port_u32: lisPort,
+                Enable_bool: true,
+            });
+
+        await api.CreateListener(param);
+
+        alert("The Listener TCP/IP '" + lisPort + "' has been created.");
+    }
+    catch (ex)
+    {
+        alert(ex);
+    }
+}
+
+export async function DeleteListener(lisPort: number): Promise<void>
+{
+  try
+  {
+      let param: VPN.VpnRpcListener = new VPN.VpnRpcListener(
+          {
+              Port_u32: lisPort,
+          });
+
+      await api.DeleteListener(param);
+
+      alert("The Listener TCP/IP '" + lisPort + "' has been deleted.");
+  }
+  catch (ex)
+  {
+      alert(ex);
+  }
+}

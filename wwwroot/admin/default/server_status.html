@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<!--#include file="include_head.html" -->
+    <body>
+<!--#include file="include_menu.html" -->
+<main>
+<div class="container-fluid">
+<H3>VPN Server Status</H3>
+<table class="table table-hover">
+  <thread>
+    <th scope="col">Item</th>
+    <th scope="col">Value</th>
+  </thread>
+  <tbody id="VPN_SERVER_STATUS">
+  </tbody>
+</table>
+<!--#include file="include_footer.html" -->
+        </div>
+      </main>
+    </body>
+    <script>
+      JS.ShowVpnServerInfo("#VPN_SERVER_INFO", "#VPN_SERVER_STATUS");
+  </script>
+</html>

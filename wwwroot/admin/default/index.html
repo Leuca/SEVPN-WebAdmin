@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <!--#include file="include_head.html" -->
     <body>
 <!--#include file="include_menu.html" -->
-<div class="container theme-showcase" role="main">
-        <H2>SoftEther VPN Server HTML5 Ajax-based Web Administration Console<BR>(Under construction!)</H2>
+<main class="my-auto">
+<div class="container-fluid">
+        <!--<H2>SoftEther VPN Server HTML5 Ajax-based Web Administration Console<BR>(Under construction!)</H2>
         <p>This is the sample of HTML5 Ajax-based VPN Server Web Administration Console.</p>
         <p>The purpose of this HTML5 admin page is to make administrators easy to set up and manage the running VPN Servers.</p>
         <h3>Authentication for this page</h3>
@@ -20,26 +21,113 @@
         <p>This HTML5 page is obviously under construction, and providing very minimum functions as sample.<BR>This initial page is written by Daiyuu Nobori (the core developer of SoftEther VPN). He is obviously lack of HTML5 development ability.<BR>Please kindly consider to contribute for <strong><a href="https://github.com/SoftEtherVPN/SoftEtherVPN/tree/master/src/bin/hamcore/wwwroot/admin/">SoftEther VPN's development on GitHub.</a></strong> Your code will help every people running SoftEther VPN Server.</p>
 
         <p>This HTML5 page's JavaScript codes directly call <strong><a href="/api/">SoftEther VPN Server JSON-RPC API</a></strong> on the running VPN Server from the web browser.<BR>You can also call the <strong><a href="/api/">SoftEther VPN Server JSON-RPC API</a></strong> remotely from your original application. (JavaScript, TypeScript, C#, Java, Python, Ruby, etc.)</p>
-            <p><a href="/api/"><strong>The insanely kindness API reference</strong></a> is available.</p>
+            <p><a href="/api/"><strong>The insanely kindness API reference</strong></a> is available.</p>-->
 
-        <H3>List of Virtual Hubs</H3>
-        <ul id="HUB_LIST"></ul>
+        <H3>Virtual Hubs</H3>
+        <div class="container-fluid" id="HUB_LIST"></div>
 
         <H3>Create new Virtual Hub</H3>
         Virtual Hub Name:<BR>
-        <input id="NEW_HUB_NAME" /> <button class="btn btn-lg btn-primary" onclick="JS.CreateNewHub($('#NEW_HUB_NAME').val(), '#HUB_LIST')">Create</button>
+        <input id="NEW_HUB_NAME" /> <button class="btn btn-primary" onclick="JS.CreateNewHub($('#NEW_HUB_NAME').val(), '#HUB_LIST')">Create</button>
 
-        <H3>VPN Server Information</H3>
-        <ul id="VPN_SERVER_INFO"></ul>
+        <!--<H3>VPN Server Information</H3>
+        <table class="table table-hover">
+          <thread>
+            <th scope="col">Item</th>
+            <th scope="col">Value</th>
+          </thread>
+          <tbody id="VPN_SERVER_INFO">
+          </tbody>
+        </table>
 
         <H3>VPN Server Status</H3>
-        <ul id="VPN_SERVER_STATUS"></ul>
+        <table class="table table-hover">
+          <thread>
+            <th scope="col">Item</th>
+            <th scope="col">Value</th>
+          </thread>
+          <tbody id="VPN_SERVER_STATUS">
+          </tbody>
+        </table>-->
+        <div class="row">
+          <div class="col-md-auto">
+            <H3>Management of Listeners</H3>
+            <div class="row">
+              <div class="col">
+                <h5>Listener List (TCP/IP port):</h5>
+                <table class="table">
+                  <thread>
+                    <th scope"col">Port Number</th>
+                    <th scope"col">Listening</th>
+                    <th scope"col">Errors</th>
+                  </thread>
+                  <tbody id="LISTENERS">
+                  </tbody>
+                </table>
+              </div>
+              <div class="col">
+                <div class="row">
+                  <div class="col">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#CreateListener">
+                      Create
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="CreateListener" tabindex="-1" aria-labelledby="CreateLis" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="CreateLis">Create Listener</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <p>You can add a TCP/IP port number for the VPN Server to accept connections from clients.</p>
+                            <p>Specify the port number to add.</p>
+                            <p>Port Number: <input id="NEW_PORT" /> (TCP/IP port)</p>
+                            <p>If the port number is already being used by another server program, the Error boolean of the port will be true.</p>
+                            <p>In this case, stop the other program that is opening the same port.</p>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="JS.CreateNewListener($('#NEW_PORT').val())" data-dismiss="modal">OK</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                  </div>
+                  <div class="col">
+                  </div>
+                  <div class="col">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-auto">
+            <H3>VPN Server and Network Information and Settings</H3>
+            <div class="row justify-content-center">
+            <a class="btn btn-secondary m-1 col-md-auto" href="">Encryption and Network</a>
+            <a class="btn btn-secondary m-1 col-md-auto" href="server_status.html">View Server Status</a>
+            <a class="btn btn-secondary m-1 col-md-auto" href="server_info.html">About this VPN Server</a>
+            <a class="btn btn-secondary m-1 col-md-auto" href="">Clustering Configuration</a>
+            <a class="btn btn-secondary m-1 col-md-auto" href="">Clustering Status</a>
+            <a class="btn btn-secondary m-1 col-md-auto" href="">Show List of TCP/IP Connections</a>
+            <a class="btn btn-secondary m-1 col-md-auto" href="">Edit Config</a>
+          </div>
+          </div>
+        </div>
 <!--#include file="include_footer.html" -->
         </div>
+      </main>
     </body>
     <script>
-        JS.ShowVpnServerInfo("#VPN_SERVER_INFO", "#VPN_SERVER_STATUS");
+        //JS.ShowVpnServerInfo("#VPN_SERVER_INFO", "#VPN_SERVER_STATUS");
         JS.ListVirtualHubs("#HUB_LIST");
+        JS.ListListeners("#LISTENERS");
     </script>
 </html>
-

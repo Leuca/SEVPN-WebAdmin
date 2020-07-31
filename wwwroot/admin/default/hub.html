@@ -3,21 +3,29 @@
 <!--#include file="include_head.html" -->
     <body>
 <!--#include file="include_menu.html" -->
-<div class="container theme-showcase" role="main">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <button class="navbar-toggler m-2" type="button" data-toggle="collapse" data-target="#navbarHub" aria-controls="navbarHub" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center" id="navbarHub">
+      <ul class="navbar-nav m-1 m-lg-1"id="HUB_BTN"></ul>
+    </div>
+
+</nav>
+<main>
+<div class="container-fluid">
         <H2><div id="HUB_NAME"></div></H2>
-
-        <button class="btn btn-lg btn-danger" onclick="JS.DeleteVirtualHub(location.search);">Delete this Virtual Hub</button>
-
         <H3>List of Users</H3>
-        <ul id="USERS_LIST"></ul>
+        <ul class="accordion" id="USERS_LIST"></ul>
 
         <H3>List of Active VPN Sessions</H3>
         <ul id="SESSIONS_LIST"></ul>
+
 <!--#include file="include_footer.html" -->
 </div>
+</main>
     </body>
     <script>
         JS.HubAdminPage(location.search);
     </script>
 </html>
-

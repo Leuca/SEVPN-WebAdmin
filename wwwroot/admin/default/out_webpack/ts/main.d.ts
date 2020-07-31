@@ -8,4 +8,7 @@ export declare function ShowVpnServerInfo(idInfo: string, idStatus: string): Pro
 export declare function CreateNewHub(hubName: string, idList: string): Promise<void>;
 export declare function DeleteVirtualHub(queryString: string): Promise<void>;
 export declare function HubAdminPage(queryString: string): Promise<void>;
+export declare function VirtualHubStatus(idHub: string): Promise<void>;
+export declare function ListListeners(id: string): Promise<void>;
+export declare function CreateNewListener(lisPort: number): Promise<void>;
 //# sourceMappingURL=main.d.ts.map

@@ -21,6 +21,6 @@ cp -r SotEtherVPN-Web-UI/wwwroot/admin/default/ SoftEtherVPN/src/bin/hamcore/www
 cd SoftEtherVPN
 git submodule init && git submodule update
 ./configure
-make -C tml
+make -C tmp
 sudo make -C tmp install
 ```

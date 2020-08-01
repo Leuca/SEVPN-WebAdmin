@@ -5,7 +5,7 @@ In a UNIX environment should be something like this:
 ```bash
 git clone https://github.com/Leuca/SotEtherVPN-Web-UI.git
 git clone https://github.com/SoftEtherVPN/SoftEtherVPN_Stable.git
-cp SotEtherVPN-Web-UI/wwwroot/admin/default/ SoftEtherVPN_Stable/src/bin/hamcore/wwwroot/admin
+cp -r SotEtherVPN-Web-UI/wwwroot/admin/default/ SoftEtherVPN_Stable/src/bin/hamcore/wwwroot/admin
 cd SoftEtherVPN_Stable
 ./configure
 make
@@ -17,7 +17,7 @@ or like this:
 ```bash
 git clone https://github.com/Leuca/SotEtherVPN-Web-UI.git
 git clone https://github.com/SoftEtherVPN/SoftEtherVPN.git
-cp SotEtherVPN-Web-UI/wwwroot/admin/default/ SoftEtherVPN/src/bin/hamcore/wwwroot/admin
+cp -r SotEtherVPN-Web-UI/wwwroot/admin/default/ SoftEtherVPN/src/bin/hamcore/wwwroot/admin
 cd SoftEtherVPN
 git submodule init && git submodule update
 ./configure

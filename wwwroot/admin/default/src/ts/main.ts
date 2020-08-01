@@ -56,7 +56,7 @@ export async function ListVirtualHubs(id: string): Promise<void>
 
     hubList.HubList.forEach(hub =>
     {
-        ul.append("<a class=\"btn btn-primary m-1\" href='./hub.html?" + hub.HubName_str + "'>" + hub.HubName_str + "</a>");
+        ul.append("<a class=\"btn btn-primary btn-lg m-1\" href='./hub.html?" + hub.HubName_str + "'>" + hub.HubName_str + "</a>");
     });
 }
 
@@ -242,11 +242,11 @@ export async function ListListeners(id: string): Promise<void>
 
     lisList.ListenerList.forEach(port =>
     {
-        li.append("<tr><th scope=\"row\">TCP " + port.Ports_u32 + "</th> <td>" + port.Enables_bool + "</td><td>" + port.Errors_bool + "</td></tr>");
+        li.append("<tr><th scope=\"row\">TCP <button type=\"button\" class=\"btn btn-link\" onclick=\"$(\'#PORT_L\').val(+" + port.Ports_u32 + ")\">" + port.Ports_u32 + "</button></th> <td>" + port.Enables_bool + "</td><td>" + port.Errors_bool + "</td></tr>");
     });
 }
 
-export async function CreateNewListener(lisPort: number): Promise<void>
+export async function CreateNewListener(lisPort: number, idLis: string): Promise<void>
 {
     if (lisPort < 1 && lisPort > 65535 )
     {
@@ -263,7 +263,7 @@ export async function CreateNewListener(lisPort: number): Promise<void>
             });
 
         await api.CreateListener(param);
-
+        ListListeners(idLis);
         alert("The Listener TCP/IP '" + lisPort + "' has been created.");
     }
     catch (ex)
@@ -272,8 +272,9 @@ export async function CreateNewListener(lisPort: number): Promise<void>
     }
 }
 
-export async function DeleteListener(lisPort: number): Promise<void>
+export async function DeleteListener(lisPort: number, idLis: string): Promise<void>
 {
+
   try
   {
       let param: VPN.VpnRpcListener = new VPN.VpnRpcListener(
@@ -282,8 +283,108 @@ export async function DeleteListener(lisPort: number): Promise<void>
           });
 
       await api.DeleteListener(param);
-
+      ListListeners(idLis);
       alert("The Listener TCP/IP '" + lisPort + "' has been deleted.");
+  }
+  catch (ex)
+  {
+      alert(ex);
+  }
+}
+
+export async function EnableListener(lisPort: number, idLis: string): Promise<void>
+{
+
+  try
+  {
+      let param: VPN.VpnRpcListener = new VPN.VpnRpcListener(
+          {
+              Port_u32: lisPort,
+              Enable_bool: true,
+          });
+
+      await api.EnableListener(param);
+      ListListeners(idLis);
+      alert("The Listener TCP/IP '" + lisPort + "' has been enabled.");
+  }
+  catch (ex)
+  {
+      alert(ex);
+  }
+}
+
+export async function DisableListener(lisPort: number, idLis: string): Promise<void>
+{
+
+  try
+  {
+      let param: VPN.VpnRpcListener = new VPN.VpnRpcListener(
+          {
+              Port_u32: lisPort,
+              Enable_bool: false,
+          });
+
+      await api.EnableListener(param);
+      ListListeners(idLis);
+      alert("The Listener TCP/IP '" + lisPort + "' has been disabled.");
+  }
+  catch (ex)
+  {
+      alert(ex);
+  }
+}
+
+export async function ListConnections(id: string): Promise<void>
+{
+    let li: JQuery<HTMLElement> = $(id);
+
+    li.children().remove();
+
+    let lisConn = await api.EnumConnection();
+
+    lisConn.ConnectionList.forEach(connection =>
+    {
+        li.append("<tr><th scope=\"row\"><button type=\"button\" class=\"btn btn-link\" onclick=\"$(\'#CONNECTION\').val(\'" + connection.Name_str + "\')\">" + connection.Name_str + "</button></th> <td>" + connection.Hostname_str + "</td><td>" + connection.Ip_ip + "</td><td>" + connection.Port_u32 + "</td><td>" + connection.ConnectedTime_dt + "</td><td>" + connection.Type_u32 + "</td></tr>");
+    });
+}
+
+export async function ConnectionInfo(connection: string): Promise<void>
+{
+  let li: JQuery<HTMLElement> = $(connection);
+
+  li.children().remove();
+  try
+  {
+    let getConStatus: VPN.VpnRpcConnectionInfo = new VPN.VpnRpcConnectionInfo(
+        {
+            Name_str: connection,
+        });
+
+    let conInfo = await api.GetConnectionInfo(getConStatus);
+    $("#CONNECTION_INFO_NAME").append("Connection \"" + conInfo.Name_str + "\" Information");
+    $("#CONNECTION_INFO").append("<table class=\"table table-hover\"><thread><th scope=\"col\">Item</th><th scope=\"col\">Value</th></thread><tbody>" + ConcatKeysToHtml(conInfo) + "</tbody></table></li>");
+
+
+  }
+  catch (ex)
+  {
+      alert(ex);
+  }
+}
+
+export async function Disconnection(con: string, conList: string): Promise<void>
+{
+
+  try
+  {
+      let param: VPN.VpnRpcConnectionInfo = new VPN.VpnRpcConnectionInfo(
+          {
+              Name_str: con,
+          });
+
+      await api.DisconnectConnection(param);
+      ListConnections(conList);
+      alert("The Connection'" + con + "' has been terminated.");
   }
   catch (ex)
   {

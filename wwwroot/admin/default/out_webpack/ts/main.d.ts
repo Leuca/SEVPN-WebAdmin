@@ -10,5 +10,11 @@ export declare function DeleteVirtualHub(queryString: string): Promise<void>;
 export declare function HubAdminPage(queryString: string): Promise<void>;
 export declare function VirtualHubStatus(idHub: string): Promise<void>;
 export declare function ListListeners(id: string): Promise<void>;
-export declare function CreateNewListener(lisPort: number): Promise<void>;
+export declare function CreateNewListener(lisPort: number, idLis: string): Promise<void>;
+export declare function DeleteListener(lisPort: number, idLis: string): Promise<void>;
+export declare function EnableListener(lisPort: number, idLis: string): Promise<void>;
+export declare function DisableListener(lisPort: number, idLis: string): Promise<void>;
+export declare function ListConnections(id: string): Promise<void>;
+export declare function ConnectionInfo(connection: string): Promise<void>;
+export declare function Disconnection(con: string, conList: string): Promise<void>;
 //# sourceMappingURL=main.d.ts.map

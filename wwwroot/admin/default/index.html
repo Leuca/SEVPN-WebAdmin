@@ -4,7 +4,7 @@
     <body>
 <!--#include file="include_menu.html" -->
 <main class="my-auto">
-<div class="container-fluid">
+<div class="container-fluid m-auto">
         <!--<H2>SoftEther VPN Server HTML5 Ajax-based Web Administration Console<BR>(Under construction!)</H2>
         <p>This is the sample of HTML5 Ajax-based VPN Server Web Administration Console.</p>
         <p>The purpose of this HTML5 admin page is to make administrators easy to set up and manage the running VPN Servers.</p>
@@ -22,14 +22,6 @@
 
         <p>This HTML5 page's JavaScript codes directly call <strong><a href="/api/">SoftEther VPN Server JSON-RPC API</a></strong> on the running VPN Server from the web browser.<BR>You can also call the <strong><a href="/api/">SoftEther VPN Server JSON-RPC API</a></strong> remotely from your original application. (JavaScript, TypeScript, C#, Java, Python, Ruby, etc.)</p>
             <p><a href="/api/"><strong>The insanely kindness API reference</strong></a> is available.</p>-->
-
-        <H3>Virtual Hubs</H3>
-        <div class="container-fluid" id="HUB_LIST"></div>
-
-        <H3>Create new Virtual Hub</H3>
-        Virtual Hub Name:<BR>
-        <input id="NEW_HUB_NAME" /> <button class="btn btn-primary" onclick="JS.CreateNewHub($('#NEW_HUB_NAME').val(), '#HUB_LIST')">Create</button>
-
         <!--<H3>VPN Server Information</H3>
         <table class="table table-hover">
           <thread>
@@ -50,11 +42,19 @@
           </tbody>
         </table>-->
         <div class="row">
-          <div class="col-md-auto">
+        <div class="col-md-auto m-auto">
+          <H3>Virtual Hubs</H3>
+          <div class="container-fluid" id="HUB_LIST"></div>
+
+          <H3>Create new Virtual Hub</H3>
+          Virtual Hub Name:<BR>
+          <input id="NEW_HUB_NAME" /> <button class="btn btn-primary btn-sm" onclick="JS.CreateNewHub($('#NEW_HUB_NAME').val(), '#HUB_LIST')">Create</button>
+        </div>
+          <div class="col-md-auto m-auto">
             <H3>Management of Listeners</H3>
             <div class="row">
+              <h5>Listener List (TCP/IP port):</h5>
               <div class="col">
-                <h5>Listener List (TCP/IP port):</h5>
                 <table class="table">
                   <thread>
                     <th scope"col">Port Number</th>
@@ -65,11 +65,10 @@
                   </tbody>
                 </table>
               </div>
-              <div class="col">
-                <div class="row">
-                  <div class="col">
+              <div class="col-md-auto">
+                <div class="row mr-2 ml-1">
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#CreateListener">
+                    <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#CreateListener">
                       Create
                     </button>
 
@@ -92,42 +91,144 @@
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" onclick="JS.CreateNewListener($('#NEW_PORT').val())" data-dismiss="modal">OK</button>
+                            <button type="button" class="btn btn-primary" onclick="JS.CreateNewListener($('#NEW_PORT').val(),'#LISTENERS')" data-dismiss="modal">OK</button>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col">
-                  </div>
-                  <div class="col">
-                  </div>
-                  <div class="col">
-                  </div>
-                </div>
+                    </div>
+                    <div class="row mr-2 ml-1">
+                    <button type="button" class="btn btn-danger m-1" onclick="JS.DeleteListener($('#PORT_L').val(),'#LISTENERS')">
+                      Delete
+                    </button>
+                    </div>
+                    <div class="row mr-2 ml-1">
+                    <button type="button" class="btn btn-success m-1" onclick="JS.EnableListener($('#PORT_L').val(),'#LISTENERS')">
+                      Online
+                    </button>
+                    </div>
+                    <div class="row mr-2 ml-1">
+                    <button type="button" class="btn btn-warning m-1" onclick="JS.DisableListener($('#PORT_L').val(),'#LISTENERS')">
+                      Offline
+                    </button>
+                    </div>
+                    <div class="row mr-2 ml-1">
+                    <p id="PORT_L"></p>
+                    </div>
+
               </div>
             </div>
           </div>
-          <div class="col-md-auto">
+          <div class="col-md-auto m-auto">
             <H3>VPN Server and Network Information and Settings</H3>
-            <div class="row justify-content-center">
-            <a class="btn btn-secondary m-1 col-md-auto" href="">Encryption and Network</a>
-            <a class="btn btn-secondary m-1 col-md-auto" href="server_status.html">View Server Status</a>
-            <a class="btn btn-secondary m-1 col-md-auto" href="server_info.html">About this VPN Server</a>
-            <a class="btn btn-secondary m-1 col-md-auto" href="">Clustering Configuration</a>
-            <a class="btn btn-secondary m-1 col-md-auto" href="">Clustering Status</a>
-            <a class="btn btn-secondary m-1 col-md-auto" href="">Show List of TCP/IP Connections</a>
-            <a class="btn btn-secondary m-1 col-md-auto" href="">Edit Config</a>
-          </div>
+            <div class="row mr-2 ml-1">
+              <a class="btn btn-secondary m-1 col-md-auto" href="">Encryption and Network</a>
+              <a class="btn btn-secondary m-1 col-md-auto" href="">Clustering Configuration</a>
+            </div>
+            <div class="row mr-2 ml-1">
+              <a class="btn btn-secondary m-1 col-md-auto" href="server_status.html">View Server Status</a>
+              <a class="btn btn-secondary m-1 col-md-auto" href="">Clustering Status</a>
+            </div>
+            <div class="row mr-2 ml-1">
+              <a class="btn btn-secondary m-1 col-md-auto align-content-center" href="server_info.html"><img src="/admin/default/icons/softether-vpn-server.svg" width="42" height="42" class="d-inline-block" alt="About this VPN Server"> About this VPN Server</a>
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-secondary m-1 col-md-auto" data-toggle="modal" data-target="#TCPIPModal">Show List of TCP/IP Connections</button>
+                <!-- Modal -->
+                <div class="modal fade" id="TCPIPModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="TCPIPModal" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="TCPIPModal">Connection List</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <table class="table table-hover">
+                        <thead>
+                            <tr>
+                              <th scope="col">Name</th>
+                              <th scope="col">Hostname</th>
+                              <th scope="col">IP</th>
+                              <th scope="col">Port</th>
+                              <th scope="col">Time Connected</th>
+                              <th scope="col">Type number</th>
+                            </tr>
+                        </thead>
+                        <tbody id="CONNECTION_LIST">
+                        </tbody>
+                      </table>
+                      <p id="CONNECTION"></p>
+                    </div>
+                    <div class="modal-footer">
+                      <!-- Button trigger modal -->
+                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#TCPIPModal_MORE" onclick="JS.ConnectionInfo($('#CONNECTION').val())">Show Connection Information</button>
+                      <!-- Modal -->
+                      <div class="modal fade" id="TCPIPModal_MORE" tabindex="-1" aria-labelledby="TCPIPModal_MORE" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="CONNECTION_INFO_NAME"></h5>
+                            </div>
+                            <div class="modal-body">
+                              <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                      <th scope="col">Item</th>
+                                      <th scope="col">Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="CONNECTION_INFO">
+                                </tbody>
+                              </table>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#CONNECTION').empty();$('#CONNECTION_INFO').empty();$('#CONNECTION_INFO_NAME').empty()">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-primary" onclick="JS.Disconnection($('#CONNECTION').val(), '#CONNECTION_LIST')">Disconnect</button>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+                </div>
+            </div>
+            <div class="row mr-2 ml-1">
+            <a class="btn btn-secondary m-1 col-md-auto" href=""><img src="/admin/default/icons/Machine.ico" width="42" height="42" class="d-inline-block" alt="About this VPN Server"> Edit Config</a>
           </div>
         </div>
-<!--#include file="include_footer.html" -->
+
         </div>
+        <hr>
+        <div class="row mr-1">
+          <div class="col-md-auto">
+          <a class="btn btn-primary btn-block m-2" href=""><img src="/admin/default/icons/vpnbridge.ico" width="42" height="42" class="d-inline-block" alt="Local Bridge Setting"> Local Bridge Setting</a>
+          </div>
+          <div class="col-md-auto">
+          <a class="btn btn-primary btn-block m-2" href="">Layer 3 Switch Setting</a>
+          </div>
+          <div class="col-md-auto">
+          <a class="btn btn-primary btn-block m-2" href="">IPSec / L2TP Setting</a>
+          </div>
+          <div class="col-md-auto">
+          <a class="btn btn-primary btn-block m-2" href="">OpenVPN / MS-SSTP Setting</a>
+          </div>
+          <div class="col-md-auto">
+          <a class="btn btn-primary btn-block m-2" href="">Dynamic DNS Setting</a>
+          </div>
+          <div class="col-md-auto">
+          <a class="btn btn-primary btn-block m-2" href="">VPN Azure Setting</a>
+        </div>
+        </div>
+        <!--#include file="include_footer.html" -->
       </main>
     </body>
     <script>
         //JS.ShowVpnServerInfo("#VPN_SERVER_INFO", "#VPN_SERVER_STATUS");
         JS.ListVirtualHubs("#HUB_LIST");
         JS.ListListeners("#LISTENERS");
+        JS.ListConnections("#CONNECTION_LIST");
     </script>
 </html>

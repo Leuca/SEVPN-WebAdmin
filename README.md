@@ -1,4 +1,4 @@
-# SotEtherVPN web administration interface
+# SotEtherVPN HTML5-based Admin Console
 ## Installing the web UI
 It is possible to try this UI by copying the ```wwwroot``` folder into a previously cloned SoftEtherVPN source code and by compliling it.<br>
 In a UNIX environment should be something like this:

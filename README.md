@@ -3,7 +3,7 @@
 It is possible to try this UI by copying the ```wwwroot``` folder into a previously cloned SoftEtherVPN source code and by compliling it.<br>
 In a UNIX environment should be something like this:
 ```bash
-git clone https://github.com/Leuca/SotEtherVPN-Web-UI.git
+git clone https://github.com/Leuca/SEVPN-WebAdmin.git
 git clone https://github.com/SoftEtherVPN/SoftEtherVPN_Stable.git
 cp -r SotEtherVPN-Web-UI/wwwroot/admin/default/ SoftEtherVPN_Stable/src/bin/hamcore/wwwroot/admin
 cd SoftEtherVPN_Stable
@@ -15,7 +15,7 @@ sudo make install
 or like this:
 
 ```bash
-git clone https://github.com/Leuca/SotEtherVPN-Web-UI.git
+git clone https://github.com/Leuca/SEVPN-WebAdmin.git
 git clone https://github.com/SoftEtherVPN/SoftEtherVPN.git
 cp -r SotEtherVPN-Web-UI/wwwroot/admin/default/ SoftEtherVPN/src/bin/hamcore/wwwroot/admin
 cd SoftEtherVPN

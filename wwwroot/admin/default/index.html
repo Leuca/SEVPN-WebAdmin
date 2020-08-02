@@ -41,15 +41,20 @@
           <tbody id="VPN_SERVER_STATUS">
           </tbody>
         </table>-->
-        <div class="row">
-        <div class="col-md-auto m-auto">
+        <div class="container-fluid m-2 p-auto">
+          <div class="row justify-content-between">
+            <div class="col-md-auto">
           <H3>Virtual Hubs</H3>
           <div class="container-fluid" id="HUB_LIST"></div>
-
+        </div>
+        <div class="col-md-auto">
           <H3>Create new Virtual Hub</H3>
           Virtual Hub Name:<BR>
           <input id="NEW_HUB_NAME" /> <button class="btn btn-primary btn-sm" onclick="JS.CreateNewHub($('#NEW_HUB_NAME').val(), '#HUB_LIST')">Create</button>
         </div>
+        </div>
+        </div>
+        <div class="row">
           <div class="col-md-auto m-auto">
             <H3>Management of Listeners</H3>
             <div class="row">
@@ -170,17 +175,8 @@
                             <div class="modal-header">
                               <h5 class="modal-title" id="CONNECTION_INFO_NAME"></h5>
                             </div>
-                            <div class="modal-body">
-                              <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                      <th scope="col">Item</th>
-                                      <th scope="col">Value</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="CONNECTION_INFO">
-                                </tbody>
-                              </table>
+                            <div class="modal-body" id="CONNECTION_INFO">
+                              <p id="CONNECTION"></p>
                             </div>
                             <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#CONNECTION').empty();$('#CONNECTION_INFO').empty();$('#CONNECTION_INFO_NAME').empty()">Close</button>

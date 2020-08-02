@@ -1,8 +1,7 @@
-// Test sample code for SoftEther VPN Server JSON-RPC Stub
 // Runs on both web browsers and Node.js
 //
 // Licensed under the Apache License 2.0
-// Copyright (c) 2014-2018 SoftEther VPN Project
+// Copyright (c) 2014-2020 SoftEther VPN Project
 
 // On the web browser uncomment below imports as necessary to support old browsers.
 import "core-js/es/promise";
@@ -162,12 +161,12 @@ export async function HubAdminPage(queryString: string): Promise<void>
         let hubInfo = await api.GetHub(getHubParam);
 
         $("#HUB_NAME").append("Virtual Hub \"" + hubInfo.HubName_str + "\"");
-        $("#HUB_BTN").append("<li class=\"nav-item\"><a class=\"nav-link btn btn-primary m-1\" onclick=\"\">Manage Virtual Hub</a></li>");
-        $("#HUB_BTN").append("<li class=\"nav-item\"><a class=\"nav-link btn btn-secondary m-1\" onclick=\"\">Online</a></li>");
-        $("#HUB_BTN").append("<li class=\"nav-item\"><a class=\"nav-link btn btn-secondary m-1\" onclick=\"\">Offline</a></li>");
-        $("#HUB_BTN").append("<li class=\"nav-item\"><a class=\"nav-link btn btn-info m-1\" href=\"hub_status.html?" + hubInfo.HubName_str + "\">View Status</a></li>");
-        $("#HUB_BTN").append("<li class=\"nav-item\"><a class=\"nav-link btn btn-warning m-1\" onclick=\"\">Properties</a></li>");
-        $("#HUB_BTN").append("<li class=\"nav-item\"><a class=\"nav-link btn btn-danger m-1\" onclick=\"JS.DeleteVirtualHub(location.search);\">Delete this Virtual Hub</a></li>");
+        //Hub buttons
+        $("#HUB_BTN").append("<button type=\"button\" class=\"btn btn-primary mr-2 mt-1\" onclick=\"\">Manage Virtual Hub</button>");
+        $("#HUB_BTN").append("<button type=\"button\" class=\"btn btn-success mr-2 mt-1\" onclick=\"JS.HubOnline('" + hubInfo.HubName_str + "')\">Online</button>");
+        $("#HUB_BTN").append("<button type=\"button\" class=\"btn btn-warning mr-2 mt-1\" onclick=\"JS.HubOffline('" + hubInfo.HubName_str + "')\">Offline</button>");
+        $("#HUB_BTN").append("<button type=\"button\" class=\"btn btn-secondary mr-2 mt-1\" onclick=\"window.location = \'./hub_properties.html?" + hubInfo.HubName_str + "\'\">Properties</button>");
+        $("#HUB_BTN").append("<button type=\"button\" class=\"btn btn-danger mt-1\" onclick=\"JS.DeleteVirtualHub(location.search);\">Delete this Virtual Hub</button>");
         // User list
         let enumUserParam: VPN.VpnRpcEnumUser = new VPN.VpnRpcEnumUser(
             {
@@ -180,7 +179,7 @@ export async function HubAdminPage(queryString: string): Promise<void>
 
         enumUserRet.UserList.forEach(user =>
         {
-            userListHtmlItem.append("<li><a class=\"btn btn-primary\" data-toggle=\"collapse\" href=\"#" + user.Name_str + "\" role=\"button\" aria-expanded=\"false\" aria-controls=\"collapseExample\"><strong>" + user.Name_str + "</strong></a><BR><div class=\"collapse\" id=\"" + user.Name_str + "\"><table class=\"table table-hover\"><thread><th scope=\"col\">Item</th><th scope=\"col\">Value</th></thread><tbody>" + ConcatKeysToHtml(user) + "</tbody></table></div></li>");
+            userListHtmlItem.append("<li><a class=\"btn btn-primary\" data-toggle=\"collapse\" href=\"#" + user.Name_str + "\" role=\"button\" aria-expanded=\"false\" aria-controls=\"collapseExample\"><strong>" + user.Name_str + "</strong></a><div class=\"overflow-auto\"><BR><div class=\"collapse\" id=\"" + user.Name_str + "\"><table class=\"table table-hover overflow-auto\"><thread><th scope=\"col\">Item</th><th scope=\"col\">Value</th></thread><tbody>" + ConcatKeysToHtml(user) + "</tbody></div></table></div></li>");
         });
 
         // Sessions list
@@ -195,8 +194,15 @@ export async function HubAdminPage(queryString: string): Promise<void>
 
         enumSessionsRet.SessionList.forEach(session =>
         {
-            sessionListHtmlItem.append("<li><a class=\"btn btn-primary\" data-toggle=\"collapse\" href=\"#" + session.Name_str + "\" role=\"button\" aria-expanded=\"false\" aria-controls=\"collapseExample\"><strong>" + session.Name_str + "</strong></a><BR><div class=\"collapse\" id=\"" + session.Name_str + "\"><table class=\"table table-hover\"><thread><th scope=\"col\">Item</th><th scope=\"col\">Value</th></thread><tbody>" + ConcatKeysToHtml(session) + "</tbody></table></div></li>");
+            sessionListHtmlItem.append("<li><a class=\"btn btn-primary\" data-toggle=\"collapse\" href=\"#" + session.Name_str + "\" role=\"button\" aria-expanded=\"false\" aria-controls=\"collapseExample\"><strong>" + session.Name_str + "</strong></a><div class=\"overflow-auto\"><BR><div class=\"collapse\" id=\"" + session.Name_str + "\"><table class=\"table table-hover\"><thread><th scope=\"col\">Item</th><th scope=\"col\">Value</th></thread><tbody>" + ConcatKeysToHtml(session) + "</tbody></table></div></div></li>");
         });
+        //Hub Status
+        let getHubStatus: VPN.VpnRpcHubStatus = new VPN.VpnRpcHubStatus(
+            {
+                HubName_str: hubNameInput,
+            });
+        let hubStatus = await api.GetHubStatus(getHubStatus);
+        $("#HUB_STATUS").append("<div class=\"overflow-auto\"><table class=\"table table-hover\"><thread><th scope=\"col\">Item</th><th scope=\"col\">Value</th></thread><tbody>" + ConcatKeysToHtml(hubStatus) + "</tbody></table></div>");
     }
     catch (ex)
     {
@@ -204,28 +210,74 @@ export async function HubAdminPage(queryString: string): Promise<void>
     }
 }
 
-export async function VirtualHubStatus(idHub: string): Promise<void>
+export async function HubPropertiesPage(queryString: string): Promise<void>
 {
-  let hubNameInput = idHub;
+    let hubNameInput = queryString;
+    if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+    try
+    {
+        let getHubStatus: VPN.VpnRpcCreateHub = new VPN.VpnRpcCreateHub(
+            {
+                HubName_str: hubNameInput,
+            });
+        let hubStatus = await api.GetHub(getHubStatus);
+
+        //Online/Offline Radio Toggle
+        if(hubStatus.Online_bool == true){
+          $("#HUB_ON").append("<input class=\"form-check-input\" type=\"radio\" name=\"online\" value=\"yes\" id=\"Online\" checked onclick=\"$('#on').empty(); $('#on').val('true')\"><label class=\"form-check-label\" for=\"Online\">Online</label>");
+          $("#HUB_OFF").append("<input class=\"form-check-input\" type=\"radio\" name=\"online\" value=\"no\" id=\"Offline\" onclick=\"$('#on').empty(); $('#on').val('false')\"><label class=\"form-check-label\" for=\"Offline\">Offline</label>");
+          $('#on').val('true');
+        }
+        else {
+          $("#HUB_ON").append("<input class=\"form-check-input\" type=\"radio\" name=\"online\" value=\"yes\" id=\"Online\" onclick=\"$('#on').empty(); $('#on').val('true')\"><label class=\"form-check-label\" for=\"Online\">Online</label>");
+          $("#HUB_OFF").append("<input class=\"form-check-input\" type=\"radio\" name=\"online\" value=\"no\" id=\"Offline\" checked onclick=\"$('#on').empty(); $('#on').val('false')\"><label class=\"form-check-label\" for=\"Offline\">Offline</label>");
+          $('#on').val('false');
+        }
+        //No Enum
+        if(hubStatus.NoEnum_bool == true){
+          $("#NOENUM").append("<input class=\"form-check-input\" type=\"checkbox\" value=\"\" id=\"EnumAnon\" checked onclick=\"$('#NO_ENUM').empty(); $('#NO_ENUM').val('false')\">");
+          $('#NO_ENUM').val('true');
+        }
+        else{
+          $("#NOENUM").append("<input class=\"form-check-input\" type=\"checkbox\" value=\"\" id=\"EnumAnon\" onclick=\"$('#NO_ENUM').empty(); $('#NO_ENUM').val('true')\">");
+          $('#NO_ENUM').val('false');
+        }
+        //Max Sessions
+        $("#MAX_S").append("Max Number of Sessions (0 for unlimited): <input class=\"form-control\" id=\"MAX_SESSIONS\" aria-describedby=\"maximumSessions\" placeholder=\"" + hubStatus.MaxSession_u32 + "\"/>")
+        $('#MAX_SESSIONS').val(hubStatus.MaxSession_u32);
+        //Go back
+        $("#END_BTN").append("<button class=\"btn btn-secondary\" type=\"button\" onclick=\"window.location.href = './hub.html?" + hubNameInput + "'\">Back</button>");
+
+    }
+    catch (ex)
+    {
+        alert(ex);
+    }
+}
+
+export async function HubPropertiesSet(queryString: string, passwd: string, on: boolean, maxs: number, noenum: boolean, type: number): Promise<void>
+{
+  let hubNameInput = queryString;
   if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+
   try
   {
-    let getHubParam: VPN.VpnRpcCreateHub = new VPN.VpnRpcCreateHub(
-        {
-            HubName_str: hubNameInput,
-        });
-    let getHubStatus: VPN.VpnRpcHubStatus = new VPN.VpnRpcHubStatus(
-        {
-            HubName_str: hubNameInput,
-        });
+      let getHubParam: VPN.VpnRpcCreateHub = new VPN.VpnRpcCreateHub(
+          {
+              HubName_str: hubNameInput,
+              AdminPasswordPlainText_str: passwd,
+              Online_bool: on,
+              MaxSession_u32: maxs,
+              NoEnum_bool: noenum,
+              HubType_u32: type,
+          });
 
-    let hubInfo = await api.GetHub(getHubParam);
-    let hubStatus = await api.GetHubStatus(getHubStatus);
-    $("#HUB_NAME").append("Virtual Hub \"" + hubInfo.HubName_str + "\"");
-    $("#HUB").append("<table class=\"table table-hover\"><thread><th scope=\"col\">Item</th><th scope=\"col\">Value</th></thread><tbody>" + ConcatKeysToHtml(hubStatus) + "</tbody></table></li>");
-
-
+      await api.SetHub(getHubParam);
+      //window.location.reload();
   }
+
   catch (ex)
   {
       alert(ex);
@@ -385,6 +437,46 @@ export async function Disconnection(con: string, conList: string): Promise<void>
       await api.DisconnectConnection(param);
       ListConnections(conList);
       alert("The Connection'" + con + "' has been terminated.");
+  }
+  catch (ex)
+  {
+      alert(ex);
+  }
+}
+
+export async function HubOnline(hubName: string): Promise<void>
+{
+
+  try
+  {
+      let param: VPN.VpnRpcSetHubOnline = new VPN.VpnRpcSetHubOnline(
+          {
+              HubName_str: hubName,
+              Online_bool: true,
+          });
+
+      await api.SetHubOnline(param);
+      alert("The '" + hubName + "' has been set online.");
+  }
+  catch (ex)
+  {
+      alert(ex);
+  }
+}
+
+export async function HubOffline(hubName: string): Promise<void>
+{
+
+  try
+  {
+      let param: VPN.VpnRpcSetHubOnline = new VPN.VpnRpcSetHubOnline(
+          {
+              HubName_str: hubName,
+              Online_bool: false,
+          });
+
+      await api.SetHubOnline(param);
+      alert("The '" + hubName + "' has been set offline.");
   }
   catch (ex)
   {

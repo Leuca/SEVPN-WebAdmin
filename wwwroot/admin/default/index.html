@@ -127,12 +127,12 @@
           <div class="col-md-auto m-auto">
             <H3>VPN Server and Network Information and Settings</H3>
             <div class="row mr-2 ml-1">
-              <a class="btn btn-secondary m-1 col-md-auto" href="">Encryption and Network</a>
-              <a class="btn btn-secondary m-1 col-md-auto" href="">Clustering Configuration</a>
+              <a class="btn btn-secondary m-1 col-md-auto disabled" aria-disabled="true" href="">Encryption and Network</a>
+              <a class="btn btn-secondary m-1 col-md-auto disabled" aria-disabled="true" href="">Clustering Configuration</a>
             </div>
             <div class="row mr-2 ml-1">
               <a class="btn btn-secondary m-1 col-md-auto" href="server_status.html">View Server Status</a>
-              <a class="btn btn-secondary m-1 col-md-auto" href="">Clustering Status</a>
+              <a class="btn btn-secondary m-1 col-md-auto disabled" aria-disabled="true" href="">Clustering Status</a>
             </div>
             <div class="row mr-2 ml-1">
               <a class="btn btn-secondary m-1 col-md-auto align-content-center" href="server_info.html"><img src="/admin/default/icons/softether-vpn-server.svg" width="42" height="42" class="d-inline-block" alt="About this VPN Server"> About this VPN Server</a>
@@ -167,32 +167,32 @@
                     </div>
                     <div class="modal-footer">
                       <!-- Button trigger modal -->
-                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#TCPIPModal_MORE" onclick="JS.ConnectionInfo($('#CONNECTION').val())">Show Connection Information</button>
-                      <!-- Modal -->
-                      <div class="modal fade" id="TCPIPModal_MORE" tabindex="-1" aria-labelledby="TCPIPModal_MORE" aria-hidden="true">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="CONNECTION_INFO_NAME"></h5>
-                            </div>
-                            <div class="modal-body" id="CONNECTION_INFO">
-                              <p id="CONNECTION"></p>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#CONNECTION').empty();$('#CONNECTION_INFO').empty();$('#CONNECTION_INFO_NAME').empty()">Close</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#TCPIPModal_MORE" data-dismiss="modal" onclick="JS.ConnectionInfo($('#CONNECTION').val())">Show Connection Information</button>
                       <button type="button" class="btn btn-primary" onclick="JS.Disconnection($('#CONNECTION').val(), '#CONNECTION_LIST')">Disconnect</button>
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                   </div>
                 </div>
                 </div>
+                <!-- Modal -->
+                <div class="modal fade" id="TCPIPModal_MORE" tabindex="-1" aria-labelledby="TCPIPModal_MORE" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="CONNECTION_INFO_NAME"></h5>
+                      </div>
+                      <div class="modal-body" id="CONNECTION_INFO">
+                        <p id="CONNECTION"></p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"  data-toggle="modal" data-target="#TCPIPModal" data-dismiss="modal" onclick="$('#CONNECTION').empty();$('#CONNECTION_INFO').empty();$('#CONNECTION_INFO_NAME').empty()">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </div>
             <div class="row mr-2 ml-1">
-            <a class="btn btn-secondary m-1 col-md-auto" href=""><img src="/admin/default/icons/Machine.ico" width="42" height="42" class="d-inline-block" alt="About this VPN Server"> Edit Config</a>
+            <a class="btn btn-secondary m-1 col-md-auto disabled" aria-disabled="true" href=""><img src="/admin/default/icons/Machine.ico" width="42" height="42" class="d-inline-block" alt="About this VPN Server"> Edit Config</a>
           </div>
         </div>
 
@@ -200,22 +200,22 @@
         <hr>
         <div class="row mr-1">
           <div class="col-md-auto">
-          <a class="btn btn-primary btn-block m-2" href=""><img src="/admin/default/icons/vpnbridge.ico" width="42" height="42" class="d-inline-block" alt="Local Bridge Setting"> Local Bridge Setting</a>
+          <a class="btn btn-primary btn-block m-2 disabled" href="" aria-disabled="true"><img src="/admin/default/icons/vpnbridge.ico" width="42" height="42" class="d-inline-block" alt="Local Bridge Setting"> Local Bridge Setting</a>
           </div>
           <div class="col-md-auto">
-          <a class="btn btn-primary btn-block m-2" href="">Layer 3 Switch Setting</a>
+          <a class="btn btn-primary btn-block m-2 disabled" href="" aria-disabled="true">Layer 3 Switch Setting</a>
           </div>
           <div class="col-md-auto">
-          <a class="btn btn-primary btn-block m-2" href="">IPSec / L2TP Setting</a>
+          <a class="btn btn-primary btn-block m-2 disabled" href="" aria-disabled="true">IPSec / L2TP Setting</a>
           </div>
           <div class="col-md-auto">
-          <a class="btn btn-primary btn-block m-2" href="">OpenVPN / MS-SSTP Setting</a>
+          <a class="btn btn-primary btn-block m-2 disabled" href="" aria-disabled="true">OpenVPN / MS-SSTP Setting</a>
           </div>
           <div class="col-md-auto">
-          <a class="btn btn-primary btn-block m-2" href="">Dynamic DNS Setting</a>
+          <a class="btn btn-primary btn-block m-2 disabled" href="" aria-disabled="true">Dynamic DNS Setting</a>
           </div>
           <div class="col-md-auto">
-          <a class="btn btn-primary btn-block m-2" href="">VPN Azure Setting</a>
+          <a href="" class="btn btn-primary btn-block m-2 disabled" aria-disabled="true">VPN Azure Setting</a>
         </div>
         </div>
         <!--#include file="include_footer.html" -->

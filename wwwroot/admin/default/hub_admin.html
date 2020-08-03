@@ -1,0 +1,67 @@
+<!-- Modal -->
+<div class="modal fade" id="AdmOpt" tabindex="-1" aria-labelledby="AdmOptLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AdmOptLabel">Virtual Hub Extended Options List</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Currently the following administration options are set for the Virtual Hub "<span id="VHUB_1"></span>"</p>
+
+
+            <div class="d-flex overflow-auto" style="height: 300px;">
+            <table class="table table-hover">
+              <thread>
+                <th scope="col">Item</th>
+                <th scope="col">Value</th>
+              </thread>
+              <tbody id="AO_LIST">
+              </tbody>
+            </table>
+          </div>
+
+
+
+          <hr>
+            <p id="AODESCR"></p>
+
+            <hr>
+            <p>The purpose of the Virtual Hub administration options is for the VPN Server Administrator to set limits for the setting ranges when the administration of the Virtual Hub is to be trusted to each Virtual Hub administrator.<br> Only an administrator with administration privileges for this entire VPN Server is able to add, edit and delete the Virtual Hub administration options. The Virtual Hub administrators are unable to make changes to the administration options, however they are able to view them.<br> There is an exception however. If allow_hub_admin_change_option is set to "1", even Virtual Hub administrators are able to edit the administration options. This API cannot be invoked on VPN Bridge. You cannot execute this API for Virtual Hubs of VPN Servers operating as a cluster member.</p>
+
+
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editValueAO" data-dismiss="modal">Edit Selected Value</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="editValueAO" tabindex="-1" aria-labelledby="editValueModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="namevalue">Name and Value</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#EVAO">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <h5 id="AOMOD_VAL_NAME"></h5>
+          <label for="AOMOD_VAL" class="form-label">Value: </label>
+          <input type="value" class="form-control" id="AOMOD_VAL" aria-describedby="valueHelp">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#EVAO">Close</button>
+        <button type="button" class="btn btn-primary" onclick="JS.AdminOptionsSet(location.search, $('#AOMOD_VAL_NAME').text(), $('#AOMOD_VAL').val() ); JS.AdminOptionsInfo(location.search)" data-dismiss="modal" data-toggle="modal" data-target="#AdmOpt">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

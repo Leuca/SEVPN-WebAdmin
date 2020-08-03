@@ -1,0 +1,68 @@
+<!-- Modal -->
+<div class="modal fade" id="EVEHOL" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="EVEHOLLabel">Virtual Hub Extended Options List</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Currently the following administration options are set for the Virtual Hub "<span id="VHUB"></span>"</p>
+
+
+            <div class="d-flex overflow-auto" style="height: 300px;">
+            <table class="table table-hover">
+              <thread>
+                <th scope="col">Item</th>
+                <th scope="col">Value</th>
+              </thread>
+              <tbody id="EO_LIST">
+              </tbody>
+            </table>
+          </div>
+
+
+
+          <hr>
+            <p id="EODESCR"></p>
+
+            <hr>
+            <p>Virtual Hub Extended Options allows you to configure more detailed parameters of this Virtual Hub</p>
+            <p>By default, both VPN Server's global administrators and individual Virtual Hub's administrators can modify the Virtual Hub Extended Options.<br> However, if the deny_hub_admin_change_ext_option is set to 1 on the Virtual Hub Admin Options, the individual Virtual Hub's administrators cannot modify the Virtual Hub Extended Options. This API cannot be invoked on VPN Bridge. You cannot execute this API for Virtual Hubs of VPN Servers operating as a cluster member.</p>
+
+
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editValue" data-dismiss="modal">Edit Selected Value</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="editValue" tabindex="-1" aria-labelledby="editValueModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="namevalue">Name and Value</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#EVEHOL">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <h5 id="MOD_VAL_NAME"></h5>
+          <label for="MOD_VAL" class="form-label">Value: </label>
+          <input type="value" class="form-control" id="MOD_VAL" aria-describedby="emailHelp">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#EVEHOL">Close</button>
+        <button type="button" class="btn btn-primary" onclick="JS.ExtendedHubSet(location.search, $('#MOD_VAL_NAME').text(), $('#MOD_VAL').val() ); JS.ExtendedHubInfo(location.search)" data-dismiss="modal" data-toggle="modal" data-target="#EVEHOL">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

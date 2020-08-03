@@ -162,7 +162,7 @@ export async function HubAdminPage(queryString: string): Promise<void>
 
         $("#HUB_NAME").append("Virtual Hub \"" + hubInfo.HubName_str + "\"");
         //Hub buttons
-        $("#HUB_BTN").append("<button type=\"button\" class=\"btn btn-primary mr-2 mt-1\" onclick=\"\">Manage Virtual Hub</button>");
+        $("#HUB_BTN").append("<button type=\"button\" class=\"btn btn-primary mr-2 mt-1\" onclick=\"\" disabled>Manage Virtual Hub</button>");
         $("#HUB_BTN").append("<button type=\"button\" class=\"btn btn-success mr-2 mt-1\" onclick=\"JS.HubOnline('" + hubInfo.HubName_str + "')\">Online</button>");
         $("#HUB_BTN").append("<button type=\"button\" class=\"btn btn-warning mr-2 mt-1\" onclick=\"JS.HubOffline('" + hubInfo.HubName_str + "')\">Offline</button>");
         $("#HUB_BTN").append("<button type=\"button\" class=\"btn btn-secondary mr-2 mt-1\" onclick=\"window.location = \'./hub_properties.html?" + hubInfo.HubName_str + "\'\">Properties</button>");
@@ -482,4 +482,138 @@ export async function HubOffline(hubName: string): Promise<void>
   {
       alert(ex);
   }
+}
+
+export async function ExtendedHubInfo(queryString: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  let li: JQuery<HTMLElement> = $("#EO_LIST");
+
+  li.children().remove();
+
+  try
+  {
+    let getHubParam: VPN.VpnRpcAdminOption = new VPN.VpnRpcAdminOption(
+        {
+            HubName_str: hubNameInput,
+        });
+    let elist = await api.GetHubExtOptions(getHubParam);
+    $("#VHUB").empty();
+    $("#VHUB").append(getHubParam.HubName_str);
+
+    elist.AdminOptionList.forEach(value =>{
+      li.append("<tr><th scope=\"row\"><button type=\"button\" class=\"btn btn-link\" onclick=\"$('#EODESCR').empty(); JS.ExtendedHubInfoDescription('" + getHubParam.HubName_str + "', '" + value.Name_str + "');$('#MOD_VAL_NAME').empty();$('#MOD_VAL_NAME').text('" + value.Name_str + "');$('#MOD_VAL').empty();$('#MOD_VAL').val('" + value.Value_u32 + "');\">" + value.Name_str + "</button></th> <td>" + value.Value_u32 + "</td></tr>")
+    });
+
+
+  }
+  catch (ex)
+  {
+      alert(ex);
+  }
+}
+
+export async function ExtendedHubInfoDescription(vhub: string, eo: string): Promise<void>
+{
+  let li: JQuery<HTMLElement> = $("#EODESCR");
+
+  li.children().remove();
+  let getHubParam: VPN.VpnRpcAdminOption = new VPN.VpnRpcAdminOption(
+      {
+          HubName_str: vhub,
+      });
+  let descr = await api.GetHubExtOptions(getHubParam);
+
+  descr.AdminOptionList.forEach(value =>{
+    if (value.Name_str == eo){
+      li.append(value.Descrption_utf);
+    }
+  });
+
+
+}
+
+export async function ExtendedHubSet(vhub: string, name: string, value: number): Promise<void>
+{
+  let hubNameInput = vhub;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+  let setParam = [
+    {"Name_str": name, "Value_u32": value, "Descrption_utf": "descrption"},
+  ]
+  let setHubParam: VPN.VpnRpcAdminOption = new VPN.VpnRpcAdminOption(
+      {
+          HubName_str: hubNameInput,
+          AdminOptionList: setParam,
+      });
+
+  await api.SetHubExtOptions(setHubParam);
+}
+
+export async function AdminOptionsInfo(queryString: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  let li: JQuery<HTMLElement> = $("#AO_LIST");
+
+  li.children().remove();
+
+  try
+  {
+    let getHubParam: VPN.VpnRpcAdminOption = new VPN.VpnRpcAdminOption(
+        {
+            HubName_str: hubNameInput,
+        });
+    let elist = await api.GetHubAdminOptions(getHubParam);
+    $("#VHUB_1").empty();
+    $("#VHUB_1").append(getHubParam.HubName_str);
+
+    elist.AdminOptionList.forEach(value =>{
+      li.append("<tr><th scope=\"row\"><button type=\"button\" class=\"btn btn-link\" onclick=\"$('#AODESCR').empty(); JS.AdminOptionsInfoDescription('" + getHubParam.HubName_str + "', '" + value.Name_str + "');$('#AOMOD_VAL_NAME').empty();$('#AOMOD_VAL_NAME').text('" + value.Name_str + "');$('#AOMOD_VAL').empty();$('#AOMOD_VAL').val('" + value.Value_u32 + "');\">" + value.Name_str + "</button></th> <td>" + value.Value_u32 + "</td></tr>")
+    });
+
+
+  }
+  catch (ex)
+  {
+      alert(ex);
+  }
+}
+
+export async function AdminOptionsInfoDescription(vhub: string, eo: string): Promise<void>
+{
+  let li: JQuery<HTMLElement> = $("#AODESCR");
+
+  li.children().remove();
+  let getHubParam: VPN.VpnRpcAdminOption = new VPN.VpnRpcAdminOption(
+      {
+          HubName_str: vhub,
+      });
+  let descr = await api.GetHubAdminOptions(getHubParam);
+
+  descr.AdminOptionList.forEach(value =>{
+    if (value.Name_str == eo){
+      li.append(value.Descrption_utf);
+    }
+  });
+
+
+}
+
+export async function AdminOptionsSet(vhub: string, name: string, value: number): Promise<void>
+{
+  let hubNameInput = vhub;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+  let setParam = [
+    {"Name_str": name, "Value_u32": value, "Descrption_utf": "descrption"},
+  ]
+  let setHubParam: VPN.VpnRpcAdminOption = new VPN.VpnRpcAdminOption(
+      {
+          HubName_str: hubNameInput,
+          AdminOptionList: setParam,
+      });
+
+  await api.SetHubAdminOptions(setHubParam);
 }

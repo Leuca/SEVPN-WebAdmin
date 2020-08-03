@@ -20,4 +20,10 @@ export declare function ConnectionInfo(connection: string): Promise<void>;
 export declare function Disconnection(con: string, conList: string): Promise<void>;
 export declare function HubOnline(hubName: string): Promise<void>;
 export declare function HubOffline(hubName: string): Promise<void>;
+export declare function ExtendedHubInfo(queryString: string): Promise<void>;
+export declare function ExtendedHubInfoDescription(vhub: string, eo: string): Promise<void>;
+export declare function ExtendedHubSet(vhub: string, name: string, value: number): Promise<void>;
+export declare function AdminOptionsInfo(queryString: string): Promise<void>;
+export declare function AdminOptionsInfoDescription(vhub: string, eo: string): Promise<void>;
+export declare function AdminOptionsSet(vhub: string, name: string, value: number): Promise<void>;
 //# sourceMappingURL=main.d.ts.map

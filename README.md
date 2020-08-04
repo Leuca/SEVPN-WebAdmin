@@ -1,5 +1,4 @@
 # SotEtherVPN HTML5-based Admin Console
-
 ### Notes
   - *Buttons not yet implemented are disabled*
   - Built using [Bootstrap (v.5.0.0-alpha1)](https://github.com/twbs/bootstrap) and [SoftEther VPN Server JSON-RPC Document on GitHub](https://github.com/SoftEtherVPN/SoftEtherVPN/tree/master/developer_tools/vpnserver-jsonrpc-clients/)

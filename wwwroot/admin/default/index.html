@@ -49,8 +49,28 @@
         </div>
         <div class="col-md-auto">
           <H3>Create new Virtual Hub</H3>
-          Virtual Hub Name:<BR>
-          <input id="NEW_HUB_NAME" /> <button class="btn btn-primary btn-sm" onclick="JS.CreateNewHub($('#NEW_HUB_NAME').val(), '#HUB_LIST')">Create</button>
+          <form>
+            <div class="row gy-2 gx-3 align-items-center">
+            <div class="col-auto">
+              <label for="NEW_HUB_NAME" class="col-form-label">Virtual Hub Name:</label>
+            </div>
+            <div class="col-auto">
+          <input id="NEW_HUB_NAME" type="text" class="form-control" aria-describedby="hubnameHelpInline"/>
+        </div>
+        <div class="col-auto">
+          <input type="password" id="passwd" class="form-control" aria-describedby="passwordHelpInline" placeholder="Password">
+        </div>
+        <div class="col-auto">
+          <input type="password" id="confirm" class="form-control" aria-describedby="confirmHelpInline" placeholder="Confirmation">
+        </div>
+        <div id="confirmHelpInline" class="form-text">
+          <p id="perror" style="color: red;"></p>
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-primary btn-sm" onclick="check()">Create</button>
+        </div>
+        </div>
+        </form>
         </div>
         </div>
         </div>
@@ -221,6 +241,21 @@
         <!--#include file="include_footer.html" -->
       </main>
     </body>
+    <script>
+      function check(){
+        var p = document.getElementById("passwd");
+        var c = document.getElementById("confirm");
+        if(p.value!=c.value){
+          p.value = "";
+          c.value = "";
+          document.getElementById("perror").innerHTML = "Passwords do not match";
+          return;
+        }
+        else{
+          JS.CreateNewHub($('#NEW_HUB_NAME').val(), '#HUB_LIST', $('#passwd').val());
+        }
+      }
+    </script>
     <script>
         //JS.ShowVpnServerInfo("#VPN_SERVER_INFO", "#VPN_SERVER_STATUS");
         JS.ListVirtualHubs("#HUB_LIST");

@@ -70,18 +70,50 @@ export async function ShowVpnServerInfo(idInfo: string, idStatus: string): Promi
 
     Object.keys(serverInfo).forEach(key =>
     {
+        if(key == "ServerType_u32"){
+          switch((<any>serverInfo)[key] ){
+            case 0: {
+              (<any>serverInfo)[key]  = "Standalone server";
+              break;
+            }
+            case 1: {
+              (<any>serverInfo)[key]  = "Cluster controller server";
+              break;
+            }
+            case 2: {
+              (<any>serverInfo)[key]  = "Cluster member server";
+              break;
+            }
+          }
+        }
         //infoList.append("<li>" + key + ": \"" + (<any>serverInfo)[key] + "\"</li>");
         infoList.append("<tr><th scope=\"row\">" + key + "</th><td>" + (<any>serverInfo)[key] + "</td></tr>");
     });
 
     Object.keys(serverStatus).forEach(key =>
     {
+        if(key == "ServerType_u32"){
+          switch((<any>serverStatus)[key]){
+            case 0: {
+              (<any>serverStatus)[key] = "Standalone server";
+              break;
+            }
+            case 1: {
+              (<any>serverStatus)[key] = "Cluster controller server";
+              break;
+            }
+            case 2: {
+              (<any>serverStatus)[key] = "Cluster member server";
+              break;
+            }
+          }
+        }
         //statusList.append("<li>" + key + ": \"" + (<any>serverStatus)[key] + "\"</li>");
         statusList.append("<tr><th scope=\"row\">" + key + "</th><td>" + (<any>serverStatus)[key] + "</td></tr>");
     });
 }
 
-export async function CreateNewHub(hubName: string, idList: string): Promise<void>
+export async function CreateNewHub(hubName: string, idList: string, passwd: string): Promise<void>
 {
     if (hubName == null || hubName == "")
     {
@@ -94,15 +126,16 @@ export async function CreateNewHub(hubName: string, idList: string): Promise<voi
         let param: VPN.VpnRpcCreateHub = new VPN.VpnRpcCreateHub(
             {
                 HubName_str: hubName,
+                AdminPasswordPlainText_str: passwd,
                 Online_bool: true,
                 HubType_u32: VPN.VpnRpcHubType.Standalone,
             });
 
         await api.CreateHub(param);
 
-        ListVirtualHubs(idList);
+        //ListVirtualHubs(idList);
 
-        alert("The Virtual Hub '" + hubName + "' is created.");
+        //alert("The Virtual Hub '" + hubName + "' is created.");
     }
     catch (ex)
     {
@@ -116,7 +149,24 @@ function ConcatKeysToHtml(obj: any): string
 
     Object.keys(obj).forEach(key =>
     {
+        if(key == "HubType_u32"){
+          switch((<any>obj)[key]){
+            case 0: {
+              (<any>obj)[key] = "Standalone";
+              break;
+            }
+            case 1: {
+              (<any>obj)[key] = "Static Hub";
+              break;
+            }
+            case 2: {
+              (<any>obj)[key] = "Dynamic Hub";
+              break;
+            }
+          }
+        }
         ret += "<tr><th scope=\"row\">" + key + "</th> <td>" + (<any>obj)[key] + "</td></tr>";
+
     });
 
     return ret;
@@ -210,6 +260,7 @@ export async function HubAdminPage(queryString: string): Promise<void>
     }
 }
 
+
 export async function HubPropertiesPage(queryString: string): Promise<void>
 {
     let hubNameInput = queryString;
@@ -248,6 +299,22 @@ export async function HubPropertiesPage(queryString: string): Promise<void>
         $('#MAX_SESSIONS').val(hubStatus.MaxSession_u32);
         //Go back
         $("#END_BTN").append("<button class=\"btn btn-secondary\" type=\"button\" onclick=\"window.location.href = './hub.html?" + hubNameInput + "'\">Back</button>");
+        //Cluster Mode Type
+        let getHubMode: VPN.VpnRpcHubStatus = new VPN.VpnRpcHubStatus(
+            {
+                HubName_str: hubNameInput,
+            });
+        let hubMode = await api.GetHubStatus(getHubMode);
+        $("#HUB_MODE").empty();
+        if(hubMode.HubType_u32 == 0){
+          $("#HUB_MODE").append("Currently the server is operating in Standalone Mode.This virtual Hub is operating as Standalone Hub.");
+        }
+        else if (hubStatus.HubType_u32 == 1){
+          $("#HUB_MODE").append("This virtual Hub is operating as Static Virtual Hub.");
+        }
+        else{
+          $("#HUB_MODE").append("This virtual Hub is operating as Dynamic Virtual Hub.");
+        }
 
     }
     catch (ex)
@@ -275,7 +342,7 @@ export async function HubPropertiesSet(queryString: string, passwd: string, on: 
           });
 
       await api.SetHub(getHubParam);
-      //window.location.reload();
+      window.location.reload();
   }
 
   catch (ex)
@@ -616,4 +683,167 @@ export async function AdminOptionsSet(vhub: string, name: string, value: number)
       });
 
   await api.SetHubAdminOptions(setHubParam);
+}
+
+export async function EnumerateAc(queryString: string): Promise<void>
+{
+    let hubNameInput = queryString;
+    if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+    let al: JQuery<HTMLElement> = $("#AL");
+
+    al.children().remove();
+
+    let eAc: VPN.VpnRpcAcList = new VPN.VpnRpcAcList(
+      {
+        HubName_str: hubNameInput,
+      });
+    let alist = await api.GetAcList(eAc);
+    var c: number;
+    var p: number;
+    p = 0;
+    c = 0;
+    alist.ACList.forEach(value =>{
+      var action: string;
+      var subnet: string;
+      subnet = "";
+      if (value.Deny_bool == true){action = "Deny"} else {action = "Pass"};
+      if (value.Masked_bool == true) {subnet = "/" + value.SubnetMask_ip};
+      al.append("<tr><th scope=\"row\"><button class=\"btn btn-primary btn-sm\" type=\"button\" onclick=\"$('#RN').empty(); $('#RN').val("+ value.Id_u32 +")\">" + value.Id_u32 + "</button></th><td>" + value.Priority_u32 + "</td><td>" + action + "</td><td>" + value.IpAddress_ip + subnet + "</td></tr>");
+
+    });
+
+    $("#RNL").val(alist.ACList.length);
+}
+
+export async function SelectAc(queryString: string, id: number): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+  let eAc: VPN.VpnRpcAcList = new VPN.VpnRpcAcList(
+    {
+      HubName_str: hubNameInput,
+    });
+  let alist = await api.GetAcList(eAc);
+  $("#I_NETMASK").empty();
+  $("#IPADDR").empty();
+  $("#IPADDR").val(alist.ACList[id-1].IpAddress_ip);
+  if(alist.ACList[id-1].Masked_bool == true){
+    $("#CHECKNM").text('true');
+    $("#CHECKNM_C").append("<input type=\"checkbox\" class=\"form-check-input\" id=\"CNETM\" onclick=\"$('#CHECKNM').empty(); $('#CHECKNM').text('false')\" checked>");
+    $("#I_NETMASK").append("<input type=\"text\" class=\"form-control\" id=\"NETMASK\">");
+  }
+  else {
+    $("#CHECKNM").text('false');
+    $("#CHECKNM_C").append("<input type=\"checkbox\" class=\"form-check-input\" id=\"CNETM\" onclick=\"document.getElementById('NETMASK').removeAttribute('disabled'); $('#CHECKNM').empty(); $('#CHECKNM').text('true') \">");
+    $("#I_NETMASK").append("<input type=\"text\" class=\"form-control\" id=\"NETMASK\" disabled>");
+  }
+  if(alist.ACList[id-1].Deny_bool == true){
+    $("#BOOLD").text('true');
+    $("#B_A").append("<input class=\"form-check-input\" type=\"radio\" name=\"d\" id=\"permit\" onclick=\"$('#BOOLD').empty(); $('#BOOLD').text('false')\">");
+    $("#B_D").append("<input class=\"form-check-input\" type=\"radio\" name=\"d\" id=\"deny\" checked>");
+  }
+  else{
+    $("#BOOLD").text('false');
+    $("#B_A").append("<input class=\"form-check-input\" type=\"radio\" name=\"d\" id=\"permit\" checked>");
+    $("#B_D").append("<input class=\"form-check-input\" type=\"radio\" name=\"d\" id=\"deny\" onclick=\"$('#BOOLD').empty(); $('#BOOLD').text('true')\">");
+  }
+  $("#PRIORITY").empty();
+  $("#PRIORITY").val(alist.ACList[id-1].Priority_u32);
+  $("#NETMASK").empty();
+  $("#NETMASK").val(alist.ACList[id-1].SubnetMask_ip);
+}
+
+export async function SetAc(queryString: string, id: number, prio: number, deny: boolean, masked: boolean, ip: string, subnet: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  let eAcc: VPN.VpnRpcAcList = new VPN.VpnRpcAcList(
+    {
+      HubName_str: hubNameInput,
+    });
+  let alist = await api.GetAcList(eAcc);
+
+  alist.ACList.splice(id-1, 1 , {"Id_u32": id, "Priority_u32": prio, "Deny_bool": deny, "Masked_bool": masked, "IpAddress_ip": ip, "SubnetMask_ip": subnet});
+
+
+  await api.SetAcList(alist);
+  EnumerateAc(queryString);
+}
+
+export async function AddAc(queryString: string, id: number, prio: number, deny: boolean, masked: boolean, ip: string, subnet: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  let eAcc: VPN.VpnRpcAcList = new VPN.VpnRpcAcList(
+    {
+      HubName_str: hubNameInput,
+    });
+  let alist = await api.GetAcList(eAcc);
+
+  let set = [
+    {"Id_u32": id, "Priority_u32": prio, "Deny_bool": deny, "Masked_bool": masked, "IpAddress_ip": ip,"SubnetMask_ip": subnet}
+  ];
+  let newA = alist.ACList.concat(set);
+  let eAc: VPN.VpnRpcAcList = new VPN.VpnRpcAcList(
+    {
+      HubName_str: hubNameInput,
+      ACList: newA,
+    });
+  await api.SetAcList(eAc);
+  EnumerateAc(queryString);
+}
+
+export async function DelAc(queryString: string, id: number): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  let eAcc: VPN.VpnRpcAcList = new VPN.VpnRpcAcList(
+    {
+      HubName_str: hubNameInput,
+    });
+  let alist = await api.GetAcList(eAcc);
+
+  alist.ACList.splice(id-1, 1);
+
+
+  await api.SetAcList(alist);
+  EnumerateAc(queryString);
+}
+
+export async function MsgGet(queryString: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  let msgParam: VPN.VpnRpcMsg = new VPN.VpnRpcMsg(
+    {
+      HubName_str: hubNameInput,
+    });
+  let msg = await api.GetHubMsg(msgParam);
+  let m: JQuery<HTMLElement> = $("#MSGINPUT");
+
+  m.children().remove();
+  // Define the string
+  var emsg = msg.Msg_bin.toString();
+
+  // Decode the String
+  var dmsg = atob(emsg);
+  m.append(dmsg);
+}
+
+
+export async function MsgSet(queryString: string, msg: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  console.log(msg);
+  var encode = new TextEncoder();
+  var arr = encode.encode(msg);
+  console.log(arr);
+  let msgParam: VPN.VpnRpcMsg = new VPN.VpnRpcMsg(
+    {
+      HubName_str: hubNameInput,
+      Msg_bin: arr,
+    });
+  await api.SetHubMsg(msgParam);
 }

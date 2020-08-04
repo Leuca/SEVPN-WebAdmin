@@ -5,7 +5,7 @@ import "whatwg-fetch";
 export declare function Test_Test(): Promise<void>;
 export declare function ListVirtualHubs(id: string): Promise<void>;
 export declare function ShowVpnServerInfo(idInfo: string, idStatus: string): Promise<void>;
-export declare function CreateNewHub(hubName: string, idList: string): Promise<void>;
+export declare function CreateNewHub(hubName: string, idList: string, passwd: string): Promise<void>;
 export declare function DeleteVirtualHub(queryString: string): Promise<void>;
 export declare function HubAdminPage(queryString: string): Promise<void>;
 export declare function HubPropertiesPage(queryString: string): Promise<void>;
@@ -26,4 +26,11 @@ export declare function ExtendedHubSet(vhub: string, name: string, value: number
 export declare function AdminOptionsInfo(queryString: string): Promise<void>;
 export declare function AdminOptionsInfoDescription(vhub: string, eo: string): Promise<void>;
 export declare function AdminOptionsSet(vhub: string, name: string, value: number): Promise<void>;
+export declare function EnumerateAc(queryString: string): Promise<void>;
+export declare function SelectAc(queryString: string, id: number): Promise<void>;
+export declare function SetAc(queryString: string, id: number, prio: number, deny: boolean, masked: boolean, ip: string, subnet: string): Promise<void>;
+export declare function AddAc(queryString: string, id: number, prio: number, deny: boolean, masked: boolean, ip: string, subnet: string): Promise<void>;
+export declare function DelAc(queryString: string, id: number): Promise<void>;
+export declare function MsgGet(queryString: string): Promise<void>;
+export declare function MsgSet(queryString: string, msg: string): Promise<void>;
 //# sourceMappingURL=main.d.ts.map

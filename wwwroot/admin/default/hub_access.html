@@ -1,0 +1,113 @@
+<!-- Modal -->
+<div class="modal fade" id="access" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Source IP Address Limit List</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>To allow or deny connections to this VPN Server Virtual Hub "<span id="VHUB_IP"></span>" according to the client computer's IP address, you can set the rules to allow or deny the connection below.</p>
+        <div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Priority</th>
+                <th scope="col">Action</th>
+                <th scope="col">Contents</th>
+              </tr>
+            </thead>
+            <tbody id="AL">
+
+
+            </tbody>
+          </table>
+
+
+          </div>
+        <p>If the client's IP address does not match any item in the list, VPN connection to this Virtual Hub will be allowed.</p>
+      </div>
+      <div class="modal-footer">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" onclick="JS.AddAc(location.search, 1, 100, 'false' ,'false' , '0.0.0.0', '0.0.0.0'); EnumerateAc(location.search)">New Rule</button>
+        <p id="RNL" style="display:none;"></p>
+        <p id="PRIORITYL" style="display:none;"></p>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Rule" data-dismiss="modal" onclick="JS.SelectAc(location.search, $('#RN').val())">Edit Rule</button>
+        <p id="RN" style="display:none;"></p>
+        <button type="button" class="btn btn-primary" onclick="JS.DelAc(location.search, $('#RN').val())">Delete Rule</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Rule" tabindex="-1" aria-labelledby="RuleLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="RuleLabel">Edit Rule Entry of Source IP Address Limit List</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dismiss="modal" data-toggle="modal" data-target="#access">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <form>
+          <div class="mb-3">
+            <label for="IPADDR" class="form-label">IP Address</label>
+            <input type="text" class="form-control" id="IPADDR" aria-describedby="IPHelp">
+          </div>
+          <div class="mb-3 form-check" id="CHECKNM_C">
+
+            <label class="form-check-label" for="CNETM">Network Mask</label>
+            <p id="CHECKNM" style="display: none;"></p>
+          </div>
+          <div class="mb-3" id="I_NETMASK">
+            <label for="NETMASK" class="form-label">Net Mask</label>
+
+          </div>
+        </form>
+        </div>
+        <div>
+        <div class="form-check form-check-inline" id="B_A">
+          <input class="form-check-input" type="radio" name="d" id="permit">
+          <label class="form-check-label" for="permit">
+            Permit
+            </label>
+          </div>
+          <div class="form-check form-check-inline" id="B_D">
+
+            <label class="form-check-label" for="deny">
+              Deny
+            </label>
+          </div>
+          <p id="BOOLD" style="display: none;"></p>
+          </div>
+          <div>
+            <div class="row g-3 align-items-center">
+              <div class="col-auto">
+                <label for="PRIORITY" class="col-form-label">Priority</label>
+              </div>
+              <div class="col-auto">
+                <input type="text" id="PRIORITY" class="form-control" aria-describedby="priorityHelpInline">
+              </div>
+              <div class="col-auto">
+                <span id="priorityHelpInline" class="form-text">
+                  (Integer: higer priority is given to smaller numbers)
+                </span>
+              </div>
+            </div>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#access">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#access" onclick="JS.SetAc(location.search, $('#RN').val(), $('#PRIORITY').val(), $('#BOOLD').text(), $('#CHECKNM').text() , $('#IPADDR').val(), $('#NETMASK').val())">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

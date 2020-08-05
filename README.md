@@ -25,6 +25,7 @@
   - [ ] OpenVPN/MS-SSTP Setting
   - [ ] Dynamic DNS Setting
   - [ ] VPN Azure Setting
+  - [ ] Disable unecessary items if logged in Hub Admin mode
 ## Installing the web UI
 It is possible to try this UI by copying the ```wwwroot``` folder into a previously cloned SoftEtherVPN source code and by compliling it.<br>
 In a UNIX environment should be something like this:

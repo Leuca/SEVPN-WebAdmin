@@ -38,6 +38,8 @@
   - [ ] VPN Azure Setting
   - [ ] Disable unecessary items if logged in as a Hub Admin
   - [ ] Implement a function that translates 0.0.0.0 to /0 (-ish)
+#### Post-checklist
+  - [ ] Work on the graphical aspects
 ## Installing the web UI
 It is possible to try this UI by copying the ```wwwroot``` folder into a previously cloned SoftEtherVPN source code and by compliling it.<br>
 In a UNIX environment should be something like this:

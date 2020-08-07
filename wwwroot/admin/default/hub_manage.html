@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<!--#include file="include_head.html" -->
+<body class="d-flex flex-column min-vh-100">
+<!--#include file="include_menu.html" -->
+<main class="my-auto py-2">
+<div class="container-fluid">
+<div class="row">
+  <div class="col-md-auto">
+    <div>
+      <h5>Management of Security Database</h5>
+      <div id="USERS"></div>
+    <p>Add, delete or edit user accounts.</p>
+    <hr>
+    <button type="button" class="btn btn-secondary">Manage Groups</button>
+    <p>Add, delete or edit groups.</p>
+    <hr>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#accessList" onclick="JS.EnumAccessLists(location.search)">Manage Access Lists</button>
+    <!--#include file="manage_access_list.html"-->
+    <!--#include file="access_modal.html"-->
+    <p>Add, delete or edit lists (packet filtering rules).</p>
+  </div>
+  <div>
+    <h5>Virtual Hub Settings</h5>
+    <div id="PROPERTIES"></div>
+    <p>Configure this Hub</p>
+    <hr>
+    <button type="button" class="btn btn-secondary">Authentication Server Setting</button>
+    <p>Use external RADIUS authentication server for user authentication.</p>
+    <hr>
+    <button type="button" class="btn btn-secondary">Manage Cascade Connections</button>
+    <p>Establish Cascade Connection to Hubs on local or remote VPN Servers.</p>
+  </div>
+  </div>
+  <div class="col-md-auto">
+    <div>
+      <h5>Current Status of This Virtual Hub</h5>
+      <div class="overflow-auto" id="STATUS" style="height: 300px"></div>
+      <div class="d-flex justify-content-end mt-2"><button type="button" class="btn btn-secondary" onclick="$('#STATUS').empty(); JS.HubManagePageStatus(location.search)">Refresh</button></div>
+    </div>
+    <div>
+      <h5>Other Settings</h5>
+      <button type="button" class="btn btn-secondary">Log Save Settings</button><button type="button" class="btn btn-secondary">Log File List</button>
+      <p>Configure settings of log saving function</p>
+      <hr>
+      <button type="button" class="btn btn-secondary">Trusted CA Certificates</button><button type="button" class="btn btn-secondary">Revoked Certificates</button>
+      <p>Manage trusted CA certificates</p>
+      <hr>
+      <button type="button" class="btn btn-secondary">Virtual NAT and Virtual DHCP Server (Secure NAT)</button>
+      <p>Secure NAT is *available* on this Virtual Hub. You can run Virtual NAT and Virtual DHCP</p>
+    </div>
+    <div>
+      <h5>VPN Sessions Management</h5>
+      <button type="button" class="btn btn-secondary">Manage Sessions</button>
+    </div>
+    <div class="d-flex justify-content-end" id="END"></div>
+  </div>
+</div>
+
+
+<!--#include file="include_footer.html" -->
+</div>
+</main>
+</body>
+<script>
+  JS.HubManagePage(location.search);
+</script>
+</html>

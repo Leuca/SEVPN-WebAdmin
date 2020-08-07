@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en">
 <!--#include file="include_head.html" -->
-    <body>
+    <body class="d-flex flex-column min-vh-100">
 <!--#include file="include_menu.html" -->
-<main class="my-auto">
+<main class="my-auto py-2">
 <div class="container-fluid m-auto">
         <!--<H2>SoftEther VPN Server HTML5 Ajax-based Web Administration Console<BR>(Under construction!)</H2>
         <p>This is the sample of HTML5 Ajax-based VPN Server Web Administration Console.</p>
@@ -122,18 +122,18 @@
                       </div>
                     </div>
                     </div>
-                    <div class="row mr-2 ml-1">
-                    <button type="button" class="btn btn-danger m-1" onclick="JS.DeleteListener($('#PORT_L').val(),'#LISTENERS')">
+                    <div class="row mr-2 ml-1" id="BTN_LIS">
+                    <button type="button" class="btn btn-danger m-1" onclick="JS.DeleteListener($('#PORT_L').val(),'#LISTENERS')" disabled>
                       Delete
                     </button>
                     </div>
-                    <div class="row mr-2 ml-1">
-                    <button type="button" class="btn btn-success m-1" onclick="JS.EnableListener($('#PORT_L').val(),'#LISTENERS')">
+                    <div class="row mr-2 ml-1" id="ENE">
+                    <button type="button" class="btn btn-success m-1" onclick="JS.EnableListener($('#PORT_L').val(),'#LISTENERS')" disabled>
                       Online
                     </button>
                     </div>
-                    <div class="row mr-2 ml-1">
-                    <button type="button" class="btn btn-warning m-1" onclick="JS.DisableListener($('#PORT_L').val(),'#LISTENERS')">
+                    <div class="row mr-2 ml-1" id="DIS">
+                    <button type="button" class="btn btn-warning m-1" onclick="JS.DisableListener($('#PORT_L').val(),'#LISTENERS')" disabled>
                       Offline
                     </button>
                     </div>

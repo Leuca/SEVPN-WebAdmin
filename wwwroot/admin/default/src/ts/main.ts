@@ -17,6 +17,8 @@ import * as VPN from "vpnrpc/dist/vpnrpc";
 VPN.VpnServerRpc.SetDebugMode(true);
 
 let api: VPN.VpnServerRpc;
+
+
 // Creating the VpnServerRpc class instance here.
 if (VPN.VpnServerRpc.IsNodeJS() === false) // // Determine if this JavaScript environment is on the Node.js or not
 {
@@ -133,9 +135,9 @@ export async function CreateNewHub(hubName: string, idList: string, passwd: stri
 
         await api.CreateHub(param);
 
-        //ListVirtualHubs(idList);
+        ListVirtualHubs(idList);
 
-        //alert("The Virtual Hub '" + hubName + "' is created.");
+        alert("The Virtual Hub '" + hubName + "' is created.");
     }
     catch (ex)
     {
@@ -196,10 +198,11 @@ export async function DeleteVirtualHub(queryString: string): Promise<void>
     }
 }
 
-export async function HubAdminPage(queryString: string): Promise<void>
+export async function HubTest(queryString: string): Promise<void>
 {
     let hubNameInput = queryString;
     if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+    let btn: JQuery<HTMLElement> = $("#HUB_BTN");
 
     try
     {
@@ -212,11 +215,53 @@ export async function HubAdminPage(queryString: string): Promise<void>
 
         $("#HUB_NAME").append("Virtual Hub \"" + hubInfo.HubName_str + "\"");
         //Hub buttons
-        $("#HUB_BTN").append("<button type=\"button\" class=\"btn btn-primary mr-2 mt-1\" onclick=\"\" disabled>Manage Virtual Hub</button>");
-        $("#HUB_BTN").append("<button type=\"button\" class=\"btn btn-success mr-2 mt-1\" onclick=\"JS.HubOnline('" + hubInfo.HubName_str + "')\">Online</button>");
-        $("#HUB_BTN").append("<button type=\"button\" class=\"btn btn-warning mr-2 mt-1\" onclick=\"JS.HubOffline('" + hubInfo.HubName_str + "')\">Offline</button>");
-        $("#HUB_BTN").append("<button type=\"button\" class=\"btn btn-secondary mr-2 mt-1\" onclick=\"window.location = \'./hub_properties.html?" + hubInfo.HubName_str + "\'\">Properties</button>");
-        $("#HUB_BTN").append("<button type=\"button\" class=\"btn btn-danger mt-1\" onclick=\"JS.DeleteVirtualHub(location.search);\">Delete this Virtual Hub</button>");
+        btn.append("<button type=\"button\" class=\"btn btn-primary mr-2 mt-1\" onclick=\"window.location.href =\'./hub_manage.hrml?" + hubInfo.HubName_str + "\'\" disabled>Manage Virtual Hub</button>");
+        if(hubInfo.Online_bool == true){
+          btn.append("<button type=\"button\" class=\"btn btn-success mr-2 mt-1\" onclick=\"JS.HubOnline('" + hubInfo.HubName_str + "')\" disabled>Online</button>");
+          btn.append("<button type=\"button\" class=\"btn btn-warning mr-2 mt-1\" onclick=\"JS.HubOffline('" + hubInfo.HubName_str + "')\">Offline</button>");
+        }
+        else{
+          btn.append("<button type=\"button\" class=\"btn btn-success mr-2 mt-1\" onclick=\"JS.HubOnline('" + hubInfo.HubName_str + "')\">Online</button>");
+          btn.append("<button type=\"button\" class=\"btn btn-warning mr-2 mt-1\" onclick=\"JS.HubOffline('" + hubInfo.HubName_str + "')\" disabled>Offline</button>");
+        }
+        btn.append("<button type=\"button\" class=\"btn btn-secondary mr-2 mt-1\" onclick=\"window.location = \'./hub_properties.html?" + hubInfo.HubName_str + "\'\">Properties</button>");
+        btn.append("<button type=\"button\" class=\"btn btn-danger mt-1\" onclick=\"JS.DeleteVirtualHub(location.search);\">Delete this Virtual Hub</button>");
+    }
+    catch (ex)
+    {
+        alert(ex);
+    }
+}
+
+export async function HubAdminPage(queryString: string): Promise<void>
+{
+    let hubNameInput = queryString;
+    if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+    let btn: JQuery<HTMLElement> = $("#HUB_BTN");
+
+    try
+    {
+        let getHubParam: VPN.VpnRpcCreateHub = new VPN.VpnRpcCreateHub(
+            {
+                HubName_str: hubNameInput,
+            });
+
+        let hubInfo = await api.GetHub(getHubParam);
+
+        $("#HUB_NAME").append("Virtual Hub \"" + hubInfo.HubName_str + "\"");
+        $("#COLLAPSE").attr("style", "");
+        //Hub buttons
+        btn.append("<button type=\"button\" class=\"btn btn-primary mr-2 mt-1\" onclick=\"window.location.href =\'./hub_manage.hrml?" + hubInfo.HubName_str + "\'\" disabled>Manage Virtual Hub</button>");
+        if(hubInfo.Online_bool == true){
+          btn.append("<button type=\"button\" class=\"btn btn-success mr-2 mt-1\" onclick=\"JS.HubOnline('" + hubInfo.HubName_str + "')\" disabled>Online</button>");
+          btn.append("<button type=\"button\" class=\"btn btn-warning mr-2 mt-1\" onclick=\"JS.HubOffline('" + hubInfo.HubName_str + "')\">Offline</button>");
+        }
+        else{
+          btn.append("<button type=\"button\" class=\"btn btn-success mr-2 mt-1\" onclick=\"JS.HubOnline('" + hubInfo.HubName_str + "')\">Online</button>");
+          btn.append("<button type=\"button\" class=\"btn btn-warning mr-2 mt-1\" onclick=\"JS.HubOffline('" + hubInfo.HubName_str + "')\" disabled>Offline</button>");
+        }
+        btn.append("<button type=\"button\" class=\"btn btn-secondary mr-2 mt-1\" onclick=\"window.location = \'./hub_properties.html?" + hubInfo.HubName_str + "\'\">Properties</button>");
+        btn.append("<button type=\"button\" class=\"btn btn-danger mt-1\" onclick=\"JS.DeleteVirtualHub(location.search);\">Delete this Virtual Hub</button>");
         // User list
         let enumUserParam: VPN.VpnRpcEnumUser = new VPN.VpnRpcEnumUser(
             {
@@ -225,7 +270,7 @@ export async function HubAdminPage(queryString: string): Promise<void>
 
         let enumUserRet = await api.EnumUser(enumUserParam);
 
-        let userListHtmlItem = $("#USERS_LIST");
+        let userListHtmlItem: JQuery<HTMLElement> = $("#USERS_LIST");
 
         enumUserRet.UserList.forEach(user =>
         {
@@ -297,8 +342,9 @@ export async function HubPropertiesPage(queryString: string): Promise<void>
         //Max Sessions
         $("#MAX_S").append("Max Number of Sessions (0 for unlimited): <input class=\"form-control\" id=\"MAX_SESSIONS\" aria-describedby=\"maximumSessions\" placeholder=\"" + hubStatus.MaxSession_u32 + "\"/>")
         $('#MAX_SESSIONS').val(hubStatus.MaxSession_u32);
-        //Go back
-        $("#END_BTN").append("<button class=\"btn btn-secondary\" type=\"button\" onclick=\"window.location.href = './hub.html?" + hubNameInput + "'\">Back</button>");
+        //Go back to hub
+        $("#END_BTN").append("<button class=\"btn btn-secondary\" type=\"button\" onclick=\"window.location.href = './hub.html?" + hubNameInput + "'; JS.cleartwk()\">Go to hub</button>");
+        $("#END_BTN").append("<button class=\"btn btn-secondary\" type=\"button\" onclick=\"window.location.href = './hub_manage.html?" + hubNameInput + "'; JS.cleartwk()\">Go to hub management</button>");
         //Cluster Mode Type
         let getHubMode: VPN.VpnRpcHubStatus = new VPN.VpnRpcHubStatus(
             {
@@ -321,6 +367,259 @@ export async function HubPropertiesPage(queryString: string): Promise<void>
     {
         alert(ex);
     }
+}
+
+export async function HubManagePage(queryString: string): Promise<void>
+{
+    let hubNameInput = queryString;
+    if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+    let getHubParam: VPN.VpnRpcCreateHub = new VPN.VpnRpcCreateHub(
+        {
+            HubName_str: hubNameInput,
+        });
+
+    let hubInfo = await api.GetHub(getHubParam);
+
+    $("#USERS").append("<button type=\"button\" class=\"btn btn-secondary\" onclick=\"windows.location.href = './hub_manage_users.html?" + hubInfo.HubName_str + "'\">Manage Users</button>");
+    $("#END").append("<button type=\"button\" class=\"btn btn-secondary\" onclick=\"window.location.href = './hub.html?" + hubInfo.HubName_str + "'\">Back</button>");
+    $("PROPERTIES").append("<button type=\"button\" class=\"btn btn-secondary\" onclick=\"window.location.href = './hub_properties.html?" + hubInfo.HubName_str + "'\">Virtual Hub Properties</button>");
+
+    HubManagePageStatus(queryString);
+}
+
+
+export async function HubManagePageStatus(queryString: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  //Hub Status
+  let getHubStatus: VPN.VpnRpcHubStatus = new VPN.VpnRpcHubStatus(
+      {
+          HubName_str: hubNameInput,
+      });
+  let hubStatus = await api.GetHubStatus(getHubStatus);
+  $("#STATUS").append("<table class=\"table table-hover\"><thread><th scope=\"col\">Item</th><th scope=\"col\">Value</th></thread><tbody>" + ConcatKeysToHtml(hubStatus) + "</tbody></table>");
+}
+
+function AccessListsContent(obj: any): string
+{
+    let proto: string = "";
+    let ret: string = "";
+    let pre: string = "";
+    let comma: string = "";
+    let tcpstate: string = "";
+    if(obj.IsIPv6_bool == true){
+      pre = "(ipv6) ";
+      obj.DestIpAddress_ip = "0.0.0.0";
+      obj.DestSubnetMask_ip = "0.0.0.0";
+      obj.SrcIpAddress_ip = "0.0.0.0";
+      obj.SrcSubnetMask_ip = "0.0.0.0";
+    }
+    else{
+      pre = "(ipv4) ";
+    }
+    if(obj.Protocol_u32 == 6){
+      if(obj.CheckTcpState_bool == true){
+        if(obj.Established_bool == true){
+          tcpstate = ", Established";
+        }
+        else{
+          tcpstate = ", Unestablished";
+        }
+      }
+    }
+
+
+    Object.keys(obj).forEach(key =>
+    {
+      //if(key != "SrcIpAddress_ip" && key != "SrcSubnetMask_ip" && key != "DestIpAddress_ip" && key != "DestSubnetMask_ip" && key != "SrcIpAddress6_bin" && key != "SrcSubnetMask6_bin" && key != "DestIpAddress6_bin" && key != "DestSubnetMask6_bin" && key != "SrcMacAddress_bin" && key != "SrcMacMask_bin" && key != "DstMacAddress_bin" && key != "DstMacMask_bin"){
+        if ((<any>obj)[key] != 0 && (<any>obj)[key] != "0.0.0.0" && (<any>obj)[key] != "AAAAAAAAAAAAAAAAAAAAAA==" && (<any>obj)[key] != "AAAAAAAA" && (<any>obj)[key] != ""){
+          if(key != "Id_u32" && key != "Note_utf" && key != "Active_bool" && key != "Priority_u32" && key != "Discard_bool" && key != "IsIPv6_bool" && key != "UniqueId_u32" && key != "CheckTcpState_bool" && key != "Established_bool"){
+            if(key == "Protocol_u32"){
+              switch((<any>obj)[key]){
+                case 1: proto = "ICMP for IPv4";break;
+                case 6: proto = "TCP"; break;
+                case 17: proto = "UDP"; break;
+                case 58: proto = "ICMP for IPv6"; break;
+                default: break;
+              }
+              ret += comma + key + "=" + proto + tcpstate;
+              if(comma != ", "){comma = ", "}
+            }
+            else{
+              ret += comma + key + "=" + (<any>obj)[key];
+              if(comma != ", "){comma = ", "}
+            }
+          }
+        }
+      //}
+      else{
+        if(obj.IsIPv6_bool == true){
+
+        }
+      }
+
+    });
+    if(ret != "" && ret != " " && ret != "," && ret != " ,"){
+      return pre + ret;
+    }
+    else{
+      return "(ether) *";
+    }
+}
+
+export async function EnumAccessLists(queryString: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+  let accessHub: VPN.VpnRpcEnumAccessList = new VPN.VpnRpcEnumAccessList(
+    {
+      HubName_str: hubNameInput,
+    });
+  let accessList = await api.EnumAccess(accessHub);
+  let counter: number = 0;
+  let priority: number = 0;
+  $("#AC_LIST").empty();
+  accessList.AccessList.forEach(rule => {
+    var action: string;
+    var status: string;
+    counter += + 1;
+    if(rule.Discard_bool == false){action = "Pass"}else{action = "Discard"};
+    if(rule.Active_bool == true){
+      status = "Enabled";
+      $("#AC_LIST").append("<tr><th scope=\"row\"><button type=\"button\" class=\"btn btn-primary btn-sm\" onclick=\"$('#SELECTED_ID').empty; $('#SELECTED_ID').val('" + counter + "'); $('#E_BTN').find('button').removeAttr('disabled'); $('#D').removeAttr('disabled'); $('#E').attr('disabled', true)\">" + counter + "</button></th><td>" + action + "</td><td>" + status + "</td><td>" + rule.Priority_u32 + "</td><td>" + rule.Note_utf + "</td><td>" + AccessListsContent(rule) + "</td></tr>");
+    }
+    else
+    {status = "Disabled";
+    $("#AC_LIST").append("<tr><th scope=\"row\"><button type=\"button\" class=\"btn btn-primary btn-sm\" onclick=\"$('#SELECTED_ID').empty; $('#SELECTED_ID').val('" + counter + "'); $('#E_BTN').find('button').removeAttr('disabled'); $('#E').removeAttr('disabled'); $('#D').attr('disabled', true)\">" + counter + "</button></th><td>" + action + "</td><td>" + status + "</td><td>" + rule.Priority_u32 + "</td><td>" + rule.Note_utf + "</td><td>" + AccessListsContent(rule) + "</td></tr>");
+    }
+    priority = rule.Priority_u32;
+  });
+  counter += + 1;
+  $("#ID_PLUS").empty();
+  $("#ID_PLUS").val(counter);
+  $("#PRIORITY_PLUS").val(priority + 100);
+}
+
+export async function DeleteAccessItem(queryString: string, id: number): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+  let itemDelete: VPN.VpnRpcDeleteAccess = new VPN.VpnRpcDeleteAccess(
+    {
+      HubName_str: hubNameInput,
+      Id_u32: id,
+    });
+  await api.DeleteAccess(itemDelete);
+  EnumAccessLists(queryString);
+}
+
+export async function EnableDisableAccessRule(queryString: string, id: number, bool: number): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+  let accessHub: VPN.VpnRpcEnumAccessList = new VPN.VpnRpcEnumAccessList(
+    {
+      HubName_str: hubNameInput,
+    });
+  let accessList = await api.EnumAccess(accessHub);
+  let modList = accessList;
+  if(bool == 1){
+    modList.AccessList[id-1].Active_bool = true;
+  }
+  else if(bool == 0){
+    modList.AccessList[id-1].Active_bool = false;
+  }
+  await api.SetAccessList(modList);
+  EnumAccessLists(queryString);
+}
+
+export async function CloneAccessRule(queryString: string, id: number): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+  let accessHub: VPN.VpnRpcEnumAccessList = new VPN.VpnRpcEnumAccessList(
+    {
+      HubName_str: hubNameInput,
+    });
+  let accessList = await api.EnumAccess(accessHub);
+  let modList = accessList;
+  modList.AccessList = modList.AccessList.concat(modList.AccessList[id-1]);
+
+  let cloned = await api.SetAccessList(modList);
+  cloned.AccessList[id].Priority_u32 += 1;
+  await api.SetAccessList(cloned);
+  EnumAccessLists(queryString);
+}
+
+export async function EditAccessRule(queryString: string, id: number): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  $("#ACCESS_I").empty();
+  let accessHub: VPN.VpnRpcEnumAccessList = new VPN.VpnRpcEnumAccessList(
+    {
+      HubName_str: hubNameInput,
+    });
+  let accessList = await api.EnumAccess(accessHub);
+  let modList = accessList;
+  let obj = modList.AccessList[id-1];
+  Object.keys(obj).forEach(key =>{
+    if(key != "UniqueId_u32" && key != "Id_u32"){
+        if(key == "DestIpAddress6_bin" || key == "DestSubnetMask6_bin" || key == "SrcIpAddress6_bin" || key == "SrcSubnetMask6_bin"){(<any>obj)[key] = window.atob((<any>obj)[key])}
+        $("#ACCESS_I").append("<tr><th scope=\"row\">" + key + "</th><td><input type=\"text\" class=\"form-control\" id=\"" + key + "\"></td></tr>");
+        $("#" + key).val((<any>obj)[key]);
+    }
+  });
+}
+
+export async function SetEditAccessRule(queryString: string, id: number): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  let accessHub: VPN.VpnRpcEnumAccessList = new VPN.VpnRpcEnumAccessList(
+    {
+      HubName_str: hubNameInput,
+    });
+  let accessList = await api.EnumAccess(accessHub);
+  let modList = accessList;
+  let obj = modList.AccessList[id-1];
+  Object.keys(obj).forEach(key =>{
+    (<any>obj)[key] = $("#" + key).val();
+    if(key == "DestIpAddress6_bin" || key == "DestSubnetMask6_bin" || key == "SrcIpAddress6_bin" || key == "SrcSubnetMask6_bin"){
+      var encode = new TextEncoder();
+      var arr = encode.encode(<any>obj[key]);
+      (<any>obj)[key] = arr;
+    }
+  });
+  modList.AccessList[id-1] = obj;
+  await api.SetAccessList(modList);
+  EditAccessRule(queryString, id);
+}
+
+export async function AddAccessRule(queryString: string, prio: number, id: number): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  let addRule: VPN.VpnRpcAddAccess = new VPN.VpnRpcAddAccess(
+    {
+      HubName_str: hubNameInput,
+    });
+    await api.AddAccess(addRule);
+    let accessHub: VPN.VpnRpcEnumAccessList = new VPN.VpnRpcEnumAccessList(
+      {
+        HubName_str: hubNameInput,
+      });
+    let accessList = await api.EnumAccess(accessHub);
+    let modList = accessList;
+    modList.AccessList[0].Priority_u32 = prio;
+    await api.SetAccessList(modList);
+    EnumAccessLists(queryString);
 }
 
 export async function HubPropertiesSet(queryString: string, passwd: string, on: boolean, maxs: number, noenum: boolean, type: number): Promise<void>
@@ -358,12 +657,23 @@ export async function ListListeners(id: string): Promise<void>
     li.children().remove();
 
     let lisList = await api.EnumListener();
-
+    $("#BTN_LIS").find("button").attr("disabled", "true");
+    $("#DIS").find("button").attr("disabled", "true");
+    $("#ENE").find("button").attr("disabled", "true");
     lisList.ListenerList.forEach(port =>
     {
-        li.append("<tr><th scope=\"row\">TCP <button type=\"button\" class=\"btn btn-link\" onclick=\"$(\'#PORT_L\').val(+" + port.Ports_u32 + ")\">" + port.Ports_u32 + "</button></th> <td>" + port.Enables_bool + "</td><td>" + port.Errors_bool + "</td></tr>");
+      let str: string = "";
+        if(port.Enables_bool == true){
+          str = "$('#DIS').find('button').removeAttr('disabled'); $('#ENE').find('button').attr('disabled', 'true')";
+        }
+        else{
+          str = "$('#ENE').find('button').removeAttr('disabled'); $('#DIS').find('button').attr('disabled', 'true')";
+        }
+        li.append("<tr><th scope=\"row\">TCP <button type=\"button\" class=\"btn btn-link\" onclick=\"$(\'#PORT_L\').val(+" + port.Ports_u32 + "); $('#BTN_LIS').find('button').removeAttr('disabled'); " + str + "\">" + port.Ports_u32 + "</button></th> <td>" + port.Enables_bool + "</td><td>" + port.Errors_bool + "</td></tr>");
+
     });
 }
+
 
 export async function CreateNewListener(lisPort: number, idLis: string): Promise<void>
 {
@@ -524,6 +834,7 @@ export async function HubOnline(hubName: string): Promise<void>
 
       await api.SetHubOnline(param);
       alert("The '" + hubName + "' has been set online.");
+      window.location.reload();
   }
   catch (ex)
   {
@@ -544,6 +855,7 @@ export async function HubOffline(hubName: string): Promise<void>
 
       await api.SetHubOnline(param);
       alert("The '" + hubName + "' has been set offline.");
+      window.location.reload();
   }
   catch (ex)
   {

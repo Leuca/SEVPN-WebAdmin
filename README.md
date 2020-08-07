@@ -5,7 +5,7 @@
   - *Buttons not yet implemented are disabled*
   - Built using [Bootstrap (v.5.0.0-alpha1)](https://github.com/twbs/bootstrap) and [SoftEther VPN Server JSON-RPC Document on GitHub](https://github.com/SoftEtherVPN/SoftEtherVPN/tree/master/developer_tools/vpnserver-jsonrpc-clients/)
   - This project is based on the original HTML5-based Modern Admin Console and JSON-RPC API Suite found [here](https://github.com/SoftEtherVPN/SoftEtherVPN/tree/master/src/bin/hamcore/wwwroot/admin)
-  - For some reason it looks like IPv6 Acess List Rules doesn't work correctly using the API(s) calls. It is highly probable that is not related to this project.
+  - For some reason it looks like IPv6 Acess List Rules don't work correctly using the API(s) calls. It is highly probable that is not related to this project.
 ## Progress
   - [x] Hub Properties
   - [x] Hub Status

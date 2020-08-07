@@ -16,6 +16,16 @@
   - [x] Management of Listeners
   - [ ] Deletion popup
   - [ ] **Manage Virtual Hub**
+    - [x] Status
+    - [x] Manage Access Lists (there are issues, plus it can be improved)
+    - [ ] Manage Users
+    - [ ] Manage Groups
+    - [ ] RADIUS
+    - [ ] Cascade Connections
+    - [ ] Logs
+    - [ ] CA
+    - [ ] Secure NAT
+    - [ ] Manage Sessions
   - [ ] Encryption and network
   - [ ] Clustering Configuration
   - [ ] Edit Config

@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Source IP Address Limit List</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#ERBTN').attr('disabled', 'true'); $('#DRBTN').attr('disabled', 'true')">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -32,14 +32,14 @@
       </div>
       <div class="modal-footer">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" onclick="JS.AddAc(location.search, 1, 100, 'false' ,'false' , '0.0.0.0', '0.0.0.0'); EnumerateAc(location.search)">New Rule</button>
+        <button type="button" class="btn btn-primary" onclick="JS.AddAc(location.search, $('#RNL').val(), $('#PRIORITYL').val())">New Rule</button>
         <p id="RNL" style="display:none;"></p>
         <p id="PRIORITYL" style="display:none;"></p>
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Rule" data-dismiss="modal" onclick="JS.SelectAc(location.search, $('#RN').val())">Edit Rule</button>
+        <button id="ERBTN" type="button" class="btn btn-primary" data-toggle="modal" data-target="#Rule" data-dismiss="modal" onclick="JS.SelectAc(location.search, $('#RN').val())" disabled>Edit Rule</button>
         <p id="RN" style="display:none;"></p>
-        <button type="button" class="btn btn-primary" onclick="JS.DelAc(location.search, $('#RN').val())">Delete Rule</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="DRBTN" type="button" class="btn btn-primary" onclick="JS.DelAc(location.search, $('#RN').val()); $('#ERBTN').attr('disabled', 'true'); $('#DRBTN').attr('disabled', 'true')" disabled>Delete Rule</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#ERBTN').attr('disabled', 'true'); $('#DRBTN').attr('disabled', 'true')">Close</button>
       </div>
     </div>
   </div>

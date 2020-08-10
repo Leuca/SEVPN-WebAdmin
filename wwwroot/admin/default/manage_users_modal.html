@@ -1,0 +1,49 @@
+<!-- Modal -->
+<div class="modal fade" id="manageUsers" tabindex="-1" aria-labelledby="manageUserslLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="manageUserslLabel">Manage Users</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#U_BTN').find('button').attr('disabled', 'true')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Virtual Hub "<span id="VHUB_U"></span>" has the following users</p>
+        <div class=" overflow-auto">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">User Name</th>
+              <th scope="col">Full Name</th>
+              <th scope="col">Group Name</th>
+              <th scope="col">Description</th>
+              <th scope="col">Auth Method</th>
+              <th scope="col">Num Logins</th>
+              <th scope="col">Last Login</th>
+              <th scope="col">Expiration Date</th>
+              <th scope="col">Transfer Bytes</th>
+              <th scope="col">Transfer Packets</th>
+              </tr>
+              <tbody id="UBODY">
+                <tbody>
+            </thead>
+          </table>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#newUser">New</button>
+        <div id="U_BTN">
+          <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#setuser" onclick="JS.FetchUser(location.search, $('#USER_C').val())" disabled>Edit</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#userInfo" onclick="JS.UserInfo(location.search, $('#USER_C').val())" disabled>View User Info</button>
+        <button type="button" class="btn btn-primary" disabled onclick="JS.DelUser(location.search, $('#USER_C').val()); $('#U_BTN').find('button').attr('disabled', 'true')">Remove</button>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="JS.ListUsers(location.search)">Refresh</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#U_BTN').find('button').attr('disabled', 'true')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<p id="USER_C" style="display: none;"></p>
+<p id="ISNEW" style="display: none;"></p>

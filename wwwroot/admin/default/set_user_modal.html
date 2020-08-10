@@ -1,0 +1,222 @@
+<!-- Modal -->
+<div class="modal fade overflow-auto" id="setuser" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="setuserlLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="setuserlLabel">Properties of user <span id="username"></span></h5>
+        <button type="button" class="close" aria-label="Close" data-dismiss="modal" data-toggle="modal" data-target="#manageUsers" onclick="JS.ClearUser()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row justify-content-between">
+          <div class="col-md-6">
+            <form>
+              <div class="row g-3 justify-content-end">
+                  <div class="col-auto">
+                    <label for="USERNAME" class="col-form-label">User Name: </label>
+                  </div>
+                  <div class="col-auto">
+                    <input type="text" id="USERNAME" class="form-control" aria-describedby="USERNAMEHelpInline">
+                  </div>
+                </div>
+                <div class="row g-3 justify-content-end">
+                    <div class="col-auto">
+                      <label for="FULLNAME" class="col-form-label">Full Name: </label>
+                    </div>
+                    <div class="col-auto">
+                      <input type="text" id="FULLNAME" class="form-control" aria-describedby="FULLNAMEHelpInline">
+                    </div>
+                  </div>
+                  <div class="row g-3 justify-content-end">
+                      <div class="col-auto">
+                        <label for="NOTE" class="col-form-label">Note: </label>
+                      </div>
+                      <div class="col-auto">
+                        <input type="text" id="NOTE" class="form-control" aria-describedby="NOTEHelpInline">
+                      </div>
+                    </div>
+              </form>
+              <hr>
+              <form>
+                <div class="row g-3 justify-content-end">
+                    <div class="col-auto">
+                      <label for="GROUPNAME" class="col-form-label">Group Name: <br>(Optional)</label>
+                    </div>
+                    <div class="col-auto">
+                      <input type="text" id="GROUPNAME" class="form-control" aria-describedby="GROUPNAMEHelpInline">
+                    </div>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="dateCheckBox" onclick="expdt()" checked>
+                    <label class="form-check-label" for="dateCheckBox">
+                      Set the Expiration Date for this Account
+                    </label>
+                  </div>
+                  <div class="row justify-content-center">
+                    <div class="col-sm">
+                      <label for="dateM" class="col-form-label">Date: </label>
+                    </div>
+                    <div class="col-sm">
+                        <input type="text" id="dateM" class="form-control" placeholder="MM" aria-describedby="dateMHelpInline" disabled>
+                      </div>
+                      <div class="col-auto px-0">
+                        <label for="dateD" class="col-form-label">/</label>
+                      </div>
+                      <div class="col-sm">
+                          <input type="text" id="dateD" class="form-control" placeholder="DD" aria-describedby="dateDHelpInline" disabled>
+                        </div>
+                        <div class="col-auto px-0">
+                          <label for="dateY" class="col-form-label">/</label>
+                        </div>
+                        <div class="col-sm">
+                            <input type="text" id="dateY" class="form-control"  placeholder="YYYY" aria-describedby="dateYHelpInline" disabled>
+                          </div>
+                    </div>
+                </form>
+                <hr>
+                <form>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="AnonC" onclick="aauth(); $('#TYPESER').val(0)">
+                    <label class="form-check-label" for="AnonC">
+                      Anonymous Authentication
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="PasswdC" onclick="pauth(); $('#TYPESER').val(1)" checked>
+                    <label class="form-check-label" for="PasswdC">
+                      Password Authentication
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="CertC" onclick="icauth(); $('#TYPESER').val(2)">
+                    <label class="form-check-label" for="CertC">
+                      Individual Certificate Authentication
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="SignedCertC" onclick="sauth(); $('#TYPESER').val(3)">
+                    <label class="form-check-label" for="SignedCertC">
+                      Signed Certificate Authentication
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="RADIUSC" onclick="RNauth(); $('#TYPESER').val(4)">
+                    <label class="form-check-label" for="RADIUSC">
+                      RADIUS Authentication
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="NTC" onclick="RNauth(); $('#TYPESER').val(5)">
+                    <label class="form-check-label" for="NTC">
+                      NT Domain Authentication
+                    </label>
+                  </div>
+                  </form>
+                  <p id="TYPESER" style="display: none;"></p>
+                  <div class="my-3">
+                    <h5>Radius or NT Domain Authentication Settings</h5>
+                    <p>Login attempts by password will be verified by external RADIUS, Windows NT Domain controller, or Active directory controller.
+                      <form>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="AuthNameC" onclick="setauthun()" disabled>
+                          <label class="form-check-label" for="AuthNameC">
+                            Specify User Name on Authentication Server
+                          </label>
+                        </div>
+                        <div class="row g-3 justify-content-end">
+                            <div class="col-auto">
+                              <label for="AuthNameI" class="col-form-label">User Name on Authentication Server: </label>
+                            </div>
+                            <div class="col-auto">
+                              <input type="text" id="AuthNameI" class="form-control" aria-describedby="AuthNameIHelpInline" disabled>
+                            </div>
+                          </div>
+                        </form>
+                    </div>
+            </div>
+            <div class="col-md-6">
+              <div>
+              <form>
+                <div class="row justify-content-between mb-2">
+                  <div class="col-auto">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="Policy" onclick="setpol(); JS.PolicyONOFF(location.search, $('#USER_C').val())">
+                      <label class="form-check-label" for="Policy">
+                        Set Security Policy
+                      </label>
+                    </div>
+                    </div>
+                    <div class="col-auto">
+                      <button type="button" class="btn btn-secondary" id="SECPOL" data-dismiss="modal" data-toggle="modal" data-target="#securityPolicy" onclick="JS.UserPolicyRules(location.search, $('#USER_C').val())">Security Policy</button>
+                      </div>
+                  </div>
+                </form>
+                </div>
+                <div>
+                  <form>
+                    <div class="row g-3 justify-content-end">
+                      <div class="col-auto">
+                        <label for="passwd" class="col-form-label">Password</label>
+                      </div>
+                      <div class="col-auto">
+                        <input type="password" id="passwd" class="form-control" aria-describedby="passwordHelpInline">
+                      </div>
+                      </div>
+                      <div class="row g-3 justify-content-end">
+                        <div class="col-auto">
+                          <label for="confirm" class="col-form-label">Confirm Password</label>
+                        </div>
+                        <div class="col-auto">
+                          <input type="password" id="confirm" class="form-control" aria-describedby="confirmpasswordHelpInline">
+                          <div id="confirmpasswordHelpInline" class="form-text" style="color: red;"></div>
+                        </div>
+                        </div>
+                    </form>
+                  </div>
+                  <div>
+                    <h5>Individual Certificate Authorization Settings</h5>
+                    <p>The users using 'Individual Certificate Authentication' will be allowed or denied connection deppending on whether the SSL client certificate completely matches the certificate that has been set for the user beforehand.</p>
+                    <div class="mb-3">
+                      <label for="CertificateTextarea" class="form-label">Specify Certificate</label>
+                      <textarea class="form-control" id="CertificateTextarea" rows="3" disabled></textarea>
+                    </div>
+                    <button id="CERTBTN" type="button" class="btn btn-secondary" onclick="JS.CertUser(location.search, $('#USER_C').val())" disabled>View Certificate</button>
+                    </div>
+                    <div>
+                      <h5>Signed Certificate Authentication Settings</h5>
+                      <p>Verification of whether the client certificate is signed is based on a certificate of CA trusted by this Virtual Hub</p>
+                      <form>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="CN_C" onclick="limitcn()" disabled>
+                          <label class="form-check-label" for="CN_C">
+                            Limit Common Name (CN) Value
+                          </label>
+                        </div>
+                        <div class="mb-3">
+                          <input type="text" class="form-control" id="CNval" disabled>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="SN_C" onclick="limitsn()" disabled>
+                          <label class="form-check-label" for="SN_C">
+                            Limit Values of the Certificate Serial Number
+                          </label>
+                        </div>
+                        <div class="mb-3">
+                          <input type="text" class="form-control" id="SNval" aria-describedby="SNvalHelpBlock" disabled>
+                        </div>
+                        <div id="SNvalHelpBlock" class="form-text">
+                          Note: Enter hexadecimal values. (Example: 0155ABCDEF)
+                        </div>
+                        </form>
+                      </div>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#manageUsers" onclick="submitUser(); JS.ClearUser()">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#manageUsers" onclick="JS.ClearUser()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

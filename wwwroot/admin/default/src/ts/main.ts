@@ -198,40 +198,6 @@ export async function DeleteVirtualHub(queryString: string): Promise<void>
     }
 }
 
-export async function HubTest(queryString: string): Promise<void>
-{
-    let hubNameInput = queryString;
-    if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
-    let btn: JQuery<HTMLElement> = $("#HUB_BTN");
-
-    try
-    {
-        let getHubParam: VPN.VpnRpcCreateHub = new VPN.VpnRpcCreateHub(
-            {
-                HubName_str: hubNameInput,
-            });
-
-        let hubInfo = await api.GetHub(getHubParam);
-
-        $("#HUB_NAME").append("Virtual Hub \"" + hubInfo.HubName_str + "\"");
-        //Hub buttons
-        btn.append("<button type=\"button\" class=\"btn btn-primary mr-2 mt-1\" onclick=\"window.location.href =\'./hub_manage.hrml?" + hubInfo.HubName_str + "\'\" disabled>Manage Virtual Hub</button>");
-        if(hubInfo.Online_bool == true){
-          btn.append("<button type=\"button\" class=\"btn btn-success mr-2 mt-1\" onclick=\"JS.HubOnline('" + hubInfo.HubName_str + "')\" disabled>Online</button>");
-          btn.append("<button type=\"button\" class=\"btn btn-warning mr-2 mt-1\" onclick=\"JS.HubOffline('" + hubInfo.HubName_str + "')\">Offline</button>");
-        }
-        else{
-          btn.append("<button type=\"button\" class=\"btn btn-success mr-2 mt-1\" onclick=\"JS.HubOnline('" + hubInfo.HubName_str + "')\">Online</button>");
-          btn.append("<button type=\"button\" class=\"btn btn-warning mr-2 mt-1\" onclick=\"JS.HubOffline('" + hubInfo.HubName_str + "')\" disabled>Offline</button>");
-        }
-        btn.append("<button type=\"button\" class=\"btn btn-secondary mr-2 mt-1\" onclick=\"window.location = \'./hub_properties.html?" + hubInfo.HubName_str + "\'\">Properties</button>");
-        btn.append("<button type=\"button\" class=\"btn btn-danger mt-1\" onclick=\"JS.DeleteVirtualHub(location.search);\">Delete this Virtual Hub</button>");
-    }
-    catch (ex)
-    {
-        alert(ex);
-    }
-}
 
 export async function HubAdminPage(queryString: string): Promise<void>
 {
@@ -251,7 +217,7 @@ export async function HubAdminPage(queryString: string): Promise<void>
         $("#HUB_NAME").append("Virtual Hub \"" + hubInfo.HubName_str + "\"");
         $("#COLLAPSE").attr("style", "");
         //Hub buttons
-        btn.append("<button type=\"button\" class=\"btn btn-primary mr-2 mt-1\" onclick=\"window.location.href =\'./hub_manage.hrml?" + hubInfo.HubName_str + "\'\" disabled>Manage Virtual Hub</button>");
+        btn.append("<button type=\"button\" class=\"btn btn-primary mr-2 mt-1\" onclick=\"window.location.href =\'./hub_manage.html?" + hubInfo.HubName_str + "\'\">Manage Virtual Hub</button>");
         if(hubInfo.Online_bool == true){
           btn.append("<button type=\"button\" class=\"btn btn-success mr-2 mt-1\" onclick=\"JS.HubOnline('" + hubInfo.HubName_str + "')\" disabled>Online</button>");
           btn.append("<button type=\"button\" class=\"btn btn-warning mr-2 mt-1\" onclick=\"JS.HubOffline('" + hubInfo.HubName_str + "')\">Offline</button>");
@@ -369,6 +335,386 @@ export async function HubPropertiesPage(queryString: string): Promise<void>
     }
 }
 
+export async function ListUsers(queryString: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+  let li: JQuery<HTMLElement> = $("#UBODY");
+  li.empty();
+  let hub: JQuery<HTMLElement> = $("#VHUB_U");
+  hub.empty();
+  hub.append(hubNameInput);
+
+  let getusers: VPN.VpnRpcEnumUser = new VPN.VpnRpcEnumUser(
+    {
+      HubName_str: hubNameInput,
+    });
+  let users = await api.EnumUser(getusers);
+  users.UserList.forEach(user =>{
+    let auth: string = "";
+    let expiration: any;
+    switch(user.AuthType_u32){
+      case 0: auth = "Anonymous authentication"; break;
+      case 1: auth = "Password authentication"; break;
+      case 2: auth = "User certificate authentication"; break;
+      case 3: auth = "Root certificate which is issued by trusted Certificate Authority"; break;
+      case 4: auth = "Radius authentication"; break;
+      case 5: auth = "Windows NT authentication"; break;
+    }
+    if(user.Expires_dt.toString() == "1970-01-01T09:00:00.000Z"){
+      expiration = "No Expiration";
+    }
+    else{
+      expiration = user.Expires_dt;
+    }
+    let date: Date;
+    li.append("<tr><th scope=\"row\"><button type=\"button\" class=\"btn btn-primary\" onclick=\"$('#USER_C').val('" + user.Name_str + "'); $('#U_BTN').find('button').removeAttr('disabled')\">" + user.Name_str + "</button></th><td>" + user.Realname_utf + "</td><td>" + user.GroupName_str + "</td><td>" + user.Note_utf + "</td><td>" + auth + "</td><td>" + user.NumLogin_u32 + "</td><td>" + user.LastLoginTime_dt + "</td><td>" + expiration + "</td><td>" + (user["Ex.Recv.BroadcastBytes_u64"] + user["Ex.Send.BroadcastBytes_u64"]) + "</td><td>" + (user["Ex.Recv.BroadcastCount_u64"] + user["Ex.Send.BroadcastCount_u64"]) + "</td></tr>");
+  });
+}
+
+function toHex(str: string) {
+    var result = '';
+    for (var i=0; i<str.length; i++) {
+      result += str.charCodeAt(i).toString(16);
+    }
+    return result;
+  }
+
+export async function FetchUser(queryString: string, name: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+
+  let userItem: VPN.VpnRpcSetUser = new VPN.VpnRpcSetUser(
+    {
+      HubName_str: hubNameInput,
+      Name_str: name,
+    });
+  let user = await api.GetUser(userItem);
+  $("#username").empty();
+  $("#username").append(user.Name_str);
+
+  if(user.ExpireTime_dt.toString() == "1970-01-01T09:00:00.000Z"){
+    $("#dateCheckBox").removeAttr("checked");
+    $("#dateM").attr("disabled", "true");
+    $("#dateY").attr("disabled", "true");
+    $("#dateD").attr("disabled", "true");
+  }
+  else{
+    let date= new Date( user.ExpireTime_dt.toString());
+    let m = date.getMonth()+1;
+    let d = date.getDate();
+    let y = date.getFullYear();
+    $("#dateCheckBox").attr("checked", "true");
+    $("#dateM").val(m);
+    $("#dateD").val(d);
+    $("#dateY").val(y);
+    $("#dateM").removeAttr("disabled");
+    $("#dateY").removeAttr("disabled");
+    $("#dateD").removeAttr("disabled");
+  }
+  $("#USERNAME").val(name);
+  $("#FULLNAME").val(user.Realname_utf);
+  $("#NOTE").val(user.Note_utf);
+  $("#GROUPNAME").val(user.GroupName_str);
+  if(user.AuthType_u32 == 5){
+    if(user.NtUsername_utf.toString()==""){
+      $("#AuthNameC").removeAttr("checked");
+      $("#AuthNameI").attr("disabled","true");
+    }
+    else{
+      $("#AuthNameC").attr("checked");
+      $("#AuthNameI").removeAttr("disabled");
+      $("#AuthNameI").text(user.NtUsername_utf);
+    }
+  }
+  if(user.AuthType_u32 == 4){
+    if(user.RadiusUsername_utf.toString()==""){
+      $("#AuthNameC").removeAttr("checked");
+      $("#AuthNameI").attr("disabled","true");
+    }
+    else{
+      $("#AuthNameC").attr("checked");
+      $("#AuthNameI").removeAttr("disabled");
+      $("#AuthNameI").text(user.RadiusUsername_utf);
+    }
+  }
+  if(user.AuthType_u32 == 3){
+    if(user.CommonName_utf.toString() == ""){
+      $("#CN_C").removeAttr("checked");
+      $("#CNval").attr("disabled", "true");
+    }
+    else{
+      $("#CN_C").attr("checked", "true");
+      $("#CNval").removeAttr("disabled");
+    }
+    if(toHex(atob(user.Serial_bin.toString())).toUpperCase() == ""){
+      $("#SN_C").removeAttr("checked");
+      $("#SNval").attr("disabled", "true");
+    }
+    else{
+      $("#SN_C").attr("checked", "true");
+      $("#SNval").removeAttr("disabled");
+    }
+    $("#CNval").val(user.CommonName_utf);
+    $("#SNval").val(toHex(atob(user.Serial_bin.toString())).toUpperCase());
+    console.log(user.Serial_bin);
+  }
+  if(user.UsePolicy_bool == true){
+    $("#Policy").attr("checked", "true");
+    $("#SECPOL").removeAttr("disabled");
+  }
+  else{
+    $("#Policy").removeAttr("checked");
+    $("#SECPOL").attr("disabled", "true");
+  }
+  $("#PasswdC").removeAttr("checked");
+  $("#passwd").attr("disabled","true");
+  $("#confirm").attr("disabled","true");
+  switch(user.AuthType_u32){
+    case 0: $("#AnonC").attr("checked","true"); $('#TYPESER').val(0); break;
+    case 1: $("#PasswdC").attr("checked","true"); $("#passwd").removeAttr("disabled"); $("#confirm").removeAttr("disabled"); $('#TYPESER').val(1); break;
+    case 2: $("#CertC").attr("checked","true"); $("#CertificateTextarea").removeAttr("disabled"); $("#CERTBTN").removeAttr("disabled"); $('#TYPESER').val(2); break;
+    case 3: $("#SignedCertC").attr("checked","true"); $("#CN_C").removeAttr("disabled"); $("#SN_C").removeAttr("disabled"); $('#TYPESER').val(3); break;
+    case 4: $("#RADIUSC").attr("checked","true"); $("#AuthNameC").removeAttr("disabled"); $('#TYPESER').val(4); break;
+    case 5: $("#NTC").attr("checked","true"); $("#AuthNameC").removeAttr("disabled"); $('#TYPESER').val(5); break;
+  }
+
+}
+
+export async function ClearUser(): Promise<void>
+{
+  $("#dateM").val('');
+  $("#dateD").val('');
+  $("#dateY").val('');
+  $("#dateCheckBox").removeAttr("checked");
+  $("#USERNAME").val('');
+  $("#FULLNAME").val('');
+  $("#NOTE").val('');
+  $("#GROUPNAME").val('');
+  $("#CNval").val('');
+  $("#SNval").val('');
+  $("#USER_C").val('');
+  $("#AuthNameI").val('');
+  $("#CertificateTextarea").val('');
+  $("#passwd").val('');
+  $("#confirm").val('');
+  $('#U_BTN').find('button').attr("disabled", "true");
+  $("#CN_C").removeAttr("checked");
+  $("#SN_C").removeAttr("checked");
+  $("#Policy").removeAttr("checked");
+  $("#CN_C").attr("disabled", "true");
+  $("#SN_C").attr("disabled", "true");
+  $("#SNval").attr("disabled", "true");
+  $("#CNval").attr("disabled", "true");
+  $("#AuthNameI").attr("disabled","true");
+  $("#SECPOL").attr("disabled", "true");
+  $("#PasswdC").attr("checked");
+  $("#passwd").removeAttr("disabled");
+  $("#confirm").removeAttr("disabled");
+  $("#AnonC").removeAttr("checked");
+  $("#CertC").removeAttr("checked");
+  $("#SignedCertC").removeAttr("checked");
+  $("#RADIUSC").removeAttr("checked");
+  $("#NTC").removeAttr("checked");
+}
+
+export async function SaveUser(queryString: string, type: number, name: string, fname: string, note: string, gname: string, date: Date, authname: string, cert: string, cn: string, sn: string, password: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  var encodeCert = new TextEncoder();
+  var cer_bin = encodeCert.encode(cert);
+  var bytes = new Uint8Array(Math.ceil(sn.length / 2));
+  for (var i = 0; i < bytes.length; i++) bytes[i] = parseInt(sn.substr(i * 2, 2), 16);
+  let rname: string = "";
+  let nname: string = "";
+
+  if(type == 4){
+    rname = authname;
+  }
+  else if(type == 5){
+    nname = authname;
+  }
+
+  if($("#dateCheckBox").is(":checked")){}
+  else
+  {date.setTime(0);}
+
+  let userItem: VPN.VpnRpcSetUser = new VPN.VpnRpcSetUser(
+    {
+      HubName_str: hubNameInput,
+      Name_str: name,
+      Realname_utf: fname,
+      Note_utf: note,
+      GroupName_str: gname,
+      ExpireTime_dt: date,
+      AuthType_u32: type,
+      Auth_Password_str: password,
+      UserX_bin: cer_bin,
+      Serial_bin: bytes,
+      CommonName_utf: cn,
+      RadiusUsername_utf: rname,
+      NtUsername_utf: nname,
+
+    });
+  try{
+      await api.SetUser(userItem);
+  }
+  catch (ex)
+  {
+      alert(ex);
+  }
+}
+
+export async function CreateUser(queryString: string, user: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  let datezero = new Date();
+  datezero.setTime(0);
+  let userItem: VPN.VpnRpcSetUser = new VPN.VpnRpcSetUser(
+    {
+      HubName_str: hubNameInput,
+      Name_str: user,
+      AuthType_u32: 1,
+      Auth_Password_str: "defaultpassword",
+      ExpireTime_dt: datezero,
+    });
+
+  try{
+      await api.CreateUser(userItem);
+  }
+  catch (ex)
+  {
+      alert(ex);
+  }
+}
+
+export async function UserInfo(queryString: string, user: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  let li: JQuery<HTMLElement> = $("#userInfoT");
+  li.empty();
+  let userItem: VPN.VpnRpcSetUser = new VPN.VpnRpcSetUser(
+    {
+      HubName_str: hubNameInput,
+      Name_str: user,
+    });
+  let u = await api.GetUser(userItem);
+  li.append("<tr><th scope=\"row\">User Name</th><td>" + u.Name_str + "</td></tr>");
+  li.append("<tr><th scope=\"row\">Created on</th><td>" + u.CreatedTime_dt + "</td></tr>");
+  li.append("<tr><th scope=\"row\">Udated on</th><td>" + u.UpdatedTime_dt + "</td></tr>");
+  li.append("<tr><th scope=\"row\">Outgoing Unicast Packets</th><td>" + u["Send.UnicastCount_u64"] + " packets</td></tr>");
+  li.append("<tr><th scope=\"row\">Outgoing Unicast Total Size</th><td>" + u["Send.UnicastBytes_u64"] + " bytes</td></tr>");
+  li.append("<tr><th scope=\"row\">Outgoing Broadcast Packets</th><td>" + u["Send.BroadcastCount_u64"] + " packets</td></tr>");
+  li.append("<tr><th scope=\"row\">Outgoing Broadcast Total Size</th><td>" + u["Send.BroadcastBytes_u64"] + " bytes</td></tr>");
+  li.append("<tr><th scope=\"row\">Incoming Unicast Packets</th><td>" + u["Recv.UnicastCount_u64"] + " packets</td></tr>");
+  li.append("<tr><th scope=\"row\">Incoming Unicast Total Size</th><td>" + u["Recv.UnicastBytes_u64"] + " bytes</td></tr>");
+  li.append("<tr><th scope=\"row\">Incoming Broadcast Packets</th><td>" + u["Recv.BroadcastCount_u64"] + " packets</td></tr>");
+  li.append("<tr><th scope=\"row\">Incoming Broadcast Total Size</th><td>" + u["Recv.BroadcastBytes_u64"] +" bytes</td></tr>");
+  li.append("<tr><th scope=\"row\">Number of Logins</th><td>" + u.NumLogin_u32 + "</td></tr>");
+
+}
+
+export async function DelUser(queryString: string, user: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+  let userItem: VPN.VpnRpcSetUser = new VPN.VpnRpcSetUser(
+    {
+      HubName_str: hubNameInput,
+      Name_str: user,
+    });
+  try {
+    await api.DeleteUser(userItem);
+    ListUsers(queryString);
+  } catch (ex) {
+    alert(ex);
+  }
+}
+
+export async function CertUser(queryString: string, user: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+  let userItem: VPN.VpnRpcSetUser = new VPN.VpnRpcSetUser(
+    {
+      HubName_str: hubNameInput,
+      Name_str: user,
+    });
+  let u = await api.GetUser(userItem);
+  $("#CertificateTextarea").val("-----BEGIN CERTIFICATE-----\n" + u.UserX_bin.toString() + "\n-----END CERTIFICATE-----");
+}
+
+export async function PolicyONOFF(queryString: string, username: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+  let userItem: VPN.VpnRpcSetUser = new VPN.VpnRpcSetUser(
+    {
+      HubName_str: hubNameInput,
+      Name_str: username,
+    });
+  let user = await api.GetUser(userItem);
+
+  if($("#Policy").is(":checked")){
+    user.UsePolicy_bool = true;
+  }
+  else{
+    user.UsePolicy_bool = false;
+  }
+
+  await api.SetUser(user);
+}
+
+export async function UserPolicyRules(queryString: string, username: string): Promise <void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  $("#policyTable").empty();
+  let userItem: VPN.VpnRpcSetUser = new VPN.VpnRpcSetUser(
+    {
+      HubName_str: hubNameInput,
+      Name_str: username,
+    });
+  let user = await api.GetUser(userItem);
+  $("#usernameP").empty();
+  $("#usernameP").append(user.Name_str);
+  Object.keys(user).forEach(item =>{
+    if(item.substring(0,7) == "policy:"){
+      $("#policyTable").append("<tr><th scope=\"row\">" + item.substring(7) + "</th><td><input class=\"form-control\" type=\"text\" id=\"" + item.substring(7) + "\"></td></tr>");
+      $("#"+item.substring(7)).val((<any>user)[item]);
+    }
+  });
+}
+
+export async function SetPolicy(queryString: string, username: string): Promise <void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+
+  let userItem: VPN.VpnRpcSetUser = new VPN.VpnRpcSetUser(
+    {
+      HubName_str: hubNameInput,
+      Name_str: username,
+    });
+  let user = await api.GetUser(userItem);
+
+  Object.keys(user).forEach(item =>{
+    if(item.substring(0,7) == "policy:"){
+      ((<any>user)[item]) = $("#"+item.substring(7)).val();
+    }
+  });
+  await api.SetUser(user);
+}
+
 export async function HubManagePage(queryString: string): Promise<void>
 {
     let hubNameInput = queryString;
@@ -381,7 +727,7 @@ export async function HubManagePage(queryString: string): Promise<void>
 
     let hubInfo = await api.GetHub(getHubParam);
 
-    $("#USERS").append("<button type=\"button\" class=\"btn btn-secondary\" onclick=\"windows.location.href = './hub_manage_users.html?" + hubInfo.HubName_str + "'\">Manage Users</button>");
+
     $("#END").append("<button type=\"button\" class=\"btn btn-secondary\" onclick=\"window.location.href = './hub.html?" + hubInfo.HubName_str + "'\">Back</button>");
     $("PROPERTIES").append("<button type=\"button\" class=\"btn btn-secondary\" onclick=\"window.location.href = './hub_properties.html?" + hubInfo.HubName_str + "'\">Virtual Hub Properties</button>");
 
@@ -576,6 +922,7 @@ export async function EditAccessRule(queryString: string, id: number): Promise<v
         $("#" + key).val((<any>obj)[key]);
     }
   });
+  EnumAccessLists(queryString);
 }
 
 export async function SetEditAccessRule(queryString: string, id: number): Promise<void>
@@ -1004,7 +1351,7 @@ export async function EnumerateAc(queryString: string): Promise<void>
     let al: JQuery<HTMLElement> = $("#AL");
 
     al.children().remove();
-
+    al.empty();
     let eAc: VPN.VpnRpcAcList = new VPN.VpnRpcAcList(
       {
         HubName_str: hubNameInput,
@@ -1015,16 +1362,20 @@ export async function EnumerateAc(queryString: string): Promise<void>
     p = 0;
     c = 0;
     alist.ACList.forEach(value =>{
+
       var action: string;
       var subnet: string;
       subnet = "";
       if (value.Deny_bool == true){action = "Deny"} else {action = "Pass"};
       if (value.Masked_bool == true) {subnet = "/" + value.SubnetMask_ip};
-      al.append("<tr><th scope=\"row\"><button class=\"btn btn-primary btn-sm\" type=\"button\" onclick=\"$('#RN').empty(); $('#RN').val("+ value.Id_u32 +")\">" + value.Id_u32 + "</button></th><td>" + value.Priority_u32 + "</td><td>" + action + "</td><td>" + value.IpAddress_ip + subnet + "</td></tr>");
-
+      al.append("<tr><th scope=\"row\"><button class=\"btn btn-primary btn-sm\" type=\"button\" onclick=\"$('#RN').empty(); $('#RN').val("+ value.Id_u32 +"); $('#ERBTN').removeAttr('disabled'); $('#DRBTN').removeAttr('disabled')\">" + value.Id_u32 + "</button></th><td>" + value.Priority_u32 + "</td><td>" + action + "</td><td>" + value.IpAddress_ip + subnet + "</td></tr>");
+      p = value.Priority_u32;
+      c = value.Id_u32;
     });
-
-    $("#RNL").val(alist.ACList.length);
+    $("#PRIORITYL").empty();
+    $("#PRIORITYL").val(p+100);
+    $("#RNL").empty();
+    $("#RNL").val(c+1);
 }
 
 export async function SelectAc(queryString: string, id: number): Promise<void>
@@ -1037,33 +1388,39 @@ export async function SelectAc(queryString: string, id: number): Promise<void>
       HubName_str: hubNameInput,
     });
   let alist = await api.GetAcList(eAc);
+  let listel = alist.ACList[id-1];
   $("#I_NETMASK").empty();
-  $("#IPADDR").empty();
-  $("#IPADDR").val(alist.ACList[id-1].IpAddress_ip);
-  if(alist.ACList[id-1].Masked_bool == true){
+  if(listel.Masked_bool == true){
+    $("#CHECKNM").empty();
     $("#CHECKNM").text('true');
     $("#CHECKNM_C").append("<input type=\"checkbox\" class=\"form-check-input\" id=\"CNETM\" onclick=\"$('#CHECKNM').empty(); $('#CHECKNM').text('false')\" checked>");
     $("#I_NETMASK").append("<input type=\"text\" class=\"form-control\" id=\"NETMASK\">");
   }
   else {
+    $("#CHECKNM").empty();
     $("#CHECKNM").text('false');
     $("#CHECKNM_C").append("<input type=\"checkbox\" class=\"form-check-input\" id=\"CNETM\" onclick=\"document.getElementById('NETMASK').removeAttribute('disabled'); $('#CHECKNM').empty(); $('#CHECKNM').text('true') \">");
     $("#I_NETMASK").append("<input type=\"text\" class=\"form-control\" id=\"NETMASK\" disabled>");
   }
-  if(alist.ACList[id-1].Deny_bool == true){
+  if(listel.Deny_bool == true){
+    $("#BOOLD").empty();
     $("#BOOLD").text('true');
     $("#B_A").append("<input class=\"form-check-input\" type=\"radio\" name=\"d\" id=\"permit\" onclick=\"$('#BOOLD').empty(); $('#BOOLD').text('false')\">");
     $("#B_D").append("<input class=\"form-check-input\" type=\"radio\" name=\"d\" id=\"deny\" checked>");
   }
   else{
+    $("#BOOLD").empty();
     $("#BOOLD").text('false');
     $("#B_A").append("<input class=\"form-check-input\" type=\"radio\" name=\"d\" id=\"permit\" checked>");
     $("#B_D").append("<input class=\"form-check-input\" type=\"radio\" name=\"d\" id=\"deny\" onclick=\"$('#BOOLD').empty(); $('#BOOLD').text('true')\">");
   }
+
   $("#PRIORITY").empty();
-  $("#PRIORITY").val(alist.ACList[id-1].Priority_u32);
+  $("#PRIORITY").val(listel.Priority_u32);
   $("#NETMASK").empty();
-  $("#NETMASK").val(alist.ACList[id-1].SubnetMask_ip);
+  $("#NETMASK").val(listel.SubnetMask_ip);
+  $("#IPADDR").empty();
+  $("#IPADDR").val(listel.IpAddress_ip);
 }
 
 export async function SetAc(queryString: string, id: number, prio: number, deny: boolean, masked: boolean, ip: string, subnet: string): Promise<void>
@@ -1083,7 +1440,7 @@ export async function SetAc(queryString: string, id: number, prio: number, deny:
   EnumerateAc(queryString);
 }
 
-export async function AddAc(queryString: string, id: number, prio: number, deny: boolean, masked: boolean, ip: string, subnet: string): Promise<void>
+export async function AddAc(queryString: string, id: number, prio: number): Promise<void>
 {
   let hubNameInput = queryString;
   if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
@@ -1094,7 +1451,7 @@ export async function AddAc(queryString: string, id: number, prio: number, deny:
   let alist = await api.GetAcList(eAcc);
 
   let set = [
-    {"Id_u32": id, "Priority_u32": prio, "Deny_bool": deny, "Masked_bool": masked, "IpAddress_ip": ip,"SubnetMask_ip": subnet}
+    {"Id_u32": id, "Priority_u32": prio, "Deny_bool": false, "Masked_bool": false, "IpAddress_ip": "0.0.0.0","SubnetMask_ip": "0.0.0.0"}
   ];
   let newA = alist.ACList.concat(set);
   let eAc: VPN.VpnRpcAcList = new VPN.VpnRpcAcList(
@@ -1151,7 +1508,6 @@ export async function MsgSet(queryString: string, msg: string): Promise<void>
   console.log(msg);
   var encode = new TextEncoder();
   var arr = encode.encode(msg);
-  console.log(arr);
   let msgParam: VPN.VpnRpcMsg = new VPN.VpnRpcMsg(
     {
       HubName_str: hubNameInput,

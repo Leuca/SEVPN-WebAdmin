@@ -9,16 +9,22 @@
   <div class="col-md-auto">
     <div>
       <h5>Management of Security Database</h5>
-      <div id="USERS"></div>
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#manageUsers" onclick="JS.ListUsers(location.search)">Manage Users</button>
+      <!--#include file="manage_users_modal.html"-->
+      <!--#include file="set_user_modal.html"-->
     <p>Add, delete or edit user accounts.</p>
     <hr>
-    <button type="button" class="btn btn-secondary">Manage Groups</button>
+    <button type="button" class="btn btn-secondary" disabled>Manage Groups</button>
     <p>Add, delete or edit groups.</p>
     <hr>
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#accessList" onclick="JS.EnumAccessLists(location.search)">Manage Access Lists</button>
     <!--#include file="manage_access_list.html"-->
     <!--#include file="access_modal.html"-->
+    <!--#include file="security_policy_modal.html"-->
+    <!--#include file="new_user_modal.html"-->
+    <!--#include file="user_info_modal.html"-->
     <p>Add, delete or edit lists (packet filtering rules).</p>
   </div>
   <div>
@@ -26,10 +32,10 @@
     <div id="PROPERTIES"></div>
     <p>Configure this Hub</p>
     <hr>
-    <button type="button" class="btn btn-secondary">Authentication Server Setting</button>
+    <button type="button" class="btn btn-secondary" disabled>Authentication Server Setting</button>
     <p>Use external RADIUS authentication server for user authentication.</p>
     <hr>
-    <button type="button" class="btn btn-secondary">Manage Cascade Connections</button>
+    <button type="button" class="btn btn-secondary" disabled>Manage Cascade Connections</button>
     <p>Establish Cascade Connection to Hubs on local or remote VPN Servers.</p>
   </div>
   </div>
@@ -41,18 +47,18 @@
     </div>
     <div>
       <h5>Other Settings</h5>
-      <button type="button" class="btn btn-secondary">Log Save Settings</button><button type="button" class="btn btn-secondary">Log File List</button>
+      <button type="button" class="btn btn-secondary" disabled>Log Save Settings</button><button type="button" class="btn btn-secondary" disabled>Log File List</button>
       <p>Configure settings of log saving function</p>
       <hr>
-      <button type="button" class="btn btn-secondary">Trusted CA Certificates</button><button type="button" class="btn btn-secondary">Revoked Certificates</button>
+      <button type="button" class="btn btn-secondary" disabled>Trusted CA Certificates</button><button type="button" class="btn btn-secondary" disabled>Revoked Certificates</button>
       <p>Manage trusted CA certificates</p>
       <hr>
-      <button type="button" class="btn btn-secondary">Virtual NAT and Virtual DHCP Server (Secure NAT)</button>
+      <button type="button" class="btn btn-secondary" disabled>Virtual NAT and Virtual DHCP Server (Secure NAT)</button>
       <p>Secure NAT is *available* on this Virtual Hub. You can run Virtual NAT and Virtual DHCP</p>
     </div>
     <div>
       <h5>VPN Sessions Management</h5>
-      <button type="button" class="btn btn-secondary">Manage Sessions</button>
+      <button type="button" class="btn btn-secondary" disabled>Manage Sessions</button>
     </div>
     <div class="d-flex justify-content-end" id="END"></div>
   </div>
@@ -65,5 +71,117 @@
 </body>
 <script>
   JS.HubManagePage(location.search);
+</script>
+<script>
+  function expdt(){
+    if($("#dateCheckBox").is(":checked")){
+      $("#dateM").removeAttr("disabled");
+      $("#dateY").removeAttr("disabled");
+      $("#dateD").removeAttr("disabled");
+    }
+    else{
+      $("#dateM").attr("disabled", "true");
+      $("#dateY").attr("disabled", "true");
+      $("#dateD").attr("disabled", "true");
+    }
+  }
+
+  function limitcn(){
+    if($("#CN_C").is(":checked")){
+      $("#CNval").removeAttr("disabled");
+    }
+    else{
+      $("#CNval").attr("disabled", "true");
+    }
+  }
+
+  function limitsn(){
+    if($("#SN_C").is(":checked")){
+      $("#SNval").removeAttr("disabled");
+    }
+    else{
+      $("#SNval").attr("disabled", "true");
+    }
+  }
+
+  function setpol(){
+    if($("#Policy").is(":checked")){
+      $("#SECPOL").removeAttr("disabled");
+    }
+    else{
+      $("#SECPOL").attr("disabled", "true");
+    }
+  }
+
+  function setauthun(){
+    if($("#AuthNameC").is(":checked")){
+      $("#AuthNameI").removeAttr("disabled");
+    }
+    else{
+      $("#AuthNameI").attr("disabled", "true");
+    }
+  }
+
+  function aauth(){
+    $("#AuthNameC").attr("disabled", "true");
+    $("#passwd").attr("disabled", "true");
+    $("#confirm").attr("disabled", "true");
+    $("#CertificateTextarea").attr("disabled", "true");
+    $("#SN_C").attr("disabled", "true");
+    $("#CN_C").attr("disabled", "true");
+    $("#CERTBTN").attr("disabled", "true");
+  }
+
+  function pauth(){
+    aauth();
+    $("#passwd").removeAttr("disabled");
+    $("#confirm").removeAttr("disabled");
+  }
+
+  function icauth(){
+    aauth();
+    $("#CertificateTextarea").removeAttr("disabled");
+    $("#CERTBTN").removeAttr("disabled");
+  }
+
+  function sauth(){
+    aauth();
+    $("#SN_C").removeAttr("disabled");
+    $("#CN_C").removeAttr("disabled");
+  }
+
+  function RNauth(){
+    aauth();
+    $("#AuthNameC").removeAttr("disabled");
+  }
+
+  function check(){
+    var p = document.getElementById("passwd");
+    var c = document.getElementById("confirm");
+    if(p.value!=c.value){
+      p.value = "";
+      c.value = "";
+      document.getElementById("confirmpasswordHelpInline").innerHTML = "Passwords do not match";
+      return;
+    }
+    else{
+      return p.value;
+    }
+  }
+
+
+  function submitUser(){
+    var mm = $("#dateM").val();
+    var dd = $("#dateD").val();
+    var yyyy = $("#dateY").val();
+    var date = new Date();
+    date.setFullYear(yyyy);
+    date.setMonth(mm-1);
+    date.setDate(dd);
+    console.log(date);
+    var passwordf = check();
+
+    JS.SaveUser(location.search, $("#TYPESER").val(), $("#USERNAME").val(), $("#FULLNAME").val(), $("#NOTE").val(), $("#GROUPNAME").val(), date, $("#AuthNameI").val(), $("#CertificateTextarea").val(), $("#CNval").val(), $("#SNval").val(), passwordf);
+  }
 </script>
 </html>

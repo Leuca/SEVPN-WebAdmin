@@ -66,3 +66,23 @@ git submodule init && git submodule update
 make -C tmp
 sudo make -C tmp install
 ```
+Further details on how to compile SoftEtherVPN Software can be found either at [BUILD UNIX](https://github.com/SoftEtherVPN/SoftEtherVPN/blob/master/src/BUILD_UNIX.md) or at [BUILD WINDOWS](https://github.com/SoftEtherVPN/SoftEtherVPN/blob/master/src/BUILD_WINDOWS.md) for Unstable Version.
+Building the Stable version is described as following:
+
+HOW TO GET THE LATEST SOURCE CODE TREE FOR DEVELOPERS
+-----------------------------------------------------
+
+If you are an open-source developer, visit our GitHub repository:
+https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/
+
+You can download the up-to-date source-code tree of SoftEther VPN
+from GitHub. You may make your own fork project from our project.
+
+The download and build instruction is following:
+```bash
+git clone https://github.com/SoftEtherVPN/SoftEtherVPN_Stable.git
+cd SoftEtherVPN
+./configure
+make
+make install
+```

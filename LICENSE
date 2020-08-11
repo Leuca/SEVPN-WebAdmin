@@ -255,6 +255,19 @@ AGREE TO ITS LICENSE.
 
 ==========
 
+THE FOLLOWING CHANGES HAS BEEN MADE TO FILES (WHICH CAN BE FOUND AT 
+https://github.com/SoftEtherVPN/SoftEtherVPN/tree/master/src/bin/hamcore/wwwroot/admin/default):
+
+  - ALL .HTML FILES HAVE BEEN REWRITTEN KEEPING ONLY THE NAMES OF THE PRE-EXISTENT FILES
+  - "/wwwroot/admin/default/src/ts/main.ts" IS BASED ON THE ORIGINAL 
+  "https://github.com/SoftEtherVPN/SoftEtherVPN/blob/master/src/bin/hamcore/wwwroot/admin/default/src/ts/main.ts",
+  AND CHANGES AFTER LINE N.49
+  - FILES FOUND AT "/wwwroot/admin/default/out_webpack" HAS BEEN GENERATED USING A NODE.JS SCRIPT
+  WHICH IS INCLUDED IN THE ORIGINAL CODE AT 
+  "https://github.com/SoftEtherVPN/SoftEtherVPN/blob/master/src/bin/hamcore/wwwroot/admin/default/package.json"
+
+
+==========
 THIS SOFTWARE CONTAINS BOOTSTRAP V5 CODE WHICH IS LICENSED BY THE MIT LICENSE:
 
 "The MIT License (MIT)

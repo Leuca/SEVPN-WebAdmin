@@ -46,7 +46,10 @@ export async function Test_Test(): Promise<void>
     console.log("-----");
     console.log();
 }
-
+/** From this line on code has been modified. New code has been made following the one originally found at
+https://github.com/SoftEtherVPN/SoftEtherVPN/blob/master/src/bin/hamcore/wwwroot/admin/default/src/ts/main.ts **/
+// Licensed under the Apache License 2.0
+// Copyright (c) 2020 Luca Magrone
 export async function ListVirtualHubs(id: string): Promise<void>
 {
     let ul: JQuery<HTMLElement> = $(id);

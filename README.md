@@ -68,9 +68,8 @@ sudo make -C tmp install
 ```
 Further details on how to compile SoftEtherVPN Software can be found either at [BUILD UNIX](https://github.com/SoftEtherVPN/SoftEtherVPN/blob/master/src/BUILD_UNIX.md) or at [BUILD WINDOWS](https://github.com/SoftEtherVPN/SoftEtherVPN/blob/master/src/BUILD_WINDOWS.md) for Unstable Version.
 Building the Stable version is described as following:
-
+"
 HOW TO GET THE LATEST SOURCE CODE TREE FOR DEVELOPERS
------------------------------------------------------
 
 If you are an open-source developer, visit our GitHub repository:
 https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/
@@ -86,3 +85,4 @@ cd SoftEtherVPN
 make
 make install
 ```
+"

@@ -32,7 +32,7 @@
   - [ ] Edit Config
   - [ ] Local Bridge Setting
   - [ ] Layer 3 Switch
-  - [ ] IPsec / L2TP Setting
+  - [x] IPsec / L2TP Setting
   - [ ] OpenVPN/MS-SSTP Setting
   - [ ] Dynamic DNS Setting
   - [ ] VPN Azure Setting

@@ -1,0 +1,92 @@
+<!-- Modal -->
+<div class="modal fade" id="ipsecmodal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="ipsecmodalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ipsecmodalLabel">IPsec / L2TP / EtherIP / L2TPv3 Settings</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h2>IPsec / L2TP / EtherIP / L2TPv3 Settings</h2>
+        <p>Virtual hubs on the VPN Server can accept Remote-Access VPN connections from L2TP-compatible PCs, Macs and Smartphones, and also can accept EtherIP / L2TPv3 Site-toSite VPN Connection.</p>
+        <div>
+          <h5>L2TP Server (Remote-Access VPN Server Function)</h5>
+          <p>VPN Connections from Smartphones suchlike iPhone, iPad and Android, and also from built-in VPN Clients on macOS and Windows can be accepted.</p>
+          <form>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="L2TP_C" onclick="presharedk()">
+              <label class="form-check-label" for="L2TP_C">
+                Enable L2TP Server Function (L2TP over IPsec)
+              </label>
+              <div id="L2TP_CHelp" class="form-text">Make VPN Connections from iPhone, iPad, Android, Windows, and macOS acceptable.</div>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="L2TP_RAW_C">
+              <label class="form-check-label" for="L2TP_RAW_C">
+                Enable L2TP Server Function (Raw L2TP without IPsec encryption)
+              </label>
+              <div id="L2TP_RAW_CHelp" class="form-text">It supports special VPN Clients which use L2TP without IPsec encryption.</div>
+            </div>
+            <hr>
+            <p>Users should specify their username such as "Username@Target Virtual Hub Name" to connect to this L2TP Server.
+              <br>
+              If designation of a Virtual Hub is omitted, the below Hub will be used as the target.
+            </p>
+            <div class="row">
+              <div class="col-auto">
+                  <label class="form-select-label" for="VHUB_L2TP">
+                    Default Virtual Hub:
+                    </label>
+                </div>
+              <div class="col-auto">
+            <select class="form-select" aria-label="select hub" id="VHUB_L2TP">
+            </select>
+            </div>
+            </div>
+            </form>
+          </div>
+          <div>
+            <h5>EtherIP Server Function (Site-to-Site VPN Connection)</h5>
+            <p>Router products which are compatible with EtherIP / L2TPv3 over IPsec can connect to Virtual Hub on the VPN Server and establish Layer-2 (Ethernet) Bridging.</p>
+            <form>
+              <div class="row">
+                <div class="col-auto">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="ETHERIP_C" onclick="ethipbtn(); presharedk()">
+                <label class="form-check-label" for="ETHERIP_C">
+                  Enable EtherIP / L2TPv3 over IPsec Server function
+                </label>
+              </div>
+              </div>
+              <div class="col-auto">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-secondary" id="ETHERIP_BTN" data-dismiss="modal" data-toggle="modal" data-target="#ipsecdetailmodal" onclick="JS.ipsecphGet()">EtherIP / L2TPv3 Detail Settings</button>
+                </div>
+              </div>
+              </form>
+            </div>
+            <div>
+              <form>
+                <div class="row">
+                  <div class="col-auto">
+                    <label for="preSharedKey" class="col-form-label">IPsec Pre-Shared Key:</label>
+                    </div>
+                    <div class="col-auto">
+                      <input type="text" id="preSharedKey" class="form-control" aria-describedby="preSharedKeyHelpInline">
+                      </div>
+                  </div>
+                  <div id="preSharedKeyHelpInline" class="form-text">
+                    IPsec Pre-Shared Key is also called "PSK" or "Secret". Specify it of about eight ASCII characters and let all VPN users know it.
+                  </div>
+                </form>
+              </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="JS.IPsecSet($('#preSharedKey').val(),$('select#VHUB_L2TP').val())" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

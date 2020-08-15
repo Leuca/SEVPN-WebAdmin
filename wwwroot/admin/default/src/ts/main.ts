@@ -1518,3 +1518,207 @@ export async function MsgSet(queryString: string, msg: string): Promise<void>
     });
   await api.SetHubMsg(msgParam);
 }
+
+export async function IPsecGet(): Promise<void>
+{
+  let ipseconf = await api.GetIPsecServices();
+  let hubslist = await  api.EnumHub();
+  $("#VHUB_L2TP").empty();
+  hubslist.HubList.forEach(hub =>
+  {
+      $("#VHUB_L2TP").append("<option value=\"" + hub.HubName_str + "\">" + hub.HubName_str  + "</option>");
+  });
+  //
+    $("select#VHUB_L2TP").val(ipseconf.L2TP_DefaultHub_str);
+  //
+  if(ipseconf.L2TP_Raw_bool == true){
+    $("#L2TP_RAW_C").attr("checked", "true");
+  }
+  else{
+    $("#L2TP_RAW_C").removeAttr("checked");
+  }
+  //
+  if(ipseconf.L2TP_IPsec_bool == true){
+    $("#L2TP_C").attr("checked", "true");
+    $("#preSharedKey").removeAttr("disabled");
+  }
+  else{
+    $("#L2TP_C").removeAttr("checked");
+    $("#preSharedKey").attr("disabled","ture");
+  }
+  //
+  if(ipseconf.EtherIP_IPsec_bool == true){
+    $("#ETHERIP_C").attr("checked", "true");
+    $("#ETHERIP_BTN").removeAttr("disabled");
+    $("#preSharedKey").removeAttr("disabled");
+  }
+  else{
+    $("#ETHERIP_C").removeAttr("checked");
+    $("#ETHERIP_BTN").attr("disabled", "true");
+    $("#preSharedKey").attr("disabled","ture");
+  }
+  //
+  $("#preSharedKey").val(ipseconf.IPsec_Secret_str);
+
+}
+
+export async function IPsecSet(secret: string, defhub: string): Promise<void>
+{
+
+  let ipseconf: VPN.VpnIPsecServices = new VPN.VpnIPsecServices(
+    {
+      L2TP_Raw_bool: $("#L2TP_RAW_C").is(":checked"),
+      L2TP_IPsec_bool: $("#L2TP_C").is(":checked"),
+      EtherIP_IPsec_bool: $("#ETHERIP_C").is(":checked"),
+      IPsec_Secret_str: secret,
+      L2TP_DefaultHub_str: defhub,
+    });
+  await api.SetIPsecServices(ipseconf);
+}
+
+export async function ipsecphGet(): Promise<void>
+{
+  let el: JQuery<HTMLElement> = $("#IP1ID");
+  el.empty();
+  let list = await api.EnumEtherIpId();
+  list.Settings.forEach(id => {
+    el.append("<tr><th scope=\"row\"><button type=\"button\" class=\"btn btn-link\" onclick=\"$('#ISAKMP').val('" + id.Id_str + "'); $('#BTN_D').removeAttr('disabled'); $('#BTN_E').removeAttr('disabled')\">" + id.Id_str + "</button></th><td>" + id.HubName_str + "</td><td>" + id.UserName_str + "</td></tr>");
+  });
+  ipsecphHub();
+}
+
+export async function ipsecphSetGet(inid: string): Promise<void>
+{
+  let id: VPN.VpnEtherIpId = new VPN.VpnEtherIpId(
+    {
+      Id_str: inid,
+    });
+  let ipid = await api.GetEtherIpId(id);
+  $("#ISAKMP").val(ipid.Id_str);
+  $("select#VHUB_ISAKMP").val(ipid.HubName_str);
+  $("#UNAME_ISAKMP").val(ipid.UserName_str);
+  $("#PASSWD_ISAKMP").val(ipid.Password_str);
+
+}
+
+export async function ipsecphClean(): Promise<void>
+{
+  $("#ISAKMP").val('');
+  $("#UNAME_ISAKMP").val('');
+  $("#PASSWD_ISAKMP").val('');
+}
+
+export async function ipsecphHub(): Promise<void>
+{
+  let hubslist = await  api.EnumHub();
+  $("#VHUB_ISAKMP").empty();
+  hubslist.HubList.forEach(hub =>
+  {
+      $("#VHUB_ISAKMP").append("<option value=\"" + hub.HubName_str + "\">" + hub.HubName_str  + "</option>");
+  });
+}
+export async function ipsecphN(): Promise<void>
+{
+  $("#SAVEBTNISA").empty();
+  $("#SAVEBTNISA").append("<button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" data-toggle=\"modal\" data-target=\"#ipsecdetailmodal\" onclick=\"JS.ipsecphAdd($('#ISAKMP').val(), $('select#VHUB_ISAKMP').val(), $('#UNAME_ISAKMP').val(), $('#PASSWD_ISAKMP').val()); JS.ipsecphGet()\">OK</button>");
+}
+
+export async function ipsecphE(id: string): Promise<void>
+{
+  $("#SAVEBTNISA").empty();
+  $("#SAVEBTNISA").append("<input type=\"text\" id=\"ID_OLD\" style=\"display: none;\">");
+  $("#ID_OLD").val(id);
+  $("#SAVEBTNISA").append("<button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" data-toggle=\"modal\" data-target=\"#ipsecdetailmodal\" onclick=\"JS.ipsecphSet($('#ID_OLD').val(), $('#ISAKMP').val(), $('select#VHUB_ISAKMP').val(), $('#UNAME_ISAKMP').val(), $('#PASSWD_ISAKMP').val()); JS.ipsecphGet()\">OK</button>");
+}
+export async function ipsecphSet(inin: string, inid: string, hub: string, uname: string, password: string): Promise<void>
+{
+  ipsecphDel(inin);
+  let id: VPN.VpnEtherIpId = new VPN.VpnEtherIpId(
+    {
+      Id_str: inid,
+      HubName_str: hub,
+      UserName_str: uname,
+      Password_str: password,
+    });
+  await api.AddEtherIpId(id);
+
+
+}
+
+
+export async function ipsecphAdd(inid: string, hub: string, uname: string, password: string): Promise<void>
+{
+  let id: VPN.VpnEtherIpId = new VPN.VpnEtherIpId(
+    {
+      Id_str: inid,
+      HubName_str: hub,
+      UserName_str: uname,
+      Password_str: password,
+    });
+  await api.AddEtherIpId(id);
+}
+
+export async function ipsecphDel(inid: string): Promise<void>
+{
+  let inidc: VPN.VpnEtherIpId = new VPN.VpnEtherIpId(
+    {
+      Id_str: inid,
+    });
+    try{
+        await api.DeleteEtherIpId(inidc);
+        $("#BTN_D").attr("disabled","true");
+        $("#BTN_E").attr("disabled","true");
+    }
+    catch (ex)
+    {
+        alert(ex);
+    }
+
+
+}
+
+export async function getOVPN(): Promise<void>
+{
+  let settings = await api.GetOpenVpnSstpConfig();
+  if(settings.EnableOpenVPN_bool == true){
+    $("#OVPN_C").attr("checked", "true");
+  }
+  else{
+    $("#OVPN_C").removeAttr("checked");
+  }
+$("#UDPports").val(settings.OpenVPNPortList_str);
+
+if(settings.EnableSSTP_bool == true){
+  $("#MSSSTP").attr("checked", "true");
+}
+else{
+  $("#MSSSTP").removeAttr("checked");
+}
+}
+
+export async function setOVPN(ports: string): Promise<void>
+{
+  var ovpn;
+  var mssstp;
+  if($("#OVPN_C").is(":checked")){
+    ovpn = true;
+  }
+  else{
+    ovpn = false;
+  }
+
+  if($("#MSSSTP").is(":checked")){
+    mssstp = true;
+  }
+  else{
+    mssstp = false;
+  }
+
+  let conf: VPN.VpnOpenVpnSstpConfig = new VPN.VpnOpenVpnSstpConfig(
+    {
+      EnableOpenVPN_bool: ovpn,
+      OpenVPNPortList_str: ports,
+      EnableSSTP_bool: mssstp,
+    });
+  await api.SetOpenVpnSstpConfig(conf);
+}

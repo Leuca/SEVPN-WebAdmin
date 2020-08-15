@@ -1,0 +1,45 @@
+<!-- Modal -->
+<div class="modal fade" id="ipsecdetailmodal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="ipsecdetailmodalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ipsecdetailmodalLabel">EtherIP / L2TPv3 Server Detail Settings</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#ipsecmodal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+        <p>EtherIP / L2TPv3 over IPsec compatible routers can connect to Virtual Hub on the VPN Server and establish Layer-2 (Ethernet) Bridging.
+          For instance, Cisco routers, NEC IX series and IIJ SEIL routers are recommended as compatible VPN routers.
+        </p>
+        <br><br>
+        <p>In order to accept EtherIP / L2TPv3 protocol, define appropriate EtherIP / L2TPv3 Client Settings to identify the client site of the router beforhand. An EtherIP / L2TPv3 Client Setting must have a corresponding IPsec Phase 1 ID.
+        </p>
+        </div>
+        <div>
+          <h6>Table of IPsec Phase 1 ID and the Virtual Hub</h6>
+          <div class="overflow-auto" style="height: 300px;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">ISAKMP Phase 1 ID</th>
+                <th scope="col">Virtual Hub</th>
+                <th scope="col">User Name</th>
+                </tr>
+              </thead>
+              <tbody id="IP1ID">
+                </tbody>
+            </table>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#PhID" onclick="JS.ipsecphClean(); JS.ipsecphN()">New</button>
+                  <button id="BTN_E" type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#PhID" onclick="JS.ipsecphSetGet($('#ISAKMP').val()); JS.ipsecphE($('#ISAKMP').val())" disabled>Edit</button>
+                          <button id="BTN_D" type="button" class="btn btn-primary" onclick="JS.ipsecphDel($('#ISAKMP').val()); JS.ipsecphGet();" disabled>Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#ipsecmodal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

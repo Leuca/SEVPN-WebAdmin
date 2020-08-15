@@ -3,6 +3,8 @@ import "core-js/es/string";
 import "whatwg-fetch";
 /** API test for 'Test', test RPC function */
 export declare function Test_Test(): Promise<void>;
+/** From this line on code has been modified. New code has been made following the one originally found at
+https://github.com/SoftEtherVPN/SoftEtherVPN/blob/master/src/bin/hamcore/wwwroot/admin/default/src/ts/main.ts **/
 export declare function ListVirtualHubs(id: string): Promise<void>;
 export declare function ShowVpnServerInfo(idInfo: string, idStatus: string): Promise<void>;
 export declare function CreateNewHub(hubName: string, idList: string, passwd: string): Promise<void>;
@@ -53,4 +55,17 @@ export declare function AddAc(queryString: string, id: number, prio: number): Pr
 export declare function DelAc(queryString: string, id: number): Promise<void>;
 export declare function MsgGet(queryString: string): Promise<void>;
 export declare function MsgSet(queryString: string, msg: string): Promise<void>;
+export declare function IPsecGet(): Promise<void>;
+export declare function IPsecSet(secret: string, defhub: string): Promise<void>;
+export declare function ipsecphGet(): Promise<void>;
+export declare function ipsecphSetGet(inid: string): Promise<void>;
+export declare function ipsecphClean(): Promise<void>;
+export declare function ipsecphHub(): Promise<void>;
+export declare function ipsecphN(): Promise<void>;
+export declare function ipsecphE(id: string): Promise<void>;
+export declare function ipsecphSet(inin: string, inid: string, hub: string, uname: string, password: string): Promise<void>;
+export declare function ipsecphAdd(inid: string, hub: string, uname: string, password: string): Promise<void>;
+export declare function ipsecphDel(inid: string): Promise<void>;
+export declare function getOVPN(): Promise<void>;
+export declare function setOVPN(ports: string): Promise<void>;
 //# sourceMappingURL=main.d.ts.map

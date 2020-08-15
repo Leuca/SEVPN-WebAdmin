@@ -226,10 +226,12 @@
           <a class="btn btn-primary btn-block m-2 disabled" href="" aria-disabled="true">Layer 3 Switch Setting</a>
           </div>
           <div class="col-md-auto">
-          <a class="btn btn-primary btn-block m-2 disabled" href="" aria-disabled="true">IPSec / L2TP Setting</a>
+            <!-- Button trigger modal -->
+          <button class="btn btn-primary btn-block m-2" type="button" data-toggle="modal" data-target="#ipsecmodal" onclick="JS.IPsecGet()">IPSec / L2TP Setting</button>
           </div>
           <div class="col-md-auto">
-          <a class="btn btn-primary btn-block m-2 disabled" href="" aria-disabled="true">OpenVPN / MS-SSTP Setting</a>
+            <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary btn-block m-2" data-toggle="modal" data-target="#openvpnM" onclick="JS.getOVPN()">OpenVPN / MS-SSTP Setting</button>
           </div>
           <div class="col-md-auto">
           <a class="btn btn-primary btn-block m-2 disabled" href="" aria-disabled="true">Dynamic DNS Setting</a>
@@ -237,6 +239,10 @@
           <div class="col-md-auto">
           <a href="" class="btn btn-primary btn-block m-2 disabled" aria-disabled="true">VPN Azure Setting</a>
         </div>
+        <!--#include file="openvpn_modal.html" -->
+        <!--#include file="ipsec_modal.html" -->
+        <!--#include file="ipsec_detail_modal.html" -->
+        <!--#include file="ipsec_detail_edit.html" -->
         </div>
         <!--#include file="include_footer.html" -->
       </main>
@@ -261,5 +267,30 @@
         JS.ListVirtualHubs("#HUB_LIST");
         JS.ListListeners("#LISTENERS");
         JS.ListConnections("#CONNECTION_LIST");
+    </script>
+    <script>
+      function ethipbtn(){
+        if($("#ETHERIP_C").is(":checked")){
+          $("#ETHERIP_BTN").removeAttr("disabled");
+        }
+        else{
+          $("#ETHERIP_BTN").attr("disabled", "true");
+        }
+      }
+
+      function presharedk(){
+        if($("#L2TP_C").is(":checked") || $("#ETHERIP_C").is(":checked")){
+          $("#preSharedKey").removeAttr("disabled");
+        }
+        else{
+          $("#preSharedKey").attr("disabled", "true");
+        }
+      }
+
+      function ISAKMPbtnR(){
+        $("#BTN_D").attr("disabled","true");
+        $("#BTN_E").attr("disabled","true");
+        JS.ipsecphClean();
+      }
     </script>
 </html>

@@ -1,0 +1,61 @@
+<!-- Modal -->
+<div class="modal fade" id="PhID" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="PhIDLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="PhIDLabel">EtherIP / L2TPv3 over IPsec Client Setting</h5>
+        <button type="button" class="close" aria-label="Close" data-dismiss="modal" data-toggle="modal" data-target="#ipsecdetailmodal" onclick="ISAKMPbtnR()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>The following Virtual Hub connection settings will be applied only when EtherIP / L2TPv3 over IPsec Client is attempting to connect this VPN Server with ISAKMP (IKE) Phase ID which is exactly equal to the value specified below.</p>
+        <form>
+          <div class="row">
+            <div class="col-auto">
+              <label for="ISAKMP" class="col-form-label">ISAKMP Phase 1 ID: </label>
+              </div>
+              <div class="col-auto">
+                <input type="text" id="ISAKMP" class="form-control" aria-describedby="ISAKMPBlock">
+                <div id="ISAKMPBlock" class="form-text">
+                  The ID must be exactly same as a ID in the configuration of the EtherIP / L2TPv3 Client. You can specify IP address as well as characters as ID, if the EtherIP Client uses IP address as Phase 1 ID. If you specify '*' (asterisk), it will be a wildcard to match any clients which doesn't match other explicit rules.
+                </div>
+              </div>
+                </div>
+
+            <div class="row justify-content-end my-2">
+              <div class="col-auto">
+                <label for="VHUB_ISAKMP" class="form-label">Virtual Hub: </label>
+                </div>
+                <div class="col-auto">
+                  <select id="VHUB_ISAKMP" class="form-select"></select>
+                  </div>
+              </div>
+              <div class="row justify-content-end my-2">
+                <div class="col-auto">
+                  <label for="UNAME_ISAKMP" class="form-label">Username: </label>
+                  </div>
+                  <div class="col-auto">
+                    <input type="text" id="UNAME_ISAKMP" class="form-control" aria-describedby="UNAME_ISAKMPInline">
+                    </div>
+                </div>
+                <div class="row justify-content-end my-2">
+                  <div class="col-auto">
+                    <label for="PASSWD_ISAKMP" class="col-form-label">Password: </label>
+                    </div>
+                    <div class="col-auto">
+                       <input type="password" id="PASSWD_ISAKMP" class="form-control" aria-describedby="passwordHelpInline">
+                      </div>
+                  </div>
+                  <p>Note that the username and the password must be same as a registered on the Virtual Hub. An EtherIP / L2TPv3 Client will be regarded as it is connected to the Virtual Hub with the identification of the above user information.</p>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div id="SAVEBTNISA">
+
+          </div>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#ipsecdetailmodal" onclick="ISAKMPbtnR()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

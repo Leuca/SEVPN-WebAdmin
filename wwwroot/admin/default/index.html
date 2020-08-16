@@ -292,5 +292,18 @@
         $("#BTN_E").attr("disabled","true");
         JS.ipsecphClean();
       }
+
+      function openvpncheck(){
+        if($("#OVPN_C").is(":checked")){
+          $("#UDPports").removeAttr("disabled");
+          $("#SampleBTN").removeAttr("disabled");
+          $("#ResDefOVPN").removeAttr("disabled");
+        }
+        else{
+          $("#UDPports").attr("disabled","true");
+          $("#SampleBTN").attr("disabled","true");
+          $("#ResDefOVPN").attr("disabled","true");
+        }
+      }
     </script>
 </html>

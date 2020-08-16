@@ -68,4 +68,5 @@ export declare function ipsecphAdd(inid: string, hub: string, uname: string, pas
 export declare function ipsecphDel(inid: string): Promise<void>;
 export declare function getOVPN(): Promise<void>;
 export declare function setOVPN(ports: string): Promise<void>;
+export declare function ConfigFile(): Promise<void>;
 //# sourceMappingURL=main.d.ts.map

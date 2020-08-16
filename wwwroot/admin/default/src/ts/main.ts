@@ -1682,9 +1682,15 @@ export async function getOVPN(): Promise<void>
   let settings = await api.GetOpenVpnSstpConfig();
   if(settings.EnableOpenVPN_bool == true){
     $("#OVPN_C").attr("checked", "true");
+    $("#UDPports").removeAttr("disabled");
+    $("#SampleBTN").removeAttr("disabled");
+    $("#ResDefOVPN").removeAttr("disabled");
   }
   else{
     $("#OVPN_C").removeAttr("checked");
+    $("#UDPports").attr("disabled","true");
+    $("#SampleBTN").attr("disabled","true");
+    $("#ResDefOVPN").attr("disabled","true");
   }
 $("#UDPports").val(settings.OpenVPNPortList_str);
 
@@ -1721,4 +1727,59 @@ export async function setOVPN(ports: string): Promise<void>
       EnableSSTP_bool: mssstp,
     });
   await api.SetOpenVpnSstpConfig(conf);
+}
+
+function downloadBlob(blob: Blob, name = 'file.txt') {
+  // Convert your blob into a Blob URL (a special url that points to an object in the browser's memory)
+  const blobUrl = URL.createObjectURL(blob);
+
+  // Create a link element
+  const link = document.createElement("a");
+
+  // Set link's href to point to the Blob URL
+  link.href = blobUrl;
+  link.download = name;
+
+  // Append link to the body
+  document.body.appendChild(link);
+
+  // Dispatch click event on the link
+  // This is necessary as link.click() does not work on the latest firefox
+  link.dispatchEvent(
+    new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+      view: window
+    })
+  );
+
+  // Remove link from body
+  document.body.removeChild(link);
+}
+
+export async function ConfigFile(): Promise<void>
+{
+  let conf = await api.MakeOpenVpnConfigFile();
+
+  const b64toBlob = (b64Data: string, contentType='', sliceSize=512) => {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  const blob = new Blob(byteArrays, {type: contentType});
+  return blob;
+}
+  const blob = b64toBlob(conf.Buffer_bin.toString(), "application/zip");
+  downloadBlob(blob, 'config.zip');
 }

@@ -15,7 +15,7 @@
           <p>Any OpenVPN Client can connect to this VPN Server</p>
           <form>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="OVPN_C">
+              <input class="form-check-input" type="checkbox" value="" id="OVPN_C" onclick="openvpncheck()">
               <label class="form-check-label" for="OVPN_C">
                 Enable OpenVPN Clone Server Function
               </label>
@@ -24,19 +24,21 @@
               <label for="UDPports" class="form-label">UDP Ports to Listen for OpenVPN:</label>
               </div>
               <div class="row my-2">
-                <input type="text" class="form-control" id="UDPports" aria-describedby="UDPportsHelp">
                 <div class="col-auto">
+                  <input type="text" class="form-control" id="UDPports" aria-describedby="UDPportsHelp">
                   </div>
                   <div class="col-auto">
-                    <button type="button" class="btn btn-secondary" disabled>Restore Default</button>
+                    <button type="button" class="btn btn-secondary" id="ResDefOVPN" onclick="$('#UDPports').val('1194')">Restore Default</button>
                     </div>
+                    <div>
                     <p>Multiple UDP ports can be specified with splitting by space or comma characters.<br>
                       OpenVPN Server Function also runs on TCP ports. Any TCP port which is defined as listener on the VPN Server accepts OpenVPN Protocol respectively and equally.
                     </p>
                     <hr>
                     <h6>Sample File Generating Tool for OpenVPN Clients</h6>
                     <p>Making a OpenVPN Client configuration file is a very difficult job. You can use this tool to generate an appropriate OpenVPN Client configuration file. The generated configuration sample can be used immediately.</p>
-                    <button type="button" class="btn btn-secondary" disabled> Generate a Sample Configuration File for OpenVPN Clients</button>
+                    <button type="button" class="btn btn-secondary" id="SampleBTN" onclick="JS.ConfigFile()">Generate a Sample Configuration File for OpenVPN Clients</button>
+                    </div>
                 </div>
             </form>
           </div>

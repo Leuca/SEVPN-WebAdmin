@@ -33,7 +33,7 @@
   - [ ] Local Bridge Setting
   - [ ] Layer 3 Switch
   - [x] IPsec / L2TP Setting
-  - [ ] OpenVPN/MS-SSTP Setting
+  - [x] OpenVPN/MS-SSTP Setting
   - [ ] Dynamic DNS Setting
   - [ ] VPN Azure Setting
   - [ ] Disable unecessary items if logged in as a Hub Admin

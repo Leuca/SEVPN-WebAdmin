@@ -2,7 +2,7 @@
 ![](default.png)
 ![](hub-settings.png)
 ### Notes
-  - *Buttons not yet implemented are disabled*
+  - *Buttons not yet implemented are disabled, but not all disabled buttons are not implemented*
   - Built using [Bootstrap (v.5.0.0-alpha1)](https://github.com/twbs/bootstrap) and [SoftEther VPN Server JSON-RPC Document on GitHub](https://github.com/SoftEtherVPN/SoftEtherVPN/tree/master/developer_tools/vpnserver-jsonrpc-clients/)
   - This project is based on the original HTML5-based Modern Admin Console and JSON-RPC API Suite found [here](https://github.com/SoftEtherVPN/SoftEtherVPN/tree/master/src/bin/hamcore/wwwroot/admin)
   - There is a bug in IPv6 Acess List Rules using the API(s) calls.

@@ -69,4 +69,6 @@ export declare function ipsecphDel(inid: string): Promise<void>;
 export declare function getOVPN(): Promise<void>;
 export declare function setOVPN(ports: string): Promise<void>;
 export declare function ConfigFile(): Promise<void>;
+export declare function AzureGet(): Promise<void>;
+export declare function AzureSet(bol: boolean): Promise<void>;
 //# sourceMappingURL=main.d.ts.map

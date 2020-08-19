@@ -1783,3 +1783,40 @@ export async function ConfigFile(): Promise<void>
   const blob = b64toBlob(conf.Buffer_bin.toString(), "application/zip");
   downloadBlob(blob, 'config.zip');
 }
+
+export async function AzureGet(): Promise<void>
+{
+  let azstat = await api.GetAzureStatus();
+  let dns = await api.GetDDnsClientStatus();
+  $("#azureDyn").empty();
+  if (azstat.IsEnabled_bool == true){
+    $("#AzureON").attr("checked", "true");
+    $("#AzureOFF").removeAttr("checked");
+    $("#azuredyn").attr("style","display:");
+    $("#azureDyn").append(dns.CurrentHostName_str + ".vpnazure.net");
+  }
+  else{
+    $("#AzureOFF").attr("checked", "true");
+    $("#AzureON").removeAttr("checked");
+    $("#azuredyn").attr("style","display: none;");
+  }
+  $("#azureS").empty();
+  if(azstat.IsConnected_bool == true){
+    $("#azureS").append("Connected");
+  }
+  else{
+    $("#azureS").append("Not Connected");
+  }
+  setTimeout(() => {  AzureGet();}, 5000);
+}
+
+export async function AzureSet(bol: boolean): Promise<void>
+{
+
+  let az: VPN.VpnRpcAzureStatus = new VPN.VpnRpcAzureStatus(
+    {
+      IsEnabled_bool: bol,
+    });
+  await api.SetAzureStatus(az);
+  AzureGet();
+}

@@ -237,12 +237,14 @@
           <a class="btn btn-primary btn-block m-2 disabled" href="" aria-disabled="true">Dynamic DNS Setting</a>
           </div>
           <div class="col-md-auto">
-          <a href="" class="btn btn-primary btn-block m-2 disabled" aria-disabled="true">VPN Azure Setting</a>
+            <!-- Button trigger modal -->
+          <button class="btn btn-primary btn-block m-2" data-toggle="modal" data-target="#Azure" onclick="JS.AzureGet()">VPN Azure Setting</button>
         </div>
         <!--#include file="openvpn_modal.html" -->
         <!--#include file="ipsec_modal.html" -->
         <!--#include file="ipsec_detail_modal.html" -->
         <!--#include file="ipsec_detail_edit.html" -->
+        <!--#include file="azure_modal.html" -->
         </div>
         <!--#include file="include_footer.html" -->
       </main>

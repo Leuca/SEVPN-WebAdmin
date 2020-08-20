@@ -1,5 +1,5 @@
 # SotEtherVPN HTML5-based Admin Console
-![](preview.png) 
+![](p.png) 
 ![](hub-settings.png)
 ### Notes
   - *Buttons not yet implemented are disabled, but not all disabled buttons are not implemented*

@@ -1757,7 +1757,7 @@ function downloadBlob(blob: Blob, name = 'file.txt') {
   document.body.removeChild(link);
 }
 
-export async function ConfigFile(): Promise<void>
+export async function OVPNConfigFile(): Promise<void>
 {
   let conf = await api.MakeOpenVpnConfigFile();
 
@@ -1782,6 +1782,44 @@ export async function ConfigFile(): Promise<void>
 }
   const blob = b64toBlob(conf.Buffer_bin.toString(), "application/zip");
   downloadBlob(blob, 'config.zip');
+}
+
+export async function ConfigFile(): Promise<void>
+{
+  let conf = await api.GetConfig();
+
+  const b64toBlob = (b64Data: string, contentType='', sliceSize=512) => {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  const blob = new Blob(byteArrays, {type: contentType});
+  return blob;
+}
+  const blob = b64toBlob(conf.FileData_bin.toString(), "text/plain");
+  downloadBlob(blob, conf.FileName_str);
+}
+
+export async function UploadConfig(cfile: string): Promise<void>
+{
+  let bin = new TextEncoder().encode(cfile);
+  let conf: VPN.VpnRpcConfig = new VPN.VpnRpcConfig(
+    {
+      FileData_bin: bin,
+    });
+  await api.SetConfig(conf);
+  setTimeout(() => {  window.location.reload();}, 2000);
 }
 
 export async function AzureGet(): Promise<void>
@@ -1819,4 +1857,21 @@ export async function AzureSet(bol: boolean): Promise<void>
     });
   await api.SetAzureStatus(az);
   AzureGet();
+}
+
+export async function DynStatus(): Promise<void>
+{
+  let status = await api.GetDDnsClientStatus();
+  let astatus = await api.GetAzureStatus();
+  $("#DYNDNS").removeAttr("style");
+  $("#AZBTN").removeAttr("disabled");
+  $("#DYNDNS").text("Current DDNS Hostname: " + status.CurrentHostName_str + status.DnsSuffix_str);
+  if(astatus.IsEnabled_bool == true){
+    $("#AZDNS").attr("style", "display:");
+  }
+  else{
+    $("#AZDNS").attr("style", "display: none;");
+  }
+  $("#AZDNS").text("VPN Azure Hostname: " + status.CurrentHostName_str +".vpnazure.net");
+
 }

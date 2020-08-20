@@ -212,10 +212,11 @@
                 </div>
             </div>
             <div class="row mr-2 ml-1">
-            <a class="btn btn-secondary m-1 col-md-auto disabled" aria-disabled="true" href=""><img src="/admin/default/icons/Machine.ico" width="42" height="42" class="d-inline-block" alt="About this VPN Server"> Edit Config</a>
+              <!-- Button trigger modal -->
+            <button class="btn btn-secondary m-1 col-md-auto" data-toggle="modal" data-target="#editConfig" onclick="$('#filename').text('Choose file...'); $('#configFile').val('')"><img src="/admin/default/icons/Machine.ico" width="42" height="42" class="d-inline-block" alt="About this VPN Server"> Edit Config</a>
           </div>
         </div>
-
+        <!--#include file="config_modal.html" -->
         </div>
         <hr>
         <div class="row mr-1">
@@ -238,7 +239,7 @@
           </div>
           <div class="col-md-auto">
             <!-- Button trigger modal -->
-          <button class="btn btn-primary btn-block m-2" data-toggle="modal" data-target="#Azure" onclick="JS.AzureGet()">VPN Azure Setting</button>
+          <button id="AZBTN" class="btn btn-primary btn-block m-2" data-toggle="modal" data-target="#Azure" onclick="JS.AzureGet()">VPN Azure Setting</button>
         </div>
         <!--#include file="openvpn_modal.html" -->
         <!--#include file="ipsec_modal.html" -->
@@ -306,6 +307,39 @@
           $("#SampleBTN").attr("disabled","true");
           $("#ResDefOVPN").attr("disabled","true");
         }
+      }
+    </script>
+    <script>
+    document.getElementById('configFile').addEventListener('change', nameFile)
+      function nameFile(){
+        $("#filename").empty();
+        $("#filename").append($("#configFile").val().substr(12));
+      }
+      document.getElementById('upfile').addEventListener('click', readFile)
+      function readFile() {
+
+        var files = document.getElementById('configFile').files;
+        if (files.length === 0) {
+            console.log('No file is selected');
+            return;
+        }
+        var res;
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            res = event.target.result;
+            JS.UploadConfig(res);
+        };
+
+        reader.readAsText(files[0]);
+      }
+      JS.DynStatus();
+      if($("#DYNDNS").val() == ""){
+        $("#DYNDNS").attr("style", "display: none;");
+        $("#AZBTN").attr("disabled", "true");
+      }
+      else{
+        $("#DYNDNS").removeAttr("style");
+        $("#AZBTN").removeAttr("disabled");
       }
     </script>
 </html>

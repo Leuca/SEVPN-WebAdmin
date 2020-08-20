@@ -1,0 +1,78 @@
+<!-- Modal -->
+<div class="modal fade" id="DDNSmodal" tabindex="-1" aria-labelledby="DDNSmodalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="DDNSmodalLabel">Dynamic DNS Function</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>This VPN Server has a Built-in Dynamic DNS Function.</h5>
+        <p>The Dynamic DNS assigns a unique and permanent DNS hostname for this VPN Server. You can use that hostname to specify this VPN Server on the settings for VPN Client and VPN Bridge. You need not to register and keep a domain name.</p>
+        <p>Also, if your ISP assigns you a dynamic (not-fixed) IP address, the corresponding IP addrress of your Dynamic DNS hostname will be automatically changed. It enables you to keep running the VPN Server by using only a dynamic IP address.<br>
+          Therefore, you need not any longer to keep static global IP addrresses with expenses monthly costs.
+        </p>
+        <p>Moreover, this VPN Server version supports 'NAT-Trasversal' function. If the VPN Server is inside the NAT and is assigned only a private IP address, you can connect to that VPN Server from the Internet side without any special settings on the NAT beforehand.</p>
+        <div class="row">
+          <div class="col-md-6" class="my-2">
+            <h5><b>Current Status:</b></h5>
+            <div class="my-2">
+              <p><strong>Assigned Dynamic DNS Hostname:</strong></p>
+              <samp id="Dhostname"></samp>
+              </div>
+              <div class="my-2">
+              <p><strong>Global IPv4 Address:</strong></p>
+              <samp id="GIPv4"></samp>
+              </div>
+              <div class="my-2">
+              <p><strong>Global IPv6 Address:</strong></p>
+              <samp id="GIPv6"></samp>
+              </div>
+              <!--<div>
+                <p><strong>DNS Key:</strong><samp id="DNSKey"></samp></p>
+                </div>-->
+                <p>To disable the Dynamic DNS Function, modify the configuration file of VPN Server. The "declare root" directive has the "declare DDnsClient" directive. In this directive, you can switch "bool Disable" from false to true, and reboot the VPN Server, then the Dynamic DNS Function will be disabled.</p>
+            </div>
+            <div class="col-md-6 mt-1">
+              <h5><b>Modify the Settings:</b></h5>
+              <div class="mb-2">
+                <p><strong>Change the Dynamic DNS Hostname:</strong></p>
+                <div class="row g-3 align-items-center mb-2">
+                  <div class="col-auto"">
+                    <input type="text" id="dynhostname" class="form-control" aria-describedby="suffix">
+                  </div>
+                  <div class="col-auto">
+                    <span id="suffix" class="form-text">
+                      .softether.net
+                    </span>
+                  </div>
+                </div>
+                <p>Hostname is with only alphabets numeric, and dashes '-'. Three letters at least.<br>
+                  You can change it any time later.</p>
+                  <div class="row">
+                    <div class="col-auto">
+                  <button id="setDDNSH" type="button" class="btn btn-secondary" onclick="JS.SetDDNSH($('#dynhostname').val()); DDNSRS()" disabled>Set to Above Hostname</button>
+                  </div>
+                  <div class="col-auto">
+                  <button id="resDDNSH" type="button" class="btn btn-secondary" onclick="JS.ResDDNSH(); DDNSRS()" disabled>Restore</button>
+                  </div>
+                  </div>
+                </div>
+                <p>You can also specify the following special forms of hostnames to specify IPv4 or IPv6 as the address-type explicitly.
+
+                    <br>Hostname for IPv4: <span id="i4b"></span>.v4.softether.net
+                    <br>Hostname for IPv6: <span id="i6b"></span>.v6.softether.net
+                  </p>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#DDNSproxy" onclick="JS.DDNSPROXYget()">Connect via Proxy Server...</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

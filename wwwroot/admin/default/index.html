@@ -235,7 +235,8 @@
           <button type="button" class="btn btn-primary btn-block m-2" data-toggle="modal" data-target="#openvpnM" onclick="JS.getOVPN()">OpenVPN / MS-SSTP Setting</button>
           </div>
           <div class="col-md-auto">
-          <a class="btn btn-primary btn-block m-2 disabled" href="" aria-disabled="true">Dynamic DNS Setting</a>
+            <!-- Button trigger modal -->
+          <button id="DYNBTN" class="btn btn-primary btn-block m-2" data-toggle="modal" data-target="#DDNSmodal" onclick="JS.GetDDNS()">Dynamic DNS Setting</a>
           </div>
           <div class="col-md-auto">
             <!-- Button trigger modal -->
@@ -246,6 +247,8 @@
         <!--#include file="ipsec_detail_modal.html" -->
         <!--#include file="ipsec_detail_edit.html" -->
         <!--#include file="azure_modal.html" -->
+        <!--#include file="ddns_modal.html" -->
+        <!--#include file="ddns_proxy_modal.html" -->
         </div>
         <!--#include file="include_footer.html" -->
       </main>
@@ -336,10 +339,52 @@
       if($("#DYNDNS").val() == ""){
         $("#DYNDNS").attr("style", "display: none;");
         $("#AZBTN").attr("disabled", "true");
+        $("#DYNBTN").attr("disabled", "true");
       }
       else{
         $("#DYNDNS").removeAttr("style");
         $("#AZBTN").removeAttr("disabled");
+        $("#DYNBTN").removeAttr("disabled");
       }
+    </script>
+    <script>
+    document.getElementById('dynhostname').addEventListener('input', DDNSc)
+      function DDNSc() {
+        $("#setDDNSH").removeAttr("disabled");
+        $("#resDDNSH").removeAttr("disabled");
+      }
+
+      function DDNSRS() {
+        $("#setDDNSH").attr("disabled","true");
+        $("#resDDNSH").attr("disabled","true");
+      }
+    </script>
+    <script>
+
+      function proxval(){
+        if($("#TCPIPPS").is(":checked")){
+          JS.proxen(false);
+        }
+        else if($("#HTTPPS").is(":checked")){
+          JS.proxen(true);
+        }
+        else if($("#SOCKSPS").is(":checked")){
+          JS.proxen(true);
+        }
+      }
+      function proxset(){
+        var type;
+        if($("#TCPIPPS").is(":checked")){
+          type = 0;
+        }
+        else if($("#HTTPPS").is(":checked")){
+          type = 1;
+        }
+        else if($("#SOCKSPS").is(":checked")){
+          type = 2;
+        }
+        JS.DDNSPROXYset(type, $("#HOST_NAME").val(), $("#PORT_N").val(), $("#USER_NAME").val(), $("#PASSWORDD").val());
+      }
+
     </script>
 </html>

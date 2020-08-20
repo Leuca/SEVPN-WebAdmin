@@ -1,0 +1,87 @@
+<!-- Modal -->
+<div class="modal fade" id="DDNSproxy" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="DDNSproxyLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="DDNSproxyLabel">Connect via Proxy Server</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#DDNSmodal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>You can connect via a Proxy Server.</p>
+        <div class="row g-3 align-items-center">
+          <div class="col-auto">
+            <label class="col-form-label">Proxy Type: </label>
+          </div>
+          <div class="col-auto">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="PROXY" id="TCPIPPS" onclick="proxval()" checked>
+              <label class="form-check-label" for="TCPIPPS">
+                Direct TCP/IP
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="PROXY" id="HTTPPS" onclick="proxval()">
+              <label class="form-check-label" for="HTTPPS">
+                Connect via HTTP Proxy Server
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="PROXY" id="SOCKSPS" onclick="proxval()">
+              <label class="form-check-label" for="SOCKSPS">
+                Connect via SOCKS Proxy Server
+              </label>
+            </div>
+          </div>
+        </div>
+            <div class="row m-1 justify-content-end">
+              <div class="col-auto">
+                <label for="HOST_NAME" class="col-form-label">Host Name: </label>
+              </div>
+              <div class="col-auto">
+                <input type="text" id="HOST_NAME" class="form-control" aria-describedby="HOST_NAMEInline">
+              </div>
+            </div>
+            <div class="row m-1 justify-content-end">
+              <div class="col-auto">
+                <label for="PORT_N" class="col-form-label">Port: </label>
+              </div>
+              <div class="col-auto">
+                <input type="text" id="PORT_N" class="form-control" aria-describedby="PORT_NInline">
+              </div>
+            </div>
+            <div class="row m-1 justify-content-end">
+              <div class="col-auto">
+                <label for="USER_NAME" class="col-form-label">User Name: </label>
+              </div>
+              <div class="col-auto">
+                <input type="text" id="USER_NAME" class="form-control" aria-describedby="USER_NAMEInline">
+              </div>
+              <div class="col-auto">
+                <span id="USER_NAMEInline" class="form-text">
+                  (optional)
+                </span>
+              </div>
+            </div>
+            <div class="row m-1 justify-content-end">
+              <div class="col-auto">
+                <label for="PASSWORDD" class="col-form-label">Password</label>
+              </div>
+              <div class="col-auto">
+                <input type="password" id="PASSWORDD" class="form-control" aria-describedby="PASSWORDDInline">
+              </div>
+              <div class="col-auto">
+                <span id="PASSWORDDInline" class="form-text">
+                  (optional)
+                </span>
+              </div>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#DDNSmodal" onclick="proxset()">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#DDNSmodal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

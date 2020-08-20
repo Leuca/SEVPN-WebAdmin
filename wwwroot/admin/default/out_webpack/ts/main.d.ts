@@ -74,4 +74,10 @@ export declare function UploadConfig(cfile: string): Promise<void>;
 export declare function AzureGet(): Promise<void>;
 export declare function AzureSet(bol: boolean): Promise<void>;
 export declare function DynStatus(): Promise<void>;
+export declare function GetDDNS(): Promise<void>;
+export declare function ResDDNSH(): Promise<void>;
+export declare function SetDDNSH(hostname: string): Promise<void>;
+export declare function proxen(bool: boolean): Promise<void>;
+export declare function DDNSPROXYget(): Promise<void>;
+export declare function DDNSPROXYset(type: number, name: string, port: number, uname: string, passwd: string): Promise<void>;
 //# sourceMappingURL=main.d.ts.map

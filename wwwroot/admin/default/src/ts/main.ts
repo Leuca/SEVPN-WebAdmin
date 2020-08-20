@@ -1865,6 +1865,7 @@ export async function DynStatus(): Promise<void>
   let astatus = await api.GetAzureStatus();
   $("#DYNDNS").removeAttr("style");
   $("#AZBTN").removeAttr("disabled");
+  $("#DYNBTN").removeAttr("disabled");
   $("#DYNDNS").text("Current DDNS Hostname: " + status.CurrentHostName_str + status.DnsSuffix_str);
   if(astatus.IsEnabled_bool == true){
     $("#AZDNS").attr("style", "display:");
@@ -1874,4 +1875,99 @@ export async function DynStatus(): Promise<void>
   }
   $("#AZDNS").text("VPN Azure Hostname: " + status.CurrentHostName_str +".vpnazure.net");
 
+}
+
+export async function GetDDNS(): Promise<void>
+{
+  let status = await api.GetDDnsClientStatus();
+  $("#Dhostname").text(status.CurrentFqdn_str);
+  var ip4: string;
+  var ip6: string;
+  if(status.Err_IPv4_u32 == 0){
+    ip4 = status.CurrentIPv4_str;
+  }
+  else{
+    ip4 = status.ErrStr_IPv4_utf;
+  }
+
+  if(status.Err_IPv6_u32 == 0){
+    ip6 = status.CurrentIPv6_str;
+  }
+  else{
+    ip6 = status.ErrStr_IPv6_utf;
+  }
+  $("#GIPv4").text(ip4);
+  $("#GIPv6").text(ip6);
+  $("#i4b").text(status.CurrentHostName_str);
+  $("#i6b").text(status.CurrentHostName_str);
+  $("#dynhostname").val(status.CurrentHostName_str);
+}
+
+export async function ResDDNSH(): Promise<void>
+{
+  let status = await api.GetDDnsClientStatus();
+  $("#dynhostname").val(status.CurrentHostName_str);
+}
+
+export async function SetDDNSH(hostname: string): Promise<void>
+{
+  let newhost: VPN.VpnRpcTest = new VPN.VpnRpcTest(
+    {
+      StrValue_str: hostname,
+    });
+    try{
+      await api.ChangeDDnsClientHostname(newhost);
+      GetDDNS();
+    }
+    catch (ex)
+    {
+        alert(ex);
+    }
+}
+
+export async function proxen(bool: boolean): Promise<void>
+{
+  if (bool == true){
+    $("#HOST_NAME").removeAttr("disabled");
+    $("#PORT_N").removeAttr("disabled");
+    $("#USER_NAME").removeAttr("disabled");
+    $("#PASSWORDD").removeAttr("disabled");
+  }
+  else{
+    $("#HOST_NAME").attr("disabled","true");
+    $("#PORT_N").attr("disabled","true");
+    $("#USER_NAME").attr("disabled","true");
+    $("#PASSWORDD").attr("disabled","true");
+  }
+}
+
+export async function DDNSPROXYget(): Promise<void>
+{
+  let settings = await api.GetDDnsInternetSettng();
+  $("#TCPIPPS").removeAttr("checked");
+  $("#HTTPPS").removeAttr("checked");
+  $("#SOCKSPS").removeAttr("checked");
+
+  switch(settings.ProxyType_u32){
+    case 0: $("#TCPIPPS").attr("checked","true"); proxen(false); break;
+    case 1: $("#HTTPPS").attr("checked","true"); proxen(true); break;
+    case 2: $("#SOCKSPS").attr("checked","true"); proxen(true); break;
+  }
+  $("#HOST_NAME").val(settings.ProxyHostName_str);
+  $("#PORT_N").val(settings.ProxyPort_u32);
+  $("#USER_NAME").val(settings.ProxyUsername_str);
+  $("#PASSWORDD").val(settings.ProxyPassword_str);
+}
+
+export async function DDNSPROXYset(type: number, name: string, port: number, uname: string, passwd: string): Promise<void>
+{
+  let pset: VPN.VpnInternetSetting = new VPN.VpnInternetSetting(
+    {
+      ProxyType_u32: type,
+      ProxyHostName_str: name,
+      ProxyPort_u32: port,
+      ProxyUsername_str: uname,
+      ProxyPassword_str: passwd,
+    });
+  await api.SetDDnsInternetSettng(pset);
 }

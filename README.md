@@ -29,7 +29,7 @@
     - [ ] Manage Sessions
   - [ ] Encryption and network
   - [ ] Clustering Configuration
-  - [ ] Edit Config
+  - [x] **Edit Config**
   - [ ] Local Bridge Setting
   - [ ] Layer 3 Switch
   - [x] IPsec / L2TP Setting

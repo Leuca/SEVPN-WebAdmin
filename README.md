@@ -34,7 +34,7 @@
   - [ ] Layer 3 Switch
   - [x] IPsec / L2TP Setting
   - [x] OpenVPN/MS-SSTP Setting
-  - [ ] Dynamic DNS Setting
+  - [x] Dynamic DNS Setting
   - [x] VPN Azure Setting
   - [ ] Disable unecessary items if logged in as a Hub Admin
   - [ ] Implement a function that translates 0.0.0.0 to /0 (-ish)

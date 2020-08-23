@@ -30,7 +30,7 @@
   - [ ] Encryption and network
   - [ ] Clustering Configuration
   - [x] **Edit Config**
-  - [ ] Local Bridge Setting
+  - [x] Local Bridge Setting (if the system allows it)
   - [ ] Layer 3 Switch
   - [x] IPsec / L2TP Setting
   - [x] OpenVPN/MS-SSTP Setting

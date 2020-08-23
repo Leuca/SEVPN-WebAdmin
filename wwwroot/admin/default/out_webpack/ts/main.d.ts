@@ -80,4 +80,8 @@ export declare function SetDDNSH(hostname: string): Promise<void>;
 export declare function proxen(bool: boolean): Promise<void>;
 export declare function DDNSPROXYget(): Promise<void>;
 export declare function DDNSPROXYset(type: number, name: string, port: number, uname: string, passwd: string): Promise<void>;
+export declare function GetBridge(): Promise<void>;
+export declare function DelBridge(device: string, hub: string): Promise<void>;
+export declare function NewLB(device: string, hub: string, tap: boolean): Promise<void>;
+export declare function IsLBSupported(): Promise<void>;
 //# sourceMappingURL=main.d.ts.map

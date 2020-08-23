@@ -1,0 +1,98 @@
+<!-- Modal -->
+<div class="modal fade" id="localbridge" tabindex="-1" aria-labelledby="localbridgeLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="localbridgeLabel">Local Bridge Settings</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="BridgeTypeR()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+        <p>
+          Local Bridge can establish a Layer 2 bridge connection between a Virtual Hub on this VPN server and a physical Ethernet Device (Network Adapter).<br>
+          It is also possible to create a tap device (virtual network interface) and establish a bridge connection with a Virtual Hub. (Tap is supported on Linux versions only)
+        </p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="row">Number</th>
+              <th scope="row">Virtual Hub Name</th>
+              <th scope="row">Network Adapter or Tap Device</th>
+              <th scope="row">Status</th>
+              </tr>
+            </thead>
+            <tbody id="bridgeDevices">
+              </tbody>
+          </table>
+          <div class="d-flex justify-content-end">
+            <button id="DelBridge" type="button" class="btn btn-danger" onclick="JS.DelBridge($('#BridgeDevice').val(),$('#BridgeHub').val()); $('#DelBridge').attr('disabled','true')" disabled>Delete Local Bridge</button>
+            </div>
+      </div>
+      <div>
+          <p>Select the Virtual Hub to bridge: </p>
+          <select class="form-select" aria-label="selectHub" id="BridgeHubSelect">
+          </select>
+          <hr>
+          <div class="row align-items-center m-1" id="OnlyLinux">
+            <div class="col-auto">
+              <label for="radioAdapter" class="col-form-label">Type to Create: </label>
+              </div>
+              <div class="col-auto">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="BridgeType" id="radioAdapter" onclick="BridgeTypeS()" checked>
+                  <label class="form-check-label" for="radioAdapter">
+                    Bridge with Physical Existing Network Adapter
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="BridgeType" id="radioTap" onclick="BridgeTypeS()">
+                  <label class="form-check-label" for="radioTap">
+                    Bridge with New Tap Device
+                  </label>
+                </div>
+                </div>
+            </div>
+            <div class="row align-items-center m-1">
+              <p id="pTypeDescr">Select the Ethernet Device (network adapter) for the bridge destination.</p>
+              <div class="col-auto">
+                <label for="selectAdapter" class="col-form-label">LAN Adapter: </label>
+                </div>
+                <div class="col-auto">
+                  <select class="form-select" aria-label="selectAdapter" id="selectAdapter">
+                  </select>
+                  </div>
+              </div>
+              <div class="row g-3 align-items-center m-1" id="OnlyLinux1">
+                <div class="col-auto">
+                  <label for="newTap" class="col-form-label">New Tap Device Name: </label>
+                </div>
+                <div class="col-auto">
+                  <input type="text" id="newTap" class="form-control" aria-describedby="newTapInline" disabled>
+                </div>
+                <div class="col-auto">
+                  <span id="newTapInline" class="form-text">
+                    (Maximum 11 Characters)
+                  </span>
+                </div>
+              </div>
+        </div>
+        <div class="row justify-content-end">
+          <div class="col-8">
+            <p>Note: Although it is possible to establish a bridge using any operating network adapter, in high load environments, you sholud prepare a network adapter dedicated for bridging.
+            </div>
+            <div class="col-3">
+              <button id="CreateBridgeBTN" type="button" class="btn btn-success" onclick="CreateBridge()">Create Local Bridge</button>
+              </div>
+          </div>
+        </div>
+      <div class="modal-footer">
+        <p>If a network adapter which was recently added on the system doesn't appear, reboot the computer and re open this dialog.</p>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="BridgeTypeR()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<input style="display: none;" id="BridgeDevice">
+<input style="display: none;" id="BridgeHub">

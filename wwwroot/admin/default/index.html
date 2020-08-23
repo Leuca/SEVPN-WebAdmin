@@ -155,7 +155,7 @@
               <a class="btn btn-secondary m-1 col-md-auto disabled" aria-disabled="true" href="">Clustering Status</a>
             </div>
             <div class="row mr-2 ml-1">
-              <a class="btn btn-secondary m-1 col-md-auto align-content-center" href="server_info.html"><img src="/admin/default/icons/softether-vpn-server.svg" width="42" height="42" class="d-inline-block" alt="About this VPN Server"> About this VPN Server</a>
+              <a class="btn btn-secondary m-1 col-md-auto align-content-center" href="server_info.html">About this VPN Server</a>
               <!-- Button trigger modal -->
               <button type="button" class="btn btn-secondary m-1 col-md-auto" data-toggle="modal" data-target="#TCPIPModal">Show List of TCP/IP Connections</button>
                 <!-- Modal -->
@@ -213,7 +213,7 @@
             </div>
             <div class="row mr-2 ml-1">
               <!-- Button trigger modal -->
-            <button class="btn btn-secondary m-1 col-md-auto" data-toggle="modal" data-target="#editConfig" onclick="$('#filename').text('Choose file...'); $('#configFile').val('')"><img src="/admin/default/icons/Machine.ico" width="42" height="42" class="d-inline-block" alt="About this VPN Server"> Edit Config</a>
+            <button class="btn btn-secondary m-1 col-md-auto" data-toggle="modal" data-target="#editConfig" onclick="$('#filename').text('Choose file...'); $('#configFile').val('')">Edit Config</a>
           </div>
         </div>
         <!--#include file="config_modal.html" -->
@@ -221,7 +221,8 @@
         <hr>
         <div class="row mr-1">
           <div class="col-md-auto">
-          <a class="btn btn-primary btn-block m-2 disabled" href="" aria-disabled="true"><img src="/admin/default/icons/vpnbridge.ico" width="42" height="42" class="d-inline-block" alt="Local Bridge Setting"> Local Bridge Setting</a>
+            <!-- Button trigger modal -->
+          <button id="LBBTN" class="btn btn-primary btn-block m-2" data-toggle="modal" data-target="#localbridge" onclick="JS.GetBridge()">Local Bridge Setting</button>
           </div>
           <div class="col-md-auto">
           <a class="btn btn-primary btn-block m-2 disabled" href="" aria-disabled="true">Layer 3 Switch Setting</a>
@@ -249,6 +250,7 @@
         <!--#include file="azure_modal.html" -->
         <!--#include file="ddns_modal.html" -->
         <!--#include file="ddns_proxy_modal.html" -->
+        <!--#include file="local_bridge_modal.html" -->
         </div>
         <!--#include file="include_footer.html" -->
       </main>
@@ -273,6 +275,7 @@
         JS.ListVirtualHubs("#HUB_LIST");
         JS.ListListeners("#LISTENERS");
         JS.ListConnections("#CONNECTION_LIST");
+        JS.IsLBSupported();
     </script>
     <script>
       function ethipbtn(){
@@ -386,5 +389,53 @@
         JS.DDNSPROXYset(type, $("#HOST_NAME").val(), $("#PORT_N").val(), $("#USER_NAME").val(), $("#PASSWORDD").val());
       }
 
+    </script>
+    <script>
+      function BridgeTypeS(){
+        if($("#radioAdapter").is(":checked")){
+          $("#CreateBridgeBTN").removeAttr("disabled");
+          $("#newTap").attr("disabled","true");
+          $("#selectAdapter").removeAttr("disabled");
+          $("#pTypeDescr").text("Select the Ethernet Device (network adapter) for the bridge destination.");
+        }
+        else if($("#radioTap").is(":checked")){
+          $("#CreateBridgeBTN").attr("disabled","true");
+          $("#selectAdapter").attr("disabled","true");
+          $("#newTap").removeAttr("disabled");
+          $("#pTypeDescr").text("Enter a name for the new tap device.");
+          document.getElementById('newTap').addEventListener('input', allowCreate);
+        }
+      }
+      function allowCreate(){
+        if($("#newTap").val() != ''){
+          $("#CreateBridgeBTN").removeAttr("disabled");
+        }
+        else{
+          $("#CreateBridgeBTN").attr("disabled","true");
+        }
+      }
+      function BridgeTypeR(){
+        if($("#radioAdapter").is(":checked")){
+          $('#DelBridge').attr('disabled','true');
+        }
+        else if($("#radioTap").is(":checked")){
+          document.getElementById('newTap').removeEventListener('input', allowCreate);
+          $("#CreateBridgeBTN").removeAttr("disabled");
+          $('#DelBridge').attr('disabled','true');
+          $("#newTap").val('');
+          $("#pTypeDescr").text("Select the Ethernet Device (network adapter) for the bridge destination.");
+          document.getElementById('radioTap').checked = false;
+          document.getElementById('radioAdapter').checked = true;
+        }
+        BridgeTypeS();
+      }
+      function CreateBridge(){
+        if($("#radioAdapter").is(":checked")){
+          JS.NewLB($("select#selectAdapter").val(), $("select#BridgeHubSelect").val(), false);
+        }
+        else if($("#radioTap").is(":checked")){
+          JS.NewLB($("#newTap").val(), $("select#BridgeHubSelect").val(), true);
+        }
+      }
     </script>
 </html>

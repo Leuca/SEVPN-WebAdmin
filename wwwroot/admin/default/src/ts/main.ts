@@ -1971,3 +1971,89 @@ export async function DDNSPROXYset(type: number, name: string, port: number, una
     });
   await api.SetDDnsInternetSettng(pset);
 }
+
+export async function GetBridge(): Promise<void>
+{
+  let checkLinux = await api.GetServerInfo();
+
+  if(checkLinux.OsType_u32 != 3100){
+    $("#OnlyLinux").attr("style","display: none;");
+    $("#OnlyLinux1").attr("style","display: none;");
+  }
+  let bridges = await api.EnumLocalBridge();
+  let num: number = 0;
+  $("#bridgeDevices").empty();
+  bridges.LocalBridgeList.forEach(bridge => {
+    num += 1;
+    var status: string = "";
+    if(bridge.Online_bool == true && bridge.Active_bool == true){
+      status = "Operating";
+    }
+    else{
+      status = "Error";
+    }
+    $("#bridgeDevices").append("<tr><th scope=\"col\">" + num + "</th><td>" + bridge.HubNameLB_str + "</td><td><button type=\"button\" class=\"btn btn-link\" onclick=\"$('#DelBridge').removeAttr('disabled'); $('#BridgeDevice').val('" + bridge.DeviceName_str + "'); $('#BridgeHub').val('" + bridge.HubNameLB_str + "')\">" + bridge.DeviceName_str + "</button></td><td>" + status + "</td></tr>");
+  });
+  let hubs = await api.EnumHub();
+  $("#BridgeHubSelect").empty();
+  hubs.HubList.forEach(hub => {
+    $("#BridgeHubSelect").append("<option value=\"" + hub.HubName_str + "\">" + hub.HubName_str + "</option>");
+  });
+  let adapters = await api.EnumEthernet();
+  $("#selectAdapter").empty();
+  adapters.EthList.forEach(adapter => {
+    $("#selectAdapter").append("<option value=\"" + adapter.DeviceName_str + "\">" + adapter.DeviceName_str + "</option>");
+  });
+}
+
+export async function DelBridge(device: string, hub: string): Promise<void>
+{
+  let item: VPN.VpnRpcLocalBridge = new VPN.VpnRpcLocalBridge(
+    {
+      DeviceName_str: device,
+      HubNameLB_str: hub,
+    });
+  try{
+    await api.DeleteLocalBridge(item);
+    GetBridge();
+  }
+  catch (ex)
+  {
+      alert(ex);
+  }
+}
+
+export async function NewLB(device: string, hub: string, tap: boolean): Promise<void>
+{
+  let item: VPN.VpnRpcLocalBridge = new VPN.VpnRpcLocalBridge(
+    {
+      DeviceName_str: device,
+      HubNameLB_str: hub,
+      TapMode_bool: tap,
+    });
+  try{
+    await api.AddLocalBridge(item);
+    GetBridge();
+    setTimeout(() => {  GetBridge();}, 2000);
+  }
+  catch (ex)
+  {
+      alert(ex);
+  }
+}
+
+export async function IsLBSupported(): Promise<void>
+{
+  let lbsupport = await api.GetBridgeSupport();
+  if(lbsupport.IsBridgeSupportedOs_bool == false){
+    $("#LBBTN").attr("disabled","true");
+  }
+  else{
+    $("#LBBTN").removeAttr("disabled");
+  }
+
+  if(lbsupport.IsWinPcapNeeded_bool == true){
+    $("#LBBTN").text("Local Bridge Setting (WinPcap needed)")
+  }
+
+}

@@ -19,7 +19,7 @@
   - [ ] **Manage Virtual Hub**
     - [x] Status
     - [x] Manage Access Lists (there are issues, plus it can be improved)
-    - [x] Manage Users
+    - [ ] Manage Users (bugs)
     - [ ] Manage Groups
     - [x] RADIUS
     - [ ] Cascade Connections

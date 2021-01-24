@@ -1,0 +1,88 @@
+<!-- Modal -->
+<div class="modal fade" id="authServerSettings" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="authServerSettingsLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="authServerSettingsLabel">Authentication Server Setting</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>To use an external RADIUS server to verify login attempts to the Virtual Hub "<span id="RadiusHubName"></span>", specify an external RADIUS server that verifies the user name and password.</p>
+        <hr>
+        <form>
+          <div class="row mb-3">
+          <div class="col-sm-10">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="useRadius" onclick="toggleRadius()">
+            <label class="form-check-label" for="useRadius">
+              Use RADIUS Authetication
+            </label>
+          </div>
+          </div>
+          </div>
+          <div class="row mb-3">
+            <label for="RADIUSIP" class="col-sm-2 col-form-label">RADIUS Server Host or IP</label>
+            <div class="col-sm-7">
+              <input type="hostname" class="form-control" id="RADIUSIP">
+              <div id="hostnameHelp" class="form-text">(use ',' or ';' to split multiple hostnames.)</div>
+              <div id="hostnameEmpty" class="invalid-feedback">
+                Host cannot be empty!
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="RADIUSPORT" class="col-sm-2 col-form-label">Port</label>
+            <div class="col-sm-3">
+              <input type="number" class="form-control" id="RADIUSPORT">
+            </div>
+            <div id="portHelp" class="col-auto">
+              <span id="portHelpInline" class="form-text">
+                  (UDP Port)
+                </span>
+              </div>
+          </div>
+          <div class="row mb-3">
+              <label for="SharedSecret" class="col-sm-2 col-form-label">Shared Secret</label>
+              <div class="col-sm-7">
+                <input type="password" class="form-control" id="SharedSecret">
+              </div>
+            </div>
+            <div class="row mb-3">
+                <label for="ConfirmSharedSecret" class="col-sm-2 col-form-label">Confirm Shared Secret</label>
+                <div class="col-sm-7">
+                  <input type="password" class="form-control" id="ConfirmSharedSecret">
+                  <div id="SharedSecretValidation" class="invalid-feedback">
+                    Secret empty or not matching!
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="RetryInterval" class="col-sm-2 col-form-label">Retry Interval</label>
+                <div class="col-sm-3">
+                  <input type="number" class="form-control" id="RetryInterval">
+                </div>
+                <div id="RetryIntervalHelp" class="col-auto">
+                  <span id="RetryIntervalHelp" class="form-text">
+                      milliseconds (above 500, below 10000)
+                    </span>
+                  </div>
+              </div>
+          </form>
+          <hr>
+          <p>
+          The RADIUS server must accept requests from IP adresses of this VPN Server.
+          <br>
+          Also, authentication by Password Authentication Protocol (PAP) must be enabled.
+          </p>
+          <br>
+          <p>
+            When using windows NT Domain Controller or Windows Server Active Directory Controller as an external authentication server, you must setup the VPN Server computer to join the domain. To use NT Domain Authetication, there are no items to configure here.
+            </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="submitRadius()">OK</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="JS.clearinvalid()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

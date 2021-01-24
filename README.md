@@ -21,7 +21,7 @@
     - [x] Manage Access Lists (there are issues, plus it can be improved)
     - [x] Manage Users
     - [ ] Manage Groups
-    - [ ] RADIUS
+    - [x] RADIUS
     - [ ] Cascade Connections
     - [ ] Logs
     - [ ] CA

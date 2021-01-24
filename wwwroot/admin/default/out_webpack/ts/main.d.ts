@@ -84,4 +84,9 @@ export declare function GetBridge(): Promise<void>;
 export declare function DelBridge(device: string, hub: string): Promise<void>;
 export declare function NewLB(device: string, hub: string, tap: boolean): Promise<void>;
 export declare function IsLBSupported(): Promise<void>;
+export declare function GetHubRADIUS(queryString: string): Promise<void>;
+export declare function SetHubRADIUS(queryString: string, radiushostname: string, port: number, secret: string, interval: number): Promise<void>;
+export declare function clearinvalid(): Promise<void>;
+export declare function enableRadius(): Promise<void>;
+export declare function disableRadius(): Promise<void>;
 //# sourceMappingURL=main.d.ts.map

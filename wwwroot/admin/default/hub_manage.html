@@ -32,7 +32,7 @@
     <div id="PROPERTIES"></div>
     <p>Configure this Hub</p>
     <hr>
-    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#authServerSettings">Authentication Server Setting</button>
+    <button type="button" class="btn btn-secondary" data-bs-target="#authServerSettings" onclick="loadRadius()">Authentication Server Setting</button>
     <p>Use external RADIUS authentication server for user authentication.</p>
     <!--#include file="auth_server_settings_modal.html"-->
     <hr>
@@ -183,6 +183,78 @@
     var passwordf = check();
 
     JS.SaveUser(location.search, $("#TYPESER").val(), $("#USERNAME").val(), $("#FULLNAME").val(), $("#NOTE").val(), $("#GROUPNAME").val(), date, $("#AuthNameI").val(), $("#CertificateTextarea").val(), $("#CNval").val(), $("#SNval").val(), passwordf);
+  }
+</script>
+<script>
+
+  function toggleRadius()
+  {
+    if($("#useRadius").is(':checked'))
+    {
+      JS.enableRadius();
+    }
+    else {
+      JS.disableRadius();
+    }
+  }
+
+  function loadRadius()
+  {
+    JS.GetHubRADIUS(location.search);
+    if($("#RADIUSIP").val() === "")
+    {
+      $("#useRadius").prop("checked",false);
+      JS.disableRadius();
+    }
+    else {
+      $("#useRadius").prop("checked",true);
+      JS.enableRadius();
+    }
+    $("#authServerSettings").modal('show');
+
+  }
+
+  function submitRadius()
+  {
+    if($("#useRadius").is(':checked')){
+      if($("#RADIUSIP").val() === "")
+      {
+        $("#RADIUSIP").addClass("is-invalid");
+      }
+      else {
+        if(parseInt($("#RADIUSPORT").val()) > 0)
+        {
+          if($("#SharedSecret").val() === $("#ConfirmSharedSecret").val() && $("#SharedSecret").val() != "" && $("#ConfirmSharedSecret").val() != "")
+          {
+            if(parseInt($("#RetryInterval").val()) >= 500 && parseInt($("#RetryInterval").val()) <= 10000)
+            {
+              JS.SetHubRADIUS(location.search, $("#RADIUSIP").val(), $("#RADIUSPORT").val(), $("#SharedSecret").val(), $("#RetryInterval").val());
+              $("#authServerSettings").modal('hide');
+              //$("#authServerSettings").modal('dispose');
+              JS.clearinvalid();
+            }
+            else {
+              $("#RetryInterval").addClass("is-invalid");
+            }
+          }
+          else
+          {
+            $("#SharedSecret").addClass("is-invalid");
+            $("#ConfirmSharedSecret").addClass("is-invalid");
+          }
+        }
+        else {
+          $("#RADIUSPORT").addClass("is-invalid");
+        }
+      }
+    }
+    else {
+      JS.SetHubRADIUS(location.search, "", 0, "", 0);
+      $("#authServerSettings").modal('hide');
+      //$("#authServerSettings").modal('dispose');
+      JS.clearinvalid();
+    }
+
   }
 </script>
 </html>

@@ -220,16 +220,16 @@ export async function HubAdminPage(queryString: string): Promise<void>
         $("#HUB_NAME").append("Virtual Hub \"" + hubInfo.HubName_str + "\"");
         $("#COLLAPSE").attr("style", "");
         //Hub buttons
-        btn.append("<button type=\"button\" class=\"btn btn-primary mr-2 mt-1\" onclick=\"window.location.href =\'./hub_manage.html?" + hubInfo.HubName_str + "\'\">Manage Virtual Hub</button>");
+        btn.append("<button type=\"button\" class=\"btn btn-primary me-2 mt-1\" onclick=\"window.location.href =\'./hub_manage.html?" + hubInfo.HubName_str + "\'\">Manage Virtual Hub</button>");
         if(hubInfo.Online_bool == true){
-          btn.append("<button type=\"button\" class=\"btn btn-success mr-2 mt-1\" onclick=\"JS.HubOnline('" + hubInfo.HubName_str + "')\" disabled>Online</button>");
-          btn.append("<button type=\"button\" class=\"btn btn-warning mr-2 mt-1\" onclick=\"JS.HubOffline('" + hubInfo.HubName_str + "')\">Offline</button>");
+          btn.append("<button type=\"button\" class=\"btn btn-success me-2 mt-1\" onclick=\"JS.HubOnline('" + hubInfo.HubName_str + "')\" disabled>Online</button>");
+          btn.append("<button type=\"button\" class=\"btn btn-warning me-2 mt-1\" onclick=\"JS.HubOffline('" + hubInfo.HubName_str + "')\">Offline</button>");
         }
         else{
-          btn.append("<button type=\"button\" class=\"btn btn-success mr-2 mt-1\" onclick=\"JS.HubOnline('" + hubInfo.HubName_str + "')\">Online</button>");
-          btn.append("<button type=\"button\" class=\"btn btn-warning mr-2 mt-1\" onclick=\"JS.HubOffline('" + hubInfo.HubName_str + "')\" disabled>Offline</button>");
+          btn.append("<button type=\"button\" class=\"btn btn-success me-2 mt-1\" onclick=\"JS.HubOnline('" + hubInfo.HubName_str + "')\">Online</button>");
+          btn.append("<button type=\"button\" class=\"btn btn-warning me-2 mt-1\" onclick=\"JS.HubOffline('" + hubInfo.HubName_str + "')\" disabled>Offline</button>");
         }
-        btn.append("<button type=\"button\" class=\"btn btn-secondary mr-2 mt-1\" onclick=\"window.location = \'./hub_properties.html?" + hubInfo.HubName_str + "\'\">Properties</button>");
+        btn.append("<button type=\"button\" class=\"btn btn-secondary me-2 mt-1\" onclick=\"window.location = \'./hub_properties.html?" + hubInfo.HubName_str + "\'\">Properties</button>");
         btn.append("<button type=\"button\" class=\"btn btn-danger mt-1\" onclick=\"JS.DeleteVirtualHub(location.search);\">Delete this Virtual Hub</button>");
         // User list
         let enumUserParam: VPN.VpnRpcEnumUser = new VPN.VpnRpcEnumUser(
@@ -2056,4 +2056,87 @@ export async function IsLBSupported(): Promise<void>
     $("#LBBTN").text("Local Bridge Setting (WinPcap needed)")
   }
 
+}
+
+/* Authentiction Server Setting */
+
+export async function GetHubRADIUS(queryString: string): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?")
+  {
+    hubNameInput = hubNameInput.substring(1);
+  };
+  let hub: VPN.VpnRpcRadius = new VPN.VpnRpcRadius (
+  {
+    HubName_str: hubNameInput,
+  });
+  try {
+    let rstatus = await api.GetHubRadius(hub);
+    if(rstatus.RadiusServerName_str == "")
+    {
+      $("#useRadius").prop("checked",false);
+      disableRadius();
+    }
+    else{
+      $("#useRadius").prop("checked",true);
+      enableRadius();
+    }
+    $('#RadiusHubName').text(hubNameInput);
+    $('#RADIUSIP').val(rstatus.RadiusServerName_str);
+    $('#RADIUSPORT').val(rstatus.RadiusPort_u32);
+    $('#SharedSecret').val(rstatus.RadiusSecret_str);
+    $('#ConfirmSharedSecret').val(rstatus.RadiusSecret_str);
+    $('#RetryInterval').val(rstatus.RadiusRetryInterval_u32);
+  } catch (ex) {
+    alert(ex);
+  }
+}
+
+export async function SetHubRADIUS(queryString: string, radiushostname: string, port: number, secret: string, interval: number): Promise<void>
+{
+  let hubNameInput = queryString;
+  if (hubNameInput.length >= 1 && hubNameInput.charAt(0) == "?") hubNameInput = hubNameInput.substring(1);
+  let hub: VPN.VpnRpcRadius = new VPN.VpnRpcRadius (
+  {
+    HubName_str: hubNameInput,
+    RadiusServerName_str: radiushostname,
+    RadiusPort_u32: port,
+    RadiusSecret_str: secret,
+    RadiusRetryInterval_u32: interval,
+  });
+  try {
+    await api.SetHubRadius(hub);
+  } catch (error) {
+    alert(error);
+  }
+}
+
+export async function clearinvalid(): Promise<void>
+{
+  //$('#RadiusHubName').text("");
+  $("#RADIUSIP").removeClass("is-invalid");
+  $("#RADIUSPORT").removeClass("is-invalid");
+  $("#SharedSecret").removeClass("is-invalid");
+  $("#ConfirmSharedSecret").removeClass("is-invalid");
+  $("#RetryInterval").removeClass("is-invalid");
+  $("#useRadius").prop("checked", false);
+}
+
+export async function enableRadius(): Promise<void>
+{
+  $("#RADIUSIP").removeAttr("disabled");
+  $("#RADIUSPORT").removeAttr("disabled");
+  $("#SharedSecret").removeAttr("disabled");
+  $('#ConfirmSharedSecret').removeAttr("disabled");
+  $('#RetryInterval').removeAttr("disabled");
+}
+
+export async function disableRadius(): Promise<void>
+{
+  $("#RADIUSIP").attr("disabled","true");
+  $("#RADIUSPORT").attr("disabled","true");
+  $("#SharedSecret").attr("disabled","true");
+  $("#ConfirmSharedSecret").attr("disabled","true");
+  $("#RetryInterval").attr("disabled","true");
 }

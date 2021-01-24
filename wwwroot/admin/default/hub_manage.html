@@ -230,7 +230,6 @@
             {
               JS.SetHubRADIUS(location.search, $("#RADIUSIP").val(), $("#RADIUSPORT").val(), $("#SharedSecret").val(), $("#RetryInterval").val());
               $("#authServerSettings").modal('hide');
-              //$("#authServerSettings").modal('dispose');
               JS.clearinvalid();
             }
             else {
@@ -251,7 +250,6 @@
     else {
       JS.SetHubRADIUS(location.search, "", 0, "", 0);
       $("#authServerSettings").modal('hide');
-      //$("#authServerSettings").modal('dispose');
       JS.clearinvalid();
     }
 

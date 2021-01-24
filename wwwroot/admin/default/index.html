@@ -93,7 +93,7 @@
               <div class="col-md-auto">
                 <div class="row mr-2 ml-1">
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#CreateListener">
+                    <button type="button" class="btn btn-primary m-1" data-bs-toggle="modal" data-bs-target="#CreateListener">
                       Create
                     </button>
 
@@ -103,7 +103,7 @@
                         <div class="modal-content">
                           <div class="modal-header">
                             <h5 class="modal-title" id="CreateLis">Create Listener</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
                             </button>
                           </div>
@@ -115,8 +115,8 @@
                             <p>In this case, stop the other program that is opening the same port.</p>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" onclick="JS.CreateNewListener($('#NEW_PORT').val(),'#LISTENERS')" data-dismiss="modal">OK</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="JS.CreateNewListener($('#NEW_PORT').val(),'#LISTENERS')" data-bs-dismiss="modal">OK</button>
                           </div>
                         </div>
                       </div>
@@ -157,14 +157,14 @@
             <div class="row mr-2 ml-1">
               <a class="btn btn-secondary m-1 col-md-auto align-content-center" href="server_info.html">About this VPN Server</a>
               <!-- Button trigger modal -->
-              <button type="button" class="btn btn-secondary m-1 col-md-auto" data-toggle="modal" data-target="#TCPIPModal">Show List of TCP/IP Connections</button>
+              <button type="button" class="btn btn-secondary m-1 col-md-auto" data-bs-toggle="modal" data-bs-target="#TCPIPModal">Show List of TCP/IP Connections</button>
                 <!-- Modal -->
-                <div class="modal fade" id="TCPIPModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="TCPIPModal" aria-hidden="true">
+                <div class="modal fade" id="TCPIPModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="TCPIPModal" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-scrollable">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="TCPIPModal">Connection List</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
@@ -187,9 +187,9 @@
                     </div>
                     <div class="modal-footer">
                       <!-- Button trigger modal -->
-                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#TCPIPModal_MORE" data-dismiss="modal" onclick="JS.ConnectionInfo($('#CONNECTION').val())">Show Connection Information</button>
+                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#TCPIPModal_MORE" data-bs-dismiss="modal" onclick="JS.ConnectionInfo($('#CONNECTION').val())">Show Connection Information</button>
                       <button type="button" class="btn btn-primary" onclick="JS.Disconnection($('#CONNECTION').val(), '#CONNECTION_LIST')">Disconnect</button>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                   </div>
                 </div>
@@ -205,7 +205,7 @@
                         <p id="CONNECTION"></p>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary"  data-toggle="modal" data-target="#TCPIPModal" data-dismiss="modal" onclick="$('#CONNECTION').empty();$('#CONNECTION_INFO').empty();$('#CONNECTION_INFO_NAME').empty()">Close</button>
+                        <button type="button" class="btn btn-secondary"  data-bs-toggle="modal" data-bs-target="#TCPIPModal" data-bs-dismiss="modal" onclick="$('#CONNECTION').empty();$('#CONNECTION_INFO').empty();$('#CONNECTION_INFO_NAME').empty()">Close</button>
                       </div>
                     </div>
                   </div>
@@ -213,7 +213,7 @@
             </div>
             <div class="row mr-2 ml-1">
               <!-- Button trigger modal -->
-            <button class="btn btn-secondary m-1 col-md-auto" data-toggle="modal" data-target="#editConfig" onclick="$('#filename').text('Choose file...'); $('#configFile').val('')">Edit Config</a>
+            <button class="btn btn-secondary m-1 col-md-auto" data-bs-toggle="modal" data-bs-target="#editConfig" onclick="$('#filename').text('Choose file...'); $('#configFile').val('')">Edit Config</a>
           </div>
         </div>
         <!--#include file="config_modal.html" -->
@@ -222,26 +222,26 @@
         <div class="row mr-1">
           <div class="col-md-auto">
             <!-- Button trigger modal -->
-          <button id="LBBTN" class="btn btn-primary btn-block m-2" data-toggle="modal" data-target="#localbridge" onclick="JS.GetBridge()">Local Bridge Setting</button>
+          <button id="LBBTN" class="btn btn-primary btn-block m-2" data-bs-toggle="modal" data-bs-target="#localbridge" onclick="JS.GetBridge()">Local Bridge Setting</button>
           </div>
           <div class="col-md-auto">
           <a class="btn btn-primary btn-block m-2 disabled" href="" aria-disabled="true">Layer 3 Switch Setting</a>
           </div>
           <div class="col-md-auto">
             <!-- Button trigger modal -->
-          <button class="btn btn-primary btn-block m-2" type="button" data-toggle="modal" data-target="#ipsecmodal" onclick="JS.IPsecGet()">IPSec / L2TP Setting</button>
+          <button class="btn btn-primary btn-block m-2" type="button" data-bs-toggle="modal" data-bs-target="#ipsecmodal" onclick="JS.IPsecGet()">IPSec / L2TP Setting</button>
           </div>
           <div class="col-md-auto">
             <!-- Button trigger modal -->
-          <button type="button" class="btn btn-primary btn-block m-2" data-toggle="modal" data-target="#openvpnM" onclick="JS.getOVPN()">OpenVPN / MS-SSTP Setting</button>
+          <button type="button" class="btn btn-primary btn-block m-2" data-bs-toggle="modal" data-bs-target="#openvpnM" onclick="JS.getOVPN()">OpenVPN / MS-SSTP Setting</button>
           </div>
           <div class="col-md-auto">
             <!-- Button trigger modal -->
-          <button id="DYNBTN" class="btn btn-primary btn-block m-2" data-toggle="modal" data-target="#DDNSmodal" onclick="JS.GetDDNS()">Dynamic DNS Setting</a>
+          <button id="DYNBTN" class="btn btn-primary btn-block m-2" data-bs-toggle="modal" data-bs-target="#DDNSmodal" onclick="JS.GetDDNS()">Dynamic DNS Setting</a>
           </div>
           <div class="col-md-auto">
             <!-- Button trigger modal -->
-          <button id="AZBTN" class="btn btn-primary btn-block m-2" data-toggle="modal" data-target="#Azure" onclick="JS.AzureGet()">VPN Azure Setting</button>
+          <button id="AZBTN" class="btn btn-primary btn-block m-2" data-bs-toggle="modal" data-bs-target="#Azure" onclick="JS.AzureGet()">VPN Azure Setting</button>
         </div>
         <!--#include file="openvpn_modal.html" -->
         <!--#include file="ipsec_modal.html" -->

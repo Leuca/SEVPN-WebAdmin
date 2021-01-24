@@ -1,10 +1,10 @@
 <!-- Modal -->
-<div class="modal fade" id="newUser" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="newUserLabel" aria-hidden="true">
+<div class="modal fade" id="newUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="newUserLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="newUserLabel">New User</h5>
-        <button type="button" class="close" data-dismiss="modal" data-toggle="modal" data-target="#manageUsers" aria-label="Close">
+        <button type="button" class="close" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#manageUsers" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -18,8 +18,8 @@
           </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#setuser" onclick="JS.CreateUser(location.search, $('#newusername').val()); JS.FetchUser(location.search, $('#newusername').val()); $('#newusername').val('')">Create</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#manageUsers">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#setuser" onclick="JS.CreateUser(location.search, $('#newusername').val()); JS.FetchUser(location.search, $('#newusername').val()); $('#newusername').val('')">Create</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#manageUsers">Close</button>
       </div>
     </div>
   </div>

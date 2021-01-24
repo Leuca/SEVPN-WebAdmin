@@ -1,10 +1,10 @@
 <!-- Modal -->
-<div class="modal fade overflow-auto" id="setuser" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="setuserlLabel" aria-hidden="true">
+<div class="modal fade overflow-auto" id="setuser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="setuserlLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="setuserlLabel">Properties of user <span id="username"></span></h5>
-        <button type="button" class="close" aria-label="Close" data-dismiss="modal" data-toggle="modal" data-target="#manageUsers" onclick="JS.ClearUser()">
+        <button type="button" class="close" aria-label="Close" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#manageUsers" onclick="JS.ClearUser()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -148,7 +148,7 @@
                     </div>
                     </div>
                     <div class="col-auto">
-                      <button type="button" class="btn btn-secondary" id="SECPOL" data-dismiss="modal" data-toggle="modal" data-target="#securityPolicy" onclick="JS.UserPolicyRules(location.search, $('#USER_C').val())">Security Policy</button>
+                      <button type="button" class="btn btn-secondary" id="SECPOL" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#securityPolicy" onclick="JS.UserPolicyRules(location.search, $('#USER_C').val())">Security Policy</button>
                       </div>
                   </div>
                 </form>
@@ -214,8 +214,8 @@
           </div>
       </div>
       <div class="modal-footer">
-      <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#manageUsers" onclick="submitUser(); JS.ClearUser()">Save changes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#manageUsers" onclick="JS.ClearUser()">Close</button>
+      <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#manageUsers" onclick="submitUser(); JS.ClearUser()">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#manageUsers" onclick="JS.ClearUser()">Close</button>
       </div>
     </div>
   </div>

@@ -10,7 +10,7 @@
     <div>
       <h5>Management of Security Database</h5>
       <!-- Button trigger modal -->
-      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#manageUsers" onclick="JS.ListUsers(location.search)">Manage Users</button>
+      <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#manageUsers" onclick="JS.ListUsers(location.search)">Manage Users</button>
       <!--#include file="manage_users_modal.html"-->
       <!--#include file="set_user_modal.html"-->
     <p>Add, delete or edit user accounts.</p>
@@ -19,7 +19,7 @@
     <p>Add, delete or edit groups.</p>
     <hr>
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#accessList" onclick="JS.EnumAccessLists(location.search)">Manage Access Lists</button>
+    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#accessList" onclick="JS.EnumAccessLists(location.search)">Manage Access Lists</button>
     <!--#include file="manage_access_list.html"-->
     <!--#include file="access_modal.html"-->
     <!--#include file="security_policy_modal.html"-->
@@ -32,9 +32,9 @@
     <div id="PROPERTIES"></div>
     <p>Configure this Hub</p>
     <hr>
-    <button type="button" class="btn btn-secondary" disabled>Authentication Server Setting</button>
+    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#authServerSettings">Authentication Server Setting</button>
     <p>Use external RADIUS authentication server for user authentication.</p>
-    <!--#include file="auth_server_settings.html"-->
+    <!--#include file="auth_server_settings_modal.html"-->
     <hr>
     <button type="button" class="btn btn-secondary" disabled>Manage Cascade Connections</button>
     <p>Establish Cascade Connection to Hubs on local or remote VPN Servers.</p>

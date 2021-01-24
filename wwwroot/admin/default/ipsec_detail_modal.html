@@ -1,10 +1,10 @@
 <!-- Modal -->
-<div class="modal fade" id="ipsecdetailmodal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="ipsecdetailmodalLabel" aria-hidden="true">
+<div class="modal fade" id="ipsecdetailmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ipsecdetailmodalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="ipsecdetailmodalLabel">EtherIP / L2TPv3 Server Detail Settings</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#ipsecmodal">
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" data-bs-toggle="modal" data-bs-target="#ipsecmodal">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -35,10 +35,10 @@
           </div>
       </div>
       <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#PhID" onclick="JS.ipsecphClean(); JS.ipsecphN()">New</button>
-                  <button id="BTN_E" type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#PhID" onclick="JS.ipsecphSetGet($('#ISAKMP').val()); JS.ipsecphE($('#ISAKMP').val())" disabled>Edit</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#PhID" onclick="JS.ipsecphClean(); JS.ipsecphN()">New</button>
+                  <button id="BTN_E" type="button" class="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#PhID" onclick="JS.ipsecphSetGet($('#ISAKMP').val()); JS.ipsecphE($('#ISAKMP').val())" disabled>Edit</button>
                           <button id="BTN_D" type="button" class="btn btn-primary" onclick="JS.ipsecphDel($('#ISAKMP').val()); JS.ipsecphGet();" disabled>Delete</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#ipsecmodal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#ipsecmodal">Close</button>
       </div>
     </div>
   </div>

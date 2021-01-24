@@ -49,7 +49,7 @@
               <hr>
               <p>You can configure more advanced settings on the Virtual Hub Extended Options List.</p>
               <!-- Button trigger modal -->
-              <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#EVEHOL" onclick="JS.ExtendedHubInfo(location.search)">Edit Virtual Hub Extended Options List</button>
+              <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#EVEHOL" onclick="JS.ExtendedHubInfo(location.search)">Edit Virtual Hub Extended Options List</button>
               <!--#include file="hub_extended.html" -->
             </div>
           </div>
@@ -58,21 +58,21 @@
               <h3>Virtual Hub Admin Option</h3>
               <p>Display and edit the Virtual Hub administration options.</p>
               <!-- Button trigger modal -->
-              <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#AdmOpt" onclick="JS.AdminOptionsInfo(location.search)">Virtual Hub Admin Option</button>
+              <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#AdmOpt" onclick="JS.AdminOptionsInfo(location.search)">Virtual Hub Admin Option</button>
               <!--#include file="hub_admin.html" -->
             </div>
             <div>
               <h3>Source IP Address Limit List</h3>
               <p>Allow or deny VPN connections to this Virtual Hub according to the client computer's IP address.</p>
               <!-- Button trigger modal -->
-              <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#access" onclick="JS.EnumerateAc(location.search)">IP Address Control List</button>
+              <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#access" onclick="JS.EnumerateAc(location.search)">IP Address Control List</button>
               <!--#include file="hub_access.html" -->
             </div>
             <div>
               <h3>Show Message when Client Connects</h3>
               <p>Shows a message on the screen of a user when a VPN Client connects to this Virtual Hub.</p>
               <!-- Button trigger modal -->
-              <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#hubmsg" onclick="$('#MSGINPUT').empty(); JS.MsgGet(location.search)">Set the Message</button>
+              <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#hubmsg" onclick="$('#MSGINPUT').empty(); JS.MsgGet(location.search)">Set the Message</button>
               <!--#include file="hub_msg.html" -->
             </div>
 

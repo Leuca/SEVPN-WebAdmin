@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="accessListLabel">Access Lists</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#E_BTN').find('button').attr('disabled', 'true'); $('#ED').find('button').attr('disabled', 'true')">
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#E_BTN').find('button').attr('disabled', 'true'); $('#ED').find('button').attr('disabled', 'true')">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -28,10 +28,10 @@
       </div>
       <div class="modal-footer">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#access_modal" data-dismiss="modal" onclick="JS.AddAccessRule(location.search, $('#PRIORITY_PLUS').val()); JS.EditAccessRule(location.search, $('#ID_PLUS').val())">New</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#access_modal" data-bs-dismiss="modal" onclick="JS.AddAccessRule(location.search, $('#PRIORITY_PLUS').val()); JS.EditAccessRule(location.search, $('#ID_PLUS').val())">New</button>
         <div id="E_BTN">
           <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#access_modal" data-dismiss="modal" onclick="JS.EditAccessRule(location.search, $('#SELECTED_ID').val())" disabled>Edit</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#access_modal" data-bs-dismiss="modal" onclick="JS.EditAccessRule(location.search, $('#SELECTED_ID').val())" disabled>Edit</button>
         <button type="button" class="btn btn-primary" onclick="JS.DeleteAccessItem(location.search, $('#SELECTED_ID').val()); $('#E_BTN').find('button').attr('disabled', 'true'); $('#ED').find('button').attr('disabled', 'true')" disabled>Delete</button>
         <button type="button" class="btn btn-primary" onclick="JS.CloneAccessRule(location.search, $('#SELECTED_ID').val()); $('#E_BTN').find('button').attr('disabled', 'true'); $('#ED').find('button').attr('disabled', 'true')" disabled>Clone</button>
         </div>
@@ -39,7 +39,7 @@
         <button type="button" class="btn btn-primary" id="E" onclick="JS.EnableDisableAccessRule(location.search, $('#SELECTED_ID').val(), 1); $('#D').removeAttr('disabled'); $('#E').attr('disabled', true)" disabled>Enable</button>
         <button type="button" class="btn btn-primary" id="D" onclick="JS.EnableDisableAccessRule(location.search, $('#SELECTED_ID').val(), 0); $('#E').removeAttr('disabled'); $('#D').attr('disabled', true)" disabled>Disable</button>
         </div>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#E_BTN').find('button').attr('disabled', 'true'); $('#ED').find('button').attr('disabled', 'true')">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="$('#E_BTN').find('button').attr('disabled', 'true'); $('#ED').find('button').attr('disabled', 'true')">Close</button>
       </div>
     </div>
   </div>

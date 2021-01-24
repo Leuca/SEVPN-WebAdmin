@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="manageUserslLabel">Manage Users</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#U_BTN').find('button').attr('disabled', 'true')">
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#U_BTN').find('button').attr('disabled', 'true')">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -32,15 +32,15 @@
           </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#newUser">New</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#newUser">New</button>
         <div id="U_BTN">
           <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#setuser" onclick="JS.FetchUser(location.search, $('#USER_C').val())" disabled>Edit</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#userInfo" onclick="JS.UserInfo(location.search, $('#USER_C').val())" disabled>View User Info</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#setuser" onclick="JS.FetchUser(location.search, $('#USER_C').val())" disabled>Edit</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#userInfo" onclick="JS.UserInfo(location.search, $('#USER_C').val())" disabled>View User Info</button>
         <button type="button" class="btn btn-primary" disabled onclick="JS.DelUser(location.search, $('#USER_C').val()); $('#U_BTN').find('button').attr('disabled', 'true')">Remove</button>
         </div>
         <button type="button" class="btn btn-primary" onclick="JS.ListUsers(location.search)">Refresh</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#U_BTN').find('button').attr('disabled', 'true')">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="$('#U_BTN').find('button').attr('disabled', 'true')">Close</button>
       </div>
     </div>
   </div>

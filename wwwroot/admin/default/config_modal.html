@@ -4,13 +4,13 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="editConfigLabel">Edit Config File</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <p>
-          By uploading a configuration file, the contents of the specified configuration file will be applied to the VPN Server and the VPN Server program will automatically restart and upon restart, operate according to the new configuration contents. Because it is difficult for an administrator to write all the contents of a configuration file, we recommend you download the configuration file to get the current contents of the VPN Server configuration and save it to file. You can then edit these contents in a regular text editor and then upload the configuration file to rewrite the contents to the VPN Server. This functionality is for people with a detailed knowledge of the VPN Server and if an incorrectly configured configuration file is written to the VPN Server, it not only could cause errors, it could also result in the loss of the current setting data. Take special care when carrying out this action. 
+          By uploading a configuration file, the contents of the specified configuration file will be applied to the VPN Server and the VPN Server program will automatically restart and upon restart, operate according to the new configuration contents. Because it is difficult for an administrator to write all the contents of a configuration file, we recommend you download the configuration file to get the current contents of the VPN Server configuration and save it to file. You can then edit these contents in a regular text editor and then upload the configuration file to rewrite the contents to the VPN Server. This functionality is for people with a detailed knowledge of the VPN Server and if an incorrectly configured configuration file is written to the VPN Server, it not only could cause errors, it could also result in the loss of the current setting data. Take special care when carrying out this action.
         </p>
         <form>
         <div class="form-file">
@@ -25,7 +25,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" id="upfile">Upload Configuration File</button>
           <button type="button" class="btn btn-primary" onclick="JS.ConfigFile()">Download Configuration File</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

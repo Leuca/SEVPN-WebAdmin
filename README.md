@@ -44,7 +44,7 @@
 ## Trying the web UI with Docker
 I built a docker image that allows everyone to test the Web UI without compiling from source the code. Although it is not possible to use the local bridge function inside the container other functions are testable.
 
-To run the container: ```docker run -itd -p 5555:5555 --name <container_name> leuca/sevpn-web-console```and after it's ready go to https://localhost:5555/admin
+To run the container: ```docker run -itd -p 5555:5555 --name <container_name> --cap-add=NET_ADMIN --device /dev/net/tun leuca/sevpn-web-console```and after it's ready go to https://localhost:5555/admin
 
 Youl'll get a warning saying that the site is not secure. That's due to the fact that the certificate is self-signed and it's correct that way.
 

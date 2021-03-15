@@ -46,6 +46,8 @@ I built a docker image that allows everyone to test the Web UI without compiling
 
 To run the container: ```docker run -itd -p 5555:5555 --name <container_name> --cap-add=NET_ADMIN --device /dev/net/tun leuca/sevpn-web-console```and after it's ready go to https://localhost:5555/admin
 
+If you run docker in Linux you might as well run: ```docker run -itd --net=host --name <container_name> --cap-add=NET_ADMIN --device /dev/net/tun leuca/sevpn-web-console``` if you are comfortable enough running docker in your host network unconfined.
+
 Youl'll get a warning saying that the site is not secure. That's due to the fact that the certificate is self-signed and it's correct that way.
 
 You can also see how I made the docker image here: https://github.com/Leuca/SoftEther-VPN-Web-Console-Docker

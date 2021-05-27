@@ -1,6 +1,7 @@
 # SotEtherVPN HTML5-based Admin Console
-![](home.png)
-![](hub-settings.png)
+## Project no longer maintained
+This project is deprecated and will no longer be developed. It was a quick and dirty attempt to create a web management ui for SoftEther VPN Server which has evolved into another project.
+For a more recent, currently under development similar project check out [softether-patternfly-ui](https://github.com/Leuca/softether-patternfly-ui)
 ### Notes
   - *Buttons not yet implemented are disabled, but not all disabled buttons are not implemented*
   - Built using [Bootstrap (v.5.0.0-beta1)](https://github.com/twbs/bootstrap) and [SoftEther VPN Server JSON-RPC Document on GitHub](https://github.com/SoftEtherVPN/SoftEtherVPN/tree/master/developer_tools/vpnserver-jsonrpc-clients/)
